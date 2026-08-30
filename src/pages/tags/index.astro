@@ -1,0 +1,80 @@
+---
+/**
+ * Tags index — /tags
+ * Auto-generated from blog frontmatter. Lists every tag with its post count.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import { getPublishedPosts } from '../../utils/blog';
+import { collectTags } from '../../utils/tags';
+
+const posts = await getPublishedPosts();
+const tags = collectTags(posts);
+---
+
+<BaseLayout title="Tags" description="Browse blog posts by tag.">
+  <Container as="section" variant="prose" class="page">
+    <header class="page-head">
+      <h1>Tags</h1>
+      <p class="intro">Browse posts by topic.</p>
+    </header>
+
+    {
+      tags.length > 0 ? (
+        <ul class="tag-list">
+          {tags.map((t) => (
+            <li>
+              <a href={`/tags/${t.slug}`}>
+                <span class="name">{t.tag}</span>
+                <span class="count">{t.count}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty">No tags yet.</p>
+      )
+    }
+  </Container>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-12);
+  }
+  .intro {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+  }
+  .tag-list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-6);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .tag-list a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+  .tag-list a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .count {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+  .empty {
+    color: var(--color-text-muted);
+  }
+</style>

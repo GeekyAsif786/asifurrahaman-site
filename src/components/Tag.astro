@@ -1,0 +1,54 @@
+---
+/**
+ * Tag — a small pill linking to a tag page (/tags/[tag]).
+ *
+ * Tags are slugified consistently (lowercase, spaces → hyphens) via the shared
+ * `tagToSlug` helper so a tag rendered here always points at the same URL the
+ * tag pages will generate in Phase 4.
+ *
+ * `interactive={false}` renders a plain, non-linked pill (useful inside cards
+ * that are themselves a single link target).
+ */
+import { tagToSlug } from '../utils/tags';
+
+interface Props {
+  tag: string;
+  interactive?: boolean;
+  class?: string;
+}
+
+const { tag, interactive = true, class: className = '' } = Astro.props as Props;
+const href = `/tags/${tagToSlug(tag)}`;
+---
+
+{
+  interactive ? (
+    <a href={href} class:list={['tag', className]}>
+      {tag}
+    </a>
+  ) : (
+    <span class:list={['tag', 'tag--static', className]}>{tag}</span>
+  )
+}
+
+<style>
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-bg-subtle);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 999px;
+    text-decoration: none;
+    line-height: 1.5;
+  }
+  a.tag:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .tag--static {
+    cursor: default;
+  }
+</style>

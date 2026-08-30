@@ -1,0 +1,23 @@
+# Netlify configuration for asifurrahaman-site
+#
+# This is a statically generated Astro site: `npm run build` outputs a `dist/`
+# folder of plain HTML/CSS that Netlify serves directly. No serverless adapter
+# or runtime is needed.
+#
+# Netlify can auto-detect Astro, but declaring the settings here makes the
+# build reproducible and pins the Node version so local and CI builds match.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Node 22 LTS. Astro 7 requires Node 18.20.8+, 20.3+, or 22+.
+  NODE_VERSION = "22"
+
+# Long-cache Astro's fingerprinted assets (filenames include a content hash,
+# so they can be cached immutably and forever).
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

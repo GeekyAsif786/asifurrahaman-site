@@ -1,0 +1,77 @@
+---
+/**
+ * Tag page — /tags/[tag]
+ *
+ * One page per unique tag, auto-generated from blog frontmatter (no manual tag
+ * database). Lists all published posts carrying that tag. `tag` param is the
+ * slug produced by tagToSlug, matching the links rendered by the Tag component.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getPublishedPosts, toSummary } from '../../utils/blog';
+import { collectTags, postsForTagSlug } from '../../utils/tags';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPublishedPosts();
+  const tags = collectTags(posts);
+  return tags.map((t) => ({
+    params: { tag: t.slug },
+    props: {
+      label: t.tag,
+      posts: postsForTagSlug(posts, t.slug).map(toSummary),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`Posts tagged “${label}”`}
+  description={`Blog posts tagged ${label}.`}
+>
+  <Container as="section" variant="prose" class="page">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Tags', href: '/tags' },
+        { label },
+      ]}
+    />
+    <header class="page-head">
+      <h1>Tagged: {label}</h1>
+      <p class="intro">
+        {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+      </p>
+    </header>
+
+    <div class="list">
+      {posts.map((post) => <BlogCard post={post} headingLevel="h2" />)}
+    </div>
+  </Container>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-8) var(--space-12);
+  }
+  .page-head {
+    margin-block: var(--space-6) var(--space-4);
+  }
+  .intro {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+  .list :global(.blog-card:last-child) {
+    border-bottom: none;
+  }
+</style>

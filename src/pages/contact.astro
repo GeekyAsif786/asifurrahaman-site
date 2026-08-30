@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import { SOCIALS } from '../utils/site';
+---
+
+<BaseLayout title="Contact" description="Get in touch with Asifur Rahman.">
+  <Container as="section" variant="prose" class="page">
+    <h1>Contact</h1>
+    <p>
+      {/* TODO: add preferred contact method(s). Do not invent an email. */}
+      The best way to reach me is via the links below.
+    </p>
+    {
+      SOCIALS.length > 0 && (
+        <ul class="links">
+          {SOCIALS.map((s) => (
+            <li>
+              <a href={s.href} rel="me noopener" target="_blank">
+                {s.label}
+                <span class="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </Container>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-12);
+  }
+  .page > p {
+    margin-top: var(--space-4);
+    color: var(--color-text-muted);
+  }
+  .links {
+    margin-top: var(--space-6);
+    padding-left: var(--space-4);
+  }
+  .links li {
+    margin-bottom: var(--space-2);
+  }
+</style>

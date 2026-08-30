@@ -1,0 +1,34 @@
+---
+/**
+ * ThemeScript — inlined, render-blocking script placed in <head>.
+ *
+ * Runs BEFORE first paint so the correct theme is applied with no flash of the
+ * wrong theme (FOUC). It reads a persisted preference from localStorage, falls
+ * back to the OS `prefers-color-scheme`, and sets `data-theme` on <html>.
+ *
+ * `is:inline` tells Astro to leave this script untouched (no bundling/deferring)
+ * so it executes synchronously in place.
+ */
+---
+
+<script is:inline>
+  (function () {
+    const STORAGE_KEY = 'theme';
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY); // 'light' | 'dark' | null
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches;
+      // Explicit choice wins; otherwise follow the system preference.
+      const theme = stored === 'light' || stored === 'dark'
+        ? stored
+        : prefersDark
+          ? 'dark'
+          : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {
+      // If storage/matchMedia is unavailable, default to light.
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>

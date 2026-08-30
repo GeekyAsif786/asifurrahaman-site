@@ -1,0 +1,322 @@
+---
+/**
+ * BlogPostLayout — the article shell for a single blog post (spec §19).
+ *
+ * Owns everything around the article body: SEO metadata (via BaseLayout),
+ * breadcrumbs, the article header (title/description/dates/tags/reading time),
+ * an optional table of contents, and the prev/next + related-posts footer.
+ *
+ * The rendered MDX/Markdown body is passed in through the default <slot />.
+ * The page (`/blog/[slug]`) stays thin: it queries data, runs render(), and
+ * hands the pieces to this layout.
+ */
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Tag from '../components/Tag.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { formatDate, isoDate, readingTimeLabel } from '../utils/format';
+import type { PostEntry } from '../utils/blog';
+import { blogPostingSchema, breadcrumbSchema } from '../utils/structured-data';
+
+interface Props {
+  post: PostEntry;
+  headings: MarkdownHeading[];
+  readingTime: number;
+  prev: PostEntry | null;
+  next: PostEntry | null;
+  related: PostEntry[];
+}
+
+const { post, headings, readingTime, prev, next, related } =
+  Astro.props as Props;
+const d = post.data;
+
+// Show a TOC only for longer articles: at least 3 section headings (h2/h3).
+const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = tocItems.length >= 3;
+
+// ---- Structured data (built from real frontmatter only) ----
+const postUrl = `/blog/${post.id}/`;
+const publishedISO = d.pubDate.toISOString();
+const modifiedISO = d.updatedDate ? d.updatedDate.toISOString() : undefined;
+
+const articleJsonLd = blogPostingSchema({
+  title: d.title,
+  description: d.description,
+  url: postUrl,
+  datePublished: publishedISO,
+  dateModified: modifiedISO,
+  tags: d.tags,
+  image: d.heroImage,
+});
+
+const breadcrumbJsonLd = breadcrumbSchema([
+  { name: 'Home', url: '/' },
+  { name: 'Blog', url: '/blog' },
+  { name: d.title }, // current page → no url
+]);
+---
+
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  image={d.heroImage}
+  ogType="article"
+  publishedTime={publishedISO}
+  modifiedTime={modifiedISO}
+  jsonLd={[articleJsonLd, breadcrumbJsonLd]}
+>
+  <Container as="article" variant="prose" class="post">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Blog', href: '/blog' },
+        { label: d.title },
+      ]}
+    />
+
+    <header class="post-head">
+      <h1>{d.title}</h1>
+      <p class="desc">{d.description}</p>
+      <div class="meta">
+        <time datetime={isoDate(d.pubDate)}>{formatDate(d.pubDate)}</time>
+        {
+          d.updatedDate && (
+            <span>· Updated <time datetime={isoDate(d.updatedDate)}>{formatDate(d.updatedDate)}</time></span>
+          )
+        }
+        <span>· {readingTimeLabel(readingTime)}</span>
+      </div>
+      {
+        d.tags.length > 0 && (
+          <ul class="tags" aria-label="Tags">
+            {d.tags.map((t) => (
+              <li>
+                <Tag tag={t} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    {
+      d.heroImage && (
+        <img
+          class="hero"
+          src={d.heroImage}
+          alt={d.heroImageAlt ?? ''}
+          loading="eager"
+        />
+      )
+    }
+
+    {showToc && <TableOfContents headings={headings} />}
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {/* Related posts (by shared tags). */}
+    {
+      related.length > 0 && (
+        <section class="related" aria-labelledby="related-h">
+          <h2 id="related-h">Related posts</h2>
+          <ul>
+            {related.map((r) => (
+              <li>
+                <a href={`/blog/${r.id}`}>{r.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* Previous / next navigation. */}
+    {
+      (prev || next) && (
+        <nav class="pager" aria-label="Post navigation">
+          <div class="pager-cell">
+            {prev && (
+              <a href={`/blog/${prev.id}`} rel="prev">
+                <span class="pager-label">← Newer</span>
+                <span class="pager-title">{prev.data.title}</span>
+              </a>
+            )}
+          </div>
+          <div class="pager-cell pager-cell--right">
+            {next && (
+              <a href={`/blog/${next.id}`} rel="next">
+                <span class="pager-label">Older →</span>
+                <span class="pager-title">{next.data.title}</span>
+              </a>
+            )}
+          </div>
+        </nav>
+      )
+    }
+  </Container>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-block: var(--space-8) var(--space-16);
+  }
+  .post-head {
+    margin-block: var(--space-6) var(--space-8);
+  }
+  .desc {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-4) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .hero {
+    margin-block: var(--space-6);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius);
+    width: 100%;
+  }
+
+  /* The TOC sits between header and body on all viewports; boxed for clarity. */
+  .post :global(.toc) {
+    margin-block: var(--space-6);
+    padding: var(--space-4) var(--space-6);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg-subtle);
+  }
+
+  /* ---- Article body typography ---- */
+  .prose {
+    font-size: var(--text-lg);
+  }
+  .prose :global(h2) {
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-3);
+    scroll-margin-top: var(--space-16);
+  }
+  .prose :global(h3) {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-2);
+    scroll-margin-top: var(--space-16);
+  }
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol),
+  .prose :global(blockquote) {
+    margin-top: var(--space-4);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: var(--space-6);
+  }
+  .prose :global(li + li) {
+    margin-top: var(--space-2);
+  }
+  .prose :global(blockquote) {
+    border-left: 3px solid var(--color-border);
+    padding-left: var(--space-4);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+  .prose :global(pre) {
+    margin-top: var(--space-4);
+  }
+  /* Tables become their own horizontal scroll container so wide tables never
+     overflow the viewport on small screens. On desktop they render normally
+     (content is narrower than the container). */
+  .prose :global(table) {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    margin-top: var(--space-4);
+    font-size: var(--text-base);
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    border: var(--border-width) solid var(--color-border);
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+  }
+  .prose :global(th) {
+    background: var(--color-bg-subtle);
+  }
+  .prose :global(img) {
+    border-radius: var(--radius);
+  }
+
+  /* ---- Related ---- */
+  .related {
+    margin-top: var(--space-16);
+    padding-top: var(--space-6);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+  .related ul {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  /* ---- Pager ---- */
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+  @media (min-width: 480px) {
+    .pager {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+  }
+  @media (min-width: 480px) {
+    .pager-cell--right {
+      text-align: right;
+    }
+  }
+  .pager a {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    text-decoration: none;
+  }
+  .pager-label {
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+  }
+  .pager-title {
+    color: var(--color-text);
+  }
+  .pager a:hover .pager-title {
+    color: var(--color-accent);
+  }
+</style>

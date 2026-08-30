@@ -1,0 +1,53 @@
+---
+/**
+ * Blog article page — /blog/[slug]
+ *
+ * getStaticPaths generates one page per published post (drafts excluded in
+ * prod). It queries adjacency + related posts, runs render() to get the body,
+ * headings (for the TOC), and reading time, then hands everything to
+ * BlogPostLayout.
+ *
+ * Custom MDX components (Callout, Figure) are passed to <Content /> so posts
+ * can use <Callout>…</Callout> without importing them in every file.
+ */
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+import Callout from '../../components/mdx/Callout.astro';
+import Figure from '../../components/mdx/Figure.astro';
+import {
+  getPublishedPosts,
+  getAdjacentPosts,
+  getRelatedPosts,
+  readingMinutes,
+} from '../../utils/blog';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPublishedPosts();
+  return Promise.all(
+    posts.map(async (post) => {
+      const { prev, next } = await getAdjacentPosts(post.id);
+      const related = await getRelatedPosts(post.id);
+      return {
+        params: { slug: post.id },
+        props: { post, prev, next, related },
+      };
+    })
+  );
+}) satisfies GetStaticPaths;
+
+const { post, prev, next, related } = Astro.props;
+const { Content, headings } = await render(post);
+const readingTime = readingMinutes(post);
+---
+
+<BlogPostLayout
+  post={post}
+  headings={headings}
+  readingTime={readingTime}
+  prev={prev}
+  next={next}
+  related={related}
+>
+  <Content components={{ Callout, Figure }} />
+</BlogPostLayout>

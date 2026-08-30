@@ -1,0 +1,101 @@
+---
+title: "Searching for Files in Linux Using Bash"
+description: "A practical tour of find, locate, and grep for locating files and content from the shell."
+pubDate: 2026-08-20
+tags:
+  - linux
+  - bash
+draft: false
+---
+
+import Callout from '../../components/mdx/Callout.astro';
+
+Finding things on a Linux system from the shell comes down to a few tools that
+each answer a slightly different question. This post covers the ones I reach
+for most: `find`, `locate`, and `grep`.
+
+## find: search the live filesystem
+
+`find` walks a directory tree and evaluates tests against each entry. It is
+exact and always up to date because it reads the filesystem directly.
+
+```bash
+# All .log files under /var/log
+find /var/log -type f -name '*.log'
+
+# Case-insensitive name match
+find . -iname 'readme*'
+
+# Files modified in the last 24 hours
+find . -type f -mtime -1
+
+# Files larger than 100 MB
+find / -type f -size +100M
+```
+
+You can also act on the results. `-exec` runs a command per match; `{}` is the
+current file and `\;` ends the command:
+
+```bash
+# Delete empty files (review first!)
+find . -type f -empty -exec rm {} \;
+```
+
+<Callout type="warning" title="Test destructive commands first">
+Before adding `-exec rm` or `-delete`, run the same `find` without them and
+read the output. It is easy to match more than you intended.
+</Callout>
+
+## locate: search a prebuilt index
+
+`locate` queries a database that is updated periodically (via `updatedb`),
+so it is very fast but can be **stale** for recently created files.
+
+```bash
+locate sshd_config
+```
+
+<Callout type="note">
+If `locate` returns nothing for a file you just created, refresh the index
+with `sudo updatedb` (where available) — or fall back to `find`.
+</Callout>
+
+## grep: search inside files
+
+`find` and `locate` match on names; `grep` matches on **content**.
+
+```bash
+# Lines containing "timeout" in a file
+grep 'timeout' config.yml
+
+# Recursive, case-insensitive, with line numbers
+grep -rin 'todo' src/
+
+# Only print the names of files that match
+grep -rl 'API_KEY' .
+```
+
+## Combining them
+
+The tools compose well. For example, search only inside the files `find`
+locates by piping through `xargs`:
+
+```bash
+# Search for "deprecated" in every .py file under the current directory
+find . -name '*.py' -print0 | xargs -0 grep -n 'deprecated'
+```
+
+Using `-print0` with `xargs -0` makes the pipeline safe for filenames that
+contain spaces or newlines.
+
+## Quick reference
+
+| Question                         | Tool     |
+| -------------------------------- | -------- |
+| Where is a file with this name?  | `find` / `locate` |
+| Which files contain this text?   | `grep -rl` |
+| Which lines contain this text?   | `grep -n` |
+
+Reach for `find` when you need accuracy and rich filters, `locate` when you
+need speed and the index is fresh, and `grep` when you care about what is
+*inside* the files.

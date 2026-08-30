@@ -1,0 +1,156 @@
+---
+/**
+ * ProjectCard — summary card for a project.
+ *
+ * The whole card is a link to the project page; GitHub/demo links are rendered
+ * as separate anchors and use event.stopPropagation-free markup by living
+ * outside the main link (the card uses a "stretched link" pattern so nested
+ * anchors remain independently clickable).
+ *
+ * Accepts a ProjectSummary — the same shape Phase 3's collection will provide.
+ * Sections (status, tech, links) render only when their data exists.
+ */
+import type { ProjectSummary } from '../utils/content-types';
+import Tag from './Tag.astro';
+
+interface Props {
+  project: ProjectSummary;
+  /** Heading level for the card title. Use 'h2' on listing pages (under an
+      h1), 'h3' (default) when the card sits under an h2 section heading. */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, headingLevel = 'h3' } = Astro.props as Props;
+const TitleTag = headingLevel;
+const { slug, title, description, technologies, status, github, demo } =
+  project;
+
+const statusLabel: Record<string, string> = {
+  'in-progress': 'In progress',
+  completed: 'Completed',
+  maintained: 'Maintained',
+  archived: 'Archived',
+  planned: 'Planned',
+};
+---
+
+<article class="project-card">
+  <div class="head">
+    <TitleTag class="title">
+      <a href={`/projects/${slug}`} class="stretched">{title}</a>
+    </TitleTag>
+    {status && <span class={`status status--${status}`}>{statusLabel[status] ?? status}</span>}
+  </div>
+
+  <p class="desc">{description}</p>
+
+  {
+    technologies.length > 0 && (
+      <ul class="tech" aria-label="Technologies">
+        {technologies.map((t) => (
+          <li>
+            <Tag tag={t} interactive={false} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  {
+    (github || demo) && (
+      <div class="links">
+        {github && (
+          <a href={github} rel="noopener" target="_blank" class="ext">
+            GitHub
+            <span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        )}
+        {demo && (
+          <a href={demo} rel="noopener" target="_blank" class="ext">
+            Live demo
+            <span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        )}
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .project-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    transition: border-color 0.15s ease;
+    height: 100%;
+  }
+  .project-card:hover {
+    border-color: var(--color-accent);
+  }
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .title {
+    font-size: var(--text-lg);
+    margin: 0;
+  }
+  .title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .title a:hover {
+    color: var(--color-accent);
+  }
+  /* Stretched-link: makes the whole card clickable while keeping the
+     GitHub/demo anchors (which sit above via z-index) independently usable. */
+  .stretched::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .status {
+    flex-shrink: 0;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+  }
+  .desc {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  .tech {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .links {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: var(--space-4);
+    margin-top: auto;
+    padding-top: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  .ext {
+    text-decoration: none;
+  }
+  .ext:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+/**
+ * Button — a single styled control used for both links and buttons.
+ *
+ * If `href` is provided it renders an <a>; otherwise a <button>. This keeps
+ * one visual definition for CTAs while staying semantically correct
+ * (navigation → link, action → button).
+ *
+ * variant: 'primary' (filled accent) | 'secondary' (outline)
+ * size:    'md' (default) | 'sm'
+ *
+ * Any extra HTML attributes (type, rel, target, aria-*, download, ...) are
+ * forwarded via ...rest so callers aren't limited by this interface.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'secondary';
+type Size = 'md' | 'sm';
+
+interface Common {
+  variant?: Variant;
+  size?: Size;
+  class?: string;
+}
+
+/**
+ * Public contract (Astro uses this to type callers): anchor attributes when
+ * `href` is set, otherwise button attributes. The two can't be intersected
+ * because `type` differs between <a> and <button>.
+ */
+export type Props =
+  | (Common & { href: string } & Omit<HTMLAttributes<'a'>, 'class'>)
+  | (Common & { href?: undefined } & Omit<HTMLAttributes<'button'>, 'class'>);
+
+const props = Astro.props as Props;
+const { variant = 'primary', size = 'md', class: className = '' } = props;
+const { href } = props as { href?: string };
+
+// Remaining HTML attributes to forward. Typed loosely for the shared spread
+// onto either element; the public `Props` type already constrains callers.
+const rest = { ...props } as Record<string, unknown>;
+delete rest.variant;
+delete rest.size;
+delete rest.class;
+delete rest.href;
+
+const classes = ['btn', `btn--${variant}`, `btn--${size}`, className];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button class:list={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font: inherit;
+    font-weight: 550;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-sm);
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .btn--md {
+    padding: 0.6rem 1.1rem;
+    font-size: var(--text-base);
+  }
+  .btn--sm {
+    padding: 0.4rem 0.75rem;
+    font-size: var(--text-sm);
+  }
+
+  .btn--primary {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    border-color: var(--color-accent);
+  }
+  .btn--primary:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: var(--color-accent-contrast);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+  .btn--secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+</style>

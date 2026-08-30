@@ -1,0 +1,246 @@
+---
+/**
+ * Project detail page — /projects/[slug]
+ *
+ * getStaticPaths generates one page per entry in the `projects` collection.
+ * The frontmatter drives the metadata header (title, summary, status, tech,
+ * GitHub/demo buttons, dates). The MDX body drives the long-form sections
+ * (Overview/Problem/Solution/…): only sections written in the file appear,
+ * satisfying "render sections only when content exists".
+ */
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import Tag from '../../components/Tag.astro';
+import { formatDate, isoDate } from '../../utils/format';
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+
+const statusLabel: Record<string, string> = {
+  'in-progress': 'In progress',
+  completed: 'Completed',
+  maintained: 'Maintained',
+  archived: 'Archived',
+  planned: 'Planned',
+};
+
+// Build a compact date range string only when at least a start date exists.
+let dateRange: string | null = null;
+if (d.startDate) {
+  const start = formatDate(d.startDate);
+  const end = d.endDate ? formatDate(d.endDate) : 'Present';
+  dateRange = `${start} – ${end}`;
+}
+---
+
+<BaseLayout title={d.title} description={d.description} image={d.image}>
+  <Container as="article" class="project">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+        { label: d.title },
+      ]}
+    />
+
+    <header class="head">
+      <h1>{d.title}</h1>
+      <p class="summary">{d.longDescription ?? d.description}</p>
+
+      <div class="meta">
+        {
+          d.status && (
+            <span class="status">{statusLabel[d.status] ?? d.status}</span>
+          )
+        }
+        {
+          dateRange && (
+            <span class="dates">
+              {d.startDate && <time datetime={isoDate(d.startDate)}>{dateRange}</time>}
+            </span>
+          )
+        }
+      </div>
+
+      {
+        d.technologies.length > 0 && (
+          <ul class="tech" aria-label="Technologies">
+            {d.technologies.map((t) => (
+              <li>
+                <Tag tag={t} interactive={false} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      {
+        (d.github || d.demo) && (
+          <div class="actions">
+            {d.github && (
+              <Button href={d.github} rel="noopener" target="_blank" size="sm">
+                GitHub
+                <span class="visually-hidden"> (opens in a new tab)</span>
+              </Button>
+            )}
+            {d.demo && (
+              <Button
+                href={d.demo}
+                variant="secondary"
+                rel="noopener"
+                target="_blank"
+                size="sm"
+              >
+                Live demo
+                <span class="visually-hidden"> (opens in a new tab)</span>
+              </Button>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    {/* Long-form sections come from the MDX body. */}
+    <div class="prose">
+      <Content />
+    </div>
+
+    {/* Screenshots gallery (only when provided). */}
+    {
+      d.screenshots.length > 0 && (
+        <section class="screenshots" aria-labelledby="shots-h">
+          <h2 id="shots-h">Screenshots</h2>
+          <div class="shot-grid">
+            {d.screenshots.map((shot) => (
+              <figure>
+                <img src={shot.src} alt={shot.alt} loading="lazy" />
+                {shot.caption && <figcaption>{shot.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <footer class="foot">
+      <a href="/projects">← All projects</a>
+    </footer>
+  </Container>
+</BaseLayout>
+
+<style>
+  .project {
+    padding-block: var(--space-8) var(--space-16);
+    max-width: var(--container-prose);
+  }
+  .head {
+    margin-block: var(--space-6) var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  .summary {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  .status {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+  }
+  .tech {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-4) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  /* Article body typography. Reused conceptually by the blog in Phase 4. */
+  .prose :global(h2) {
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-3);
+    padding-top: var(--space-2);
+  }
+  .prose :global(h3) {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-2);
+  }
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-top: var(--space-4);
+    color: var(--color-text);
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: var(--space-6);
+  }
+  .prose :global(li + li) {
+    margin-top: var(--space-2);
+  }
+  .prose :global(pre) {
+    margin-top: var(--space-4);
+  }
+
+  .screenshots {
+    margin-top: var(--space-12);
+  }
+  .shot-grid {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+  .shot-grid img {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius);
+  }
+  .shot-grid figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .foot {
+    margin-top: var(--space-16);
+    padding-top: var(--space-6);
+    border-top: var(--border-width) solid var(--color-border);
+    font-size: var(--text-sm);
+  }
+  .foot a {
+    text-decoration: none;
+  }
+  .foot a:hover {
+    text-decoration: underline;
+  }
+</style>

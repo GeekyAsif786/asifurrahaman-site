@@ -1,0 +1,18 @@
+---
+/**
+ * JsonLd — renders a JSON-LD structured-data block.
+ *
+ * Pass a plain schema.org object (or array of objects). It is serialized into
+ * a <script type="application/ld+json"> in the document. Using set:html with
+ * JSON.stringify is the standard Astro pattern; the content is build-time data
+ * we control (never user input), so it is safe to inline.
+ */
+interface Props {
+  schema: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const { schema } = Astro.props as Props;
+const json = JSON.stringify(schema);
+---
+
+<script type="application/ld+json" set:html={json} is:inline />

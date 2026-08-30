@@ -1,0 +1,197 @@
+---
+/**
+ * Header — site masthead with primary navigation and the theme toggle.
+ *
+ * Mobile: nav collapses behind a disclosure button (aria-expanded). The menu
+ * itself is plain HTML/CSS toggled by a tiny script — no framework needed.
+ * Desktop (>= 720px): nav is always visible inline.
+ *
+ * Active link: computed from the current pathname so the current section is
+ * marked with aria-current="page".
+ */
+import Container from './Container.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { NAV, SITE } from '../utils/site';
+
+const pathname = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === '/') return pathname === '/';
+  // Mark active for the section root and any nested route.
+  return pathname === href || pathname.startsWith(href + '/');
+}
+---
+
+<header class="site-header">
+  <Container>
+    <div class="bar">
+      <a href="/" class="brand" aria-label={`${SITE.name} — home`}>
+        {SITE.name}
+      </a>
+
+      <button
+        id="nav-toggle"
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Open menu"
+      >
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+
+      <nav id="primary-nav" class="nav" aria-label="Primary">
+        <ul class="nav-list">
+          {
+            NAV.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  class:list={['nav-link', { active: isActive(item.href) }]}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="nav-actions">
+          <ThemeToggle />
+        </div>
+      </nav>
+    </div>
+  </Container>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: var(--border-width) solid var(--color-border);
+    background: var(--color-bg);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 3.75rem;
+  }
+  .brand {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: var(--text-lg);
+  }
+  .brand:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0.5rem;
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .nav-toggle-bar {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--color-text);
+    border-radius: 2px;
+  }
+
+  .nav {
+    display: none;
+  }
+  .nav-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .nav-link {
+    display: block;
+    padding: var(--space-2) var(--space-1);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: var(--text-base);
+  }
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+  .nav-link.active {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .nav-actions {
+    margin-top: var(--space-3);
+  }
+
+  /* Expanded mobile menu */
+  .nav.open {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: var(--color-bg);
+    border-bottom: var(--border-width) solid var(--color-border);
+    padding: var(--space-4) var(--space-4) var(--space-6);
+  }
+
+  @media (min-width: 720px) {
+    .nav-toggle {
+      display: none;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+    .nav-list {
+      flex-direction: row;
+      gap: var(--space-6);
+    }
+    .nav-link {
+      padding: var(--space-1) 0;
+    }
+    .nav-actions {
+      margin-top: 0;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(!!open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+
+  // Close the menu on Escape for keyboard users.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav?.classList.contains('open')) {
+      nav.classList.remove('open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.setAttribute('aria-label', 'Open menu');
+      (toggle as HTMLElement | null)?.focus();
+    }
+  });
+</script>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+---
+
+<BaseLayout title="Page not found" noindex={true}>
+  <Container as="section" variant="prose" class="page">
+    <p class="code">404</p>
+    <h1>Page not found</h1>
+    <p class="msg">
+      The page you’re looking for doesn’t exist or may have moved.
+    </p>
+    <p><a href="/">Return home</a></p>
+  </Container>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-24);
+    text-align: center;
+  }
+  .code {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: var(--text-lg);
+    letter-spacing: 0.1em;
+  }
+  .msg {
+    margin-block: var(--space-4) var(--space-6);
+    color: var(--color-text-muted);
+  }
+</style>

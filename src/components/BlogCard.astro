@@ -1,0 +1,105 @@
+---
+/**
+ * BlogCard — summary card for a blog post.
+ *
+ * Accepts a PostSummary — the same shape Phase 4's blog collection will
+ * provide (after computing reading time). The title links to /blog/[slug];
+ * tags link to their tag pages. Uses a stretched-link so the whole card is
+ * clickable while tag links stay independently usable.
+ */
+import type { PostSummary } from '../utils/content-types';
+import Tag from './Tag.astro';
+import { formatDate, isoDate, readingTimeLabel } from '../utils/format';
+
+interface Props {
+  post: PostSummary;
+  /** Heading level for the card title. Use 'h2' on listing pages (under an
+      h1), 'h3' (default) when under an h2 section heading. */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { post, headingLevel = 'h3' } = Astro.props as Props;
+const TitleTag = headingLevel;
+const { slug, title, description, pubDate, updatedDate, tags, readingTime } =
+  post;
+---
+
+<article class="blog-card">
+  <div class="meta">
+    <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
+    {
+      updatedDate && (
+        <span class="updated">· Updated {formatDate(updatedDate)}</span>
+      )
+    }
+    {readingTime && <span class="rt">· {readingTimeLabel(readingTime)}</span>}
+  </div>
+
+  <TitleTag class="title">
+    <a href={`/blog/${slug}`} class="stretched">{title}</a>
+  </TitleTag>
+
+  <p class="desc">{description}</p>
+
+  {
+    tags.length > 0 && (
+      <ul class="tags" aria-label="Tags">
+        {tags.map((t) => (
+          <li>
+            <Tag tag={t} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .blog-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+  }
+  .title {
+    font-size: var(--text-lg);
+    margin: 0;
+  }
+  .title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .title a:hover {
+    color: var(--color-accent);
+  }
+  .stretched::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .desc {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+  .tags {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    margin: var(--space-1) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

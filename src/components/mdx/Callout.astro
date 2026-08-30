@@ -1,0 +1,86 @@
+---
+/**
+ * Callout — a highlighted aside for notes, tips, and warnings.
+ *
+ * Usage in MDX:
+ *   import Callout from '../../components/mdx/Callout.astro';
+ *   <Callout type="warning" title="Careful">Body text…</Callout>
+ *
+ * type: 'note' (default) | 'tip' | 'warning'
+ * The colored left border and label come from the type; content is a slot so
+ * it can contain full markdown/MDX.
+ */
+type CalloutType = 'note' | 'tip' | 'warning';
+
+interface Props {
+  type?: CalloutType;
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props as Props;
+
+const defaultTitle: Record<CalloutType, string> = {
+  note: 'Note',
+  tip: 'Tip',
+  warning: 'Warning',
+};
+const label = title ?? defaultTitle[type];
+---
+
+<aside class:list={['callout', `callout--${type}`]} role="note">
+  <p class="callout-title">{label}</p>
+  <div class="callout-body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    margin-block: var(--space-6);
+    padding: var(--space-4) var(--space-6);
+    border: var(--border-width) solid var(--color-border);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    background: var(--color-bg-subtle);
+  }
+  .callout-title {
+    margin: 0 0 var(--space-2);
+    font-weight: 650;
+    font-size: var(--text-sm);
+    letter-spacing: 0.01em;
+  }
+  /* Tighten spacing of the first/last block inside the callout body. */
+  .callout-body :global(> :first-child) {
+    margin-top: 0;
+  }
+  .callout-body :global(> :last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Variant accents. Border colors chosen for contrast in both themes. */
+  .callout--note {
+    border-left-color: var(--color-accent);
+  }
+  .callout--note .callout-title {
+    color: var(--color-accent);
+  }
+  .callout--tip {
+    border-left-color: #16a34a;
+  }
+  .callout--tip .callout-title {
+    /* Darkened from the border green to meet WCAG AA on the subtle bg. */
+    color: #15803d;
+  }
+  .callout--warning {
+    border-left-color: #d97706;
+  }
+  .callout--warning .callout-title {
+    color: #b45309;
+  }
+  :global([data-theme='dark']) .callout--tip .callout-title {
+    color: #4ade80;
+  }
+  :global([data-theme='dark']) .callout--warning .callout-title {
+    color: #fbbf24;
+  }
+</style>

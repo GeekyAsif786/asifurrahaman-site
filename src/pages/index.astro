@@ -1,0 +1,233 @@
+---
+/**
+ * Homepage.
+ *
+ * Sections: Hero (with CTAs), Featured Projects, Latest Articles, About
+ * preview, Areas of interest.
+ *
+ * Data: featured projects come from the `projects` collection; latest articles
+ * from the `blog` collection. The card components accept the collection-derived
+ * summary shapes directly.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/Button.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { SITE, SOCIALS, AREAS_OF_INTEREST } from '../utils/site';
+import { getFeaturedProjects, toSummary as projectToSummary } from '../utils/projects';
+import { getPublishedPosts, toSummary as postToSummary } from '../utils/blog';
+import { personSchema } from '../utils/structured-data';
+
+// Featured projects from the `projects` content collection.
+const featuredProjects = (await getFeaturedProjects()).map(projectToSummary);
+
+// Latest 3 published posts from the `blog` collection (already newest-first).
+const latestPosts = (await getPublishedPosts()).slice(0, 3).map(postToSummary);
+
+const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
+---
+
+<BaseLayout jsonLd={personSchema()}>
+  {/* ---- Hero ---- */}
+  <Container as="section" class="hero">
+    <p class="eyebrow">Personal engineering site</p>
+    <h1>{SITE.name}</h1>
+    <p class="lede">
+      {/* TODO: replace with a concise, accurate self-description.
+          Do not add employment, degrees, or achievements unless provided. */}
+      Engineering student and developer. I build software and write about
+      networks, systems, and the things I’m learning.
+    </p>
+    <div class="cta">
+      <Button href="/projects" variant="primary">View Projects</Button>
+      <Button href="/blog" variant="secondary">Read Blog</Button>
+      {
+        githubUrl && (
+          <Button href={githubUrl} variant="secondary" rel="noopener" target="_blank">
+            GitHub
+            <span class="visually-hidden"> (opens in a new tab)</span>
+          </Button>
+        )
+      }
+      <Button href="/contact" variant="secondary">Contact</Button>
+    </div>
+  </Container>
+
+  {/* ---- Featured Projects ---- */}
+  {
+    featuredProjects.length > 0 && (
+      <Container as="section" class="section">
+        <div class="section-head">
+          <h2>Featured projects</h2>
+          <a href="/projects" class="see-all">All projects →</a>
+        </div>
+        <div class="project-grid">
+          {featuredProjects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </Container>
+    )
+  }
+
+  {/* ---- Latest Articles ---- */}
+  {
+    latestPosts.length > 0 && (
+      <Container as="section" class="section">
+        <div class="section-head">
+          <h2>Latest articles</h2>
+          <a href="/blog" class="see-all">All articles →</a>
+        </div>
+        <div class="post-list">
+          {latestPosts.map((post) => (
+            <BlogCard post={post} />
+          ))}
+        </div>
+      </Container>
+    )
+  }
+
+  {/* ---- About preview ---- */}
+  <Container as="section" class="section">
+    <div class="about">
+      <h2>About</h2>
+      <p>
+        {/* TODO: short, honest intro. Keep it factual. */}
+        I’m Asifur Rahman. This site is where I collect my engineering projects,
+        technical writing, and learning notes. It’s built to grow over time.
+      </p>
+      <p><a href="/about">More about me →</a></p>
+    </div>
+  </Container>
+
+  {/* ---- Areas of interest ---- */}
+  {
+    AREAS_OF_INTEREST.length > 0 && (
+      <Container as="section" class="section">
+        <h2>Areas of interest</h2>
+        <p class="areas-note">
+          Topics I’m actively learning and building around — interests, not
+          claims of professional expertise.
+        </p>
+        <ul class="areas">
+          {AREAS_OF_INTEREST.map((area) => (
+            <li>{area}</li>
+          ))}
+        </ul>
+      </Container>
+    )
+  }
+</BaseLayout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-2);
+  }
+  .lede {
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+    max-width: 42rem;
+    margin-top: var(--space-4);
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  /* ---- Generic section ---- */
+  .section {
+    padding-block: var(--space-8);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .section-head h2 {
+    margin: 0;
+  }
+  .see-all {
+    flex-shrink: 0;
+    font-size: var(--text-sm);
+    text-decoration: none;
+  }
+  .see-all:hover {
+    text-decoration: underline;
+  }
+
+  /* ---- Featured projects grid ---- */
+  .project-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .project-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ---- Latest posts ---- */
+  .post-list {
+    display: flex;
+    flex-direction: column;
+  }
+  /* Remove the trailing border on the last card in the list. */
+  .post-list :global(.blog-card:last-child) {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  /* ---- About ---- */
+  .about {
+    max-width: var(--container-prose);
+  }
+  .about h2 {
+    margin-bottom: var(--space-4);
+  }
+  .about p {
+    color: var(--color-text-muted);
+  }
+  .about p + p {
+    margin-top: var(--space-4);
+  }
+
+  /* ---- Areas of interest ---- */
+  .areas-note {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    max-width: var(--container-prose);
+    margin-block: var(--space-3) var(--space-6);
+  }
+  .areas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .areas li {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    background: var(--color-bg-subtle);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+  }
+</style>

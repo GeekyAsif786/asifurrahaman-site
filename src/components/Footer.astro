@@ -1,0 +1,75 @@
+---
+/**
+ * Footer — site-wide footer with social links and a dynamic copyright year.
+ */
+import Container from './Container.astro';
+import { SITE, SOCIALS } from '../utils/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <Container>
+    <div class="footer-inner">
+      <p class="copy">
+        © {year} {SITE.name}
+      </p>
+      {
+        SOCIALS.length > 0 && (
+          <nav class="socials" aria-label="Social links">
+            <ul>
+              {SOCIALS.map((s) => (
+                <li>
+                  <a href={s.href} rel="me noopener" target="_blank">
+                    {s.label}
+                    <span class="visually-hidden"> (opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    border-top: var(--border-width) solid var(--color-border);
+    padding-block: var(--space-8);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+  .copy {
+    margin: 0;
+  }
+  .socials ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: var(--space-4);
+  }
+  .socials a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+  .socials a:hover {
+    color: var(--color-accent);
+  }
+  @media (min-width: 640px) {
+    .footer-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+</style>

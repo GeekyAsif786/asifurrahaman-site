@@ -1,0 +1,88 @@
+---
+title: "Understanding DNS"
+description: "How a domain name becomes an IP address: resolvers, records, and the resolution path."
+pubDate: 2026-08-30
+tags:
+  - networking
+  - dns
+draft: false
+---
+
+import Callout from '../../components/mdx/Callout.astro';
+
+The Domain Name System (DNS) translates human-friendly names like
+`example.com` into the IP addresses machines use to talk to each other. It is
+often described as the phone book of the internet, but a more accurate picture
+is a **distributed, hierarchical database** queried on demand.
+
+## The name hierarchy
+
+Domain names are read right to left, from most general to most specific:
+
+```text
+www.example.com.
+└─┬─┘ └──┬──┘ └┬┘ └ root (the trailing dot)
+  │      │     └ top-level domain (TLD): com
+  │      └ second-level domain: example
+  └ subdomain / host: www
+```
+
+That trailing dot represents the **root** of the hierarchy. It is usually
+implied and omitted, but it is always there conceptually.
+
+## The resolution path
+
+When a program needs the address for `www.example.com`, resolution typically
+walks the hierarchy through a **recursive resolver**:
+
+1. The client asks its configured recursive resolver.
+2. The resolver asks a **root** server, which points to the `.com` TLD servers.
+3. The resolver asks a **`.com` TLD** server, which points to `example.com`'s
+   authoritative servers.
+4. The resolver asks the **authoritative** server, which returns the answer.
+5. The resolver caches the answer and returns it to the client.
+
+<Callout type="note" title="Caching is what makes DNS fast">
+Each answer carries a TTL (time to live). Resolvers cache records until the TTL
+expires, so most lookups never travel the full path above.
+</Callout>
+
+## Common record types
+
+A zone holds records of different types. A few you will meet constantly:
+
+| Type    | Purpose                                            |
+| ------- | -------------------------------------------------- |
+| `A`     | Maps a name to an IPv4 address                     |
+| `AAAA`  | Maps a name to an IPv6 address                     |
+| `CNAME` | Aliases one name to another name                   |
+| `MX`    | Mail exchange servers for a domain                 |
+| `TXT`   | Arbitrary text; used for verification, SPF, etc.   |
+| `NS`    | Delegates a zone to a set of authoritative servers |
+
+## Inspecting DNS yourself
+
+You can follow the resolution process with command-line tools. `dig` is the
+most detailed:
+
+```bash
+# Ask for the A record and show the answer section
+dig example.com A +noall +answer
+
+# Trace the full delegation path from the root
+dig example.com +trace
+```
+
+<Callout type="tip">
+If a change to a record “isn’t working yet,” suspect caching first. Check the
+TTL on the old record — a resolver may still be serving it until that TTL
+elapses.
+</Callout>
+
+## Why the hierarchy matters
+
+Because no single server holds every name, DNS scales to the size of the
+internet and distributes authority: the owner of a domain controls its own
+authoritative records, while delegation from the root and TLDs makes those
+records discoverable. That separation of *who answers* from *who asks* is the
+core idea worth remembering.

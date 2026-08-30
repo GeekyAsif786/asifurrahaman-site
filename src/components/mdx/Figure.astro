@@ -1,0 +1,54 @@
+---
+/**
+ * Figure — an image with an accessible caption.
+ *
+ * Usage in MDX:
+ *   import Figure from '../../components/mdx/Figure.astro';
+ *   <Figure src="/blog/diagram.png" alt="DNS resolution flow" caption="Figure 1: …" />
+ *
+ * `alt` is required (accessibility). `caption` is optional and rendered in a
+ * <figcaption>. Images are lazy-loaded by default.
+ *
+ * This uses a plain <img> with a public-path `src` so authors can drop images
+ * into /public and reference them. For build-time optimized images, Astro's
+ * <Image> component can be introduced later without changing this API.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+}
+
+const { src, alt, caption, width, height } = Astro.props as Props;
+---
+
+<figure class="figure">
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure {
+    margin-block: var(--space-8);
+  }
+  .figure img {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius);
+    width: 100%;
+  }
+  .figure figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+</style>

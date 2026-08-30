@@ -1,0 +1,132 @@
+---
+/**
+ * ThemeToggle — a small accessible button that cycles the theme:
+ *   system → light → dark → system ...
+ *
+ * - "system" means: no stored preference, follow the OS.
+ * - The chosen state is persisted in localStorage under `theme`.
+ * - Icons are inline SVGs shown/hidden via CSS based on the current mode,
+ *   so there is no icon-flicker on load. The ThemeScript already set
+ *   data-theme before paint; this component only handles interaction.
+ *
+ * The button uses a single script (bundled by Astro) that hydrates the
+ * initial "mode" label from localStorage and wires the click handler.
+ */
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="theme-toggle"
+  aria-label="Toggle color theme"
+  title="Toggle color theme"
+>
+  <!-- sun (shown in dark mode → click to go light-ish) -->
+  <svg class="icon icon-sun" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <!-- moon -->
+  <svg class="icon icon-moon" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </svg>
+  <!-- system (monitor) -->
+  <svg class="icon icon-system" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+    <path d="M8 21h8M12 17v4"></path>
+  </svg>
+  <span class="visually-hidden" id="theme-toggle-label">Theme</span>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .theme-toggle:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .icon {
+    display: none;
+  }
+  /* Show the icon matching the *current* explicit mode.
+     When following system (no data-mode), show the system icon. */
+  .theme-toggle[data-mode='light'] .icon-sun {
+    display: block;
+  }
+  .theme-toggle[data-mode='dark'] .icon-moon {
+    display: block;
+  }
+  .theme-toggle[data-mode='system'] .icon-system,
+  .theme-toggle:not([data-mode]) .icon-system {
+    display: block;
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = 'theme';
+  type Mode = 'system' | 'light' | 'dark';
+
+  const btn = document.getElementById('theme-toggle');
+
+  function currentMode(): Mode {
+    const v = localStorage.getItem(STORAGE_KEY);
+    return v === 'light' || v === 'dark' ? v : 'system';
+  }
+
+  function systemPrefersDark(): boolean {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function applyMode(mode: Mode): void {
+    // Resolve to an actual theme for the document attribute.
+    const resolved =
+      mode === 'system' ? (systemPrefersDark() ? 'dark' : 'light') : mode;
+    document.documentElement.setAttribute('data-theme', resolved);
+    if (btn) {
+      btn.setAttribute('data-mode', mode);
+      btn.setAttribute(
+        'aria-label',
+        `Theme: ${mode}. Click to change.`
+      );
+    }
+  }
+
+  function nextMode(mode: Mode): Mode {
+    // system → light → dark → system
+    if (mode === 'system') return 'light';
+    if (mode === 'light') return 'dark';
+    return 'system';
+  }
+
+  // Initialize the visible state from storage.
+  applyMode(currentMode());
+
+  btn?.addEventListener('click', () => {
+    const next = nextMode(currentMode());
+    if (next === 'system') {
+      localStorage.removeItem(STORAGE_KEY);
+    } else {
+      localStorage.setItem(STORAGE_KEY, next);
+    }
+    applyMode(next);
+  });
+
+  // Keep in sync with OS changes while in "system" mode.
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', () => {
+      if (currentMode() === 'system') applyMode('system');
+    });
+</script>
