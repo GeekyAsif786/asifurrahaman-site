@@ -99,7 +99,7 @@ export function getSocials(): SocialLink[] {
   }
   if (SOCIAL_LINKS.email) {
     items.push({
-      label: `Email ${SITE.name}`,
+      label: `asif@asifurrahaman.com`,
       href: `mailto:${SOCIAL_LINKS.email}`,
       icon: 'email',
       sameTab: true,
@@ -107,7 +107,7 @@ export function getSocials(): SocialLink[] {
   }
   if (SOCIAL_LINKS.twitter) {
     items.push({
-      label: 'Twitter/X',
+      label: 'X',
       href: SOCIAL_LINKS.twitter,
       icon: 'twitter',
     });

@@ -1,20 +1,54 @@
 ---
 title: "Understanding DNS"
-description: "How a domain name becomes an IP address: resolvers, records, and the resolution path."
+description: "How a domain name becomes an IP address: names, resolvers, records, delegation, and the journey behind a simple web address."
 pubDate: 2026-08-30
 tags:
   - networking
   - dns
-draft: false
+draft: true
 ---
 
 import Callout from '../../components/mdx/Callout.astro';
 
-The Domain Name System (DNS) translates human-friendly names like
-`example.com` into the IP addresses machines use to talk to each other. It is
-often described as the phone book of the internet, but a more accurate picture
-is a **distributed, hierarchical database** queried on demand.
+You type example.com into a browser, press Enter, and a moment later a page appears.
 
+It feels like the browser somehow knows where example.com lives. But computers don't fundamentally communicate using names like example.com. They communicate using network addresses, most commonly IPv4 or IPv6 addresses.
+
+Something has to bridge those two worlds.
+
+That is the job of the Domain Name System (DNS).
+
+DNS is often called the phone book of the internet. The analogy isn't completely wrong, but it hides something important: DNS isn't just a giant table that maps names to IP addresses. It is a distributed, hierarchical naming system in which different servers are responsible for different parts of the namespace, and resolvers piece together answers when they are needed.
+
+And that's what makes DNS interesting.
+Before DNS: what does "resolving a domain" actually mean?
+
+When an application needs information about a name such as:
+
+www.example.com
+
+it normally doesn't go directly to a root server or an authoritative server.
+
+The application first hands the request to a stub resolver, usually provided by the operating system or networking stack. The stub resolver is intentionally simple: it forwards the query to a recursive resolver that does the harder work of finding the answer.
+
+That recursive resolver might be operated by:
+
+your internet service provider,
+your organization,
+a public DNS service,
+or another network operator.
+
+```text
+Application / Browser
+        |
+        v
+    Stub Resolver
+        |
+        v
+  Recursive Resolver
+```
+
+This distinction is worth remembering because "DNS server" is an overloaded phrase. A **recursive resolver** and an **authoritative nameserver** perform very different jobs, even though both may casually be called DNS servers.
 ## The name hierarchy
 
 Domain names are read right to left, from most general to most specific:
@@ -27,62 +61,418 @@ www.example.com.
   └ subdomain / host: www
 ```
 
-That trailing dot represents the **root** of the hierarchy. It is usually
-implied and omitted, but it is always there conceptually.
+The DNS namespace is a tree, and every fully qualified domain name ultimately ends at the root. In normal writing, however, we usually omit the final dot, so we write www.example.com instead of www.example.com..
 
-## The resolution path
+The important idea is not the terminology. It is the hierarchy.
 
-When a program needs the address for `www.example.com`, resolution typically
-walks the hierarchy through a **recursive resolver**:
+Nobody needs to maintain one gigantic server containing every domain in existence.
 
-1. The client asks its configured recursive resolver.
-2. The resolver asks a **root** server, which points to the `.com` TLD servers.
-3. The resolver asks a **`.com` TLD** server, which points to `example.com`'s
-   authoritative servers.
-4. The resolver asks the **authoritative** server, which returns the answer.
-5. The resolver caches the answer and returns it to the client.
+Different parts of the tree can be administered independently.  
+<br/>
+# So where does `example.com` actually live?
 
-<Callout type="note" title="Caching is what makes DNS fast">
-Each answer carries a TTL (time to live). Resolvers cache records until the TTL
-expires, so most lookups never travel the full path above.
-</Callout>
+This is where **delegation** enters the picture.
 
-## Common record types
+The DNS hierarchy has multiple levels of authority.
 
-A zone holds records of different types. A few you will meet constantly:
+At the top is the **root zone**. Root nameservers provide information about the authoritative nameservers responsible for top-level domains such as `.com`, `.org`, `.net`, and country-code TLDs. The `.com` TLD's authoritative nameservers then know where `example.com` is delegated. Finally, the authoritative nameservers for `example.com` contain the records for names inside that zone.
 
-| Type    | Purpose                                            |
-| ------- | -------------------------------------------------- |
-| `A`     | Maps a name to an IPv4 address                     |
-| `AAAA`  | Maps a name to an IPv6 address                     |
-| `CNAME` | Aliases one name to another name                   |
-| `MX`    | Mail exchange servers for a domain                 |
-| `TXT`   | Arbitrary text; used for verification, SPF, etc.   |
-| `NS`    | Delegates a zone to a set of authoritative servers |
+So a simplified chain looks like this:
 
-## Inspecting DNS yourself
+```text
+Root (.)
+   |
+   v
+.com TLD
+   |
+   v
+example.com
+   |
+   v
+www.example.com
+```
 
-You can follow the resolution process with command-line tools. `dig` is the
-most detailed:
+This is one of the fundamental ideas behind DNS:
+
+> **The root does not know the IP address of `www.example.com`. It knows where to find the `.com` servers.**
+
+Likewise, the `.com` servers do not need to know the IP address of every host under every `.com` domain. They provide the delegation information that leads a resolver to the authoritative servers for `example.com`.
+<br/>
+---
+<br/>
+# Following a DNS lookup
+
+Let's imagine the recursive resolver has no useful cached information for:
+
+```text
+www.example.com
+```
+
+A simplified cold-cache resolution might look like this:
+
+```text
+Your computer
+     |
+     | "Where is www.example.com?"
+     v
+Recursive Resolver
+     |
+     | asks root
+     v
+Root Servers
+     |
+     | "Ask the .com nameservers"
+     v
+.com TLD Servers
+     |
+     | "Ask example.com's authoritative nameservers"
+     v
+Authoritative Servers for example.com
+     |
+     | "www.example.com → address record"
+     v
+Recursive Resolver
+     |
+     | returns result
+     v
+Your computer
+```
+
+The recursive resolver is doing the work of **pursuing the query on your behalf**. In DNS terminology, recursive and iterative behavior are distinct: in recursive mode, the server tries to obtain the final answer for the client; in iterative mode, a server can instead respond with a referral to another server.
+
+And there is an important detail hidden by the diagram:
+
+**This entire chain often does not happen.**
+<br/>
+---
+<br/>
+# DNS is fast because of caching
+
+A recursive resolver normally keeps DNS information in a cache.
+
+Suppose someone else on the same network asked for:
+
+```text
+www.example.com
+```
+
+a few seconds ago.
+
+The recursive resolver may already know the answer.
+
+Instead of starting again at the root, it can simply return the cached information.
+
+DNS records contain a **TTL (Time To Live)** that tells caches how long the record may be retained before it should be discarded and refreshed.
+
+So the real path is often closer to:
+
+```text
+Your computer
+      |
+      v
+Recursive Resolver
+      |
+      | cache hit
+      v
+Cached DNS data
+      |
+      v
+Your computer
+```
+
+That is one reason DNS can feel almost instantaneous.
+
+Caching also applies to negative answers. A resolver can temporarily cache information that a requested name or record does not exist, rather than repeating the same unsuccessful lookup over and over. This behavior is described by DNS negative caching rules.
+<br/>
+---
+<br/>
+# DNS doesn't only contain IP addresses
+
+Another common misconception is that DNS is simply:
+
+```text
+domain name → IP address
+```
+
+That's only one of its uses.
+
+DNS stores **resource records (RRs)** of different types. The record type tells you what kind of information is being requested.
+
+Here are some records you'll encounter constantly:
+
+| Type | What it does |
+|---|---|
+| **A** | Maps a name to an IPv4 address |
+| **AAAA** | Maps a name to an IPv6 address |
+| **CNAME** | Makes one name an alias of another canonical name |
+| **MX** | Specifies mail-exchange hosts for a domain |
+| **NS** | Identifies authoritative nameservers for a zone |
+| **TXT** | Stores text data used by many applications, including domain verification and SPF-related information |
+| **SOA** | Describes key administrative information for a zone |
+
+IANA maintains the authoritative registry of DNS record types.
+
+Notice that an **MX record doesn't directly contain an IP address**. It identifies a mail server by name, which can then be resolved through A or AAAA records. Similarly, an NS record identifies nameservers rather than directly answering the original user's question.
+
+That's another reason the statement "DNS translates domains into IP addresses" is useful as an introduction but incomplete as a technical description.
+
+DNS is really a **general-purpose distributed naming system**.
+<br/>
+---
+<br/>
+# A note about CNAME
+
+CNAME is especially worth understanding because it is often described too casually.
+
+Suppose:
+
+```text
+blog.example.com
+```
+
+is a CNAME pointing to:
+
+```text
+some-site.example.net
+```
+
+The idea is essentially:
+
+```text
+blog.example.com
+        |
+        v
+some-site.example.net
+```
+
+The resolver can then continue resolving the canonical name.
+
+One important DNS rule is that a name owning a CNAME record cannot simultaneously have ordinary records such as A, MX, or TXT records at that same name. There are specialized mechanisms for some scenarios, but a traditional CNAME is not simply "another DNS record that can coexist with everything else."
+<br/>
+---
+<br/>
+# What about the nameservers I get from my hosting provider?
+
+This is where DNS becomes very practical when you're actually running a website.
+
+When you buy a domain, the registrar needs to know **which authoritative nameservers are responsible for the domain**.
+
+For example, a domain might be delegated to nameservers operated by your DNS provider:
+
+```text
+example.com
+     |
+     ├── ns1.provider.example
+     └── ns2.provider.example
+```
+
+Those authoritative servers then publish the zone's records:
+
+```text
+example.com       A       ...
+www.example.com   CNAME   ...
+example.com       MX      ...
+example.com       TXT     ...
+```
+
+Changing nameservers therefore isn't merely "changing where the website is hosted." It changes **which infrastructure is authoritative for the domain's DNS zone**.
+
+That distinction becomes extremely important when you're configuring a domain for both a website and email.
+<br/>
+---
+<br/>
+# DNS and your website are not the same thing
+
+Suppose you have:
+
+```text
+asifurrahaman.com
+```
+
+and you want:
+
+```text
+Website → Netlify
+Email   → Hostinger
+```
+
+DNS can describe both.
+
+For example, conceptually:
+
+```text
+asifurrahaman.com
+       |
+       ├── Web records ──→ Netlify
+       |
+       └── MX records ───→ Hostinger mail servers
+```
+
+The domain itself doesn't have to "belong" entirely to your web host.
+
+DNS is simply publishing the information necessary for different services to find each other.
+
+That's why accidentally replacing or deleting your MX/TXT records while configuring a website can break email even though the website continues to work.
+<br/>
+---
+<br/>
+# How does the computer actually transport DNS queries?
+
+Traditional DNS commonly uses **UDP on port 53**, with TCP also used when necessary. DNS has evolved significantly over the years, including extensions that allow larger responses and modern mechanisms for encrypted DNS transport.
+
+Today you may also encounter:
+
+- **DNS over TLS (DoT)**
+- **DNS over HTTPS (DoH)**
+- **DNS over QUIC (DoQ)**
+
+These mechanisms change how DNS queries are transported; they do not eliminate the underlying DNS hierarchy or resource-record system.
+
+DNSSEC is another important extension, but it solves a different problem: **authenticating DNS data and protecting its integrity**, not encrypting DNS queries. DNSSEC specifically provides data-origin authentication and integrity, but does not provide confidentiality.
+<br/>
+---
+<br/>
+# See DNS for yourself
+
+You don't need Wireshark or a complicated setup to experiment with DNS.
+
+The `dig` command is one of the best tools for this.
+
+Ask for an A record:
 
 ```bash
-# Ask for the A record and show the answer section
 dig example.com A +noall +answer
+```
 
-# Trace the full delegation path from the root
+You might get something conceptually like:
+
+```text
+example.com.    300    IN    A    93.184.216.34
+```
+
+Now you can see several pieces of DNS data directly:
+
+```text
+example.com.  → name
+300           → TTL
+IN            → Internet class
+A             → record type
+93.184.216.34 → IPv4 address
+```
+
+You can also inspect other records:
+
+```bash
+dig example.com AAAA
+dig example.com MX
+dig example.com NS
+dig example.com TXT
+```
+
+And there is a particularly useful command:
+
+```bash
 dig example.com +trace
 ```
 
-<Callout type="tip">
-If a change to a record “isn’t working yet,” suspect caching first. Check the
-TTL on the old record — a resolver may still be serving it until that TTL
-elapses.
-</Callout>
+`+trace` is interesting because it lets `dig` walk the delegation hierarchy starting from the root instead of simply asking your normal recursive resolver for the final answer.
 
-## Why the hierarchy matters
+It is therefore a great way to *see* the hierarchy we've been discussing.
+<br/>
+---
+<br/>
+# The most important idea: DNS is a system of delegation
 
-Because no single server holds every name, DNS scales to the size of the
-internet and distributes authority: the owner of a domain controls its own
-authoritative records, while delegation from the root and TLDs makes those
-records discoverable. That separation of *who answers* from *who asks* is the
-core idea worth remembering.
+The easiest way to misunderstand DNS is to imagine one enormous database with one enormous server.
+
+The better mental model is this:
+
+```text
+                  DNS Root
+                     |
+              ┌──────┴──────┐
+              |             |
+             .com          .org
+              |
+         example.com
+              |
+       ┌──────┴───────┐
+       |              |
+      www            mail
+```
+
+Different parts of this tree can be administered by different organizations.
+
+A recursive resolver navigates that hierarchy, uses referrals to discover where authority lives, and uses caching to avoid repeating work that has already been done.
+
+And that is why DNS scales.
+
+There is no single machine on the internet that needs to know:
+
+> "What is the IP address of every website in existence?"
+
+Instead, authority is **distributed**.
+
+The root knows who handles the TLD.
+
+The TLD knows who handles the domain.
+
+The domain's authoritative nameservers know the records inside that domain.
+
+The recursive resolver connects those pieces together and remembers useful answers along the way.
+<br/>
+---
+<br/>
+# One mental model that helped me
+
+When you enter:
+
+```text
+www.example.com
+```
+
+think:
+
+```text
+Name
+ ↓
+Stub Resolver
+ ↓
+Recursive Resolver
+ ↓
+Cache?
+ ├── Yes → return cached data
+ │
+ └── No
+      ↓
+     Root
+      ↓
+     TLD
+      ↓
+     Authoritative Nameserver
+      ↓
+     Resource Record
+      ↓
+     Recursive Resolver
+      ↓
+     Your computer
+```
+
+And remember three roles:
+
+```text
+Stub resolver
+→ asks someone else to resolve the name
+
+Recursive resolver
+→ does the lookup work on the client's behalf
+
+Authoritative nameserver
+→ publishes the authoritative DNS data for its zone
+```
+
+Once those three roles make sense, a lot of "mysterious" internet infrastructure suddenly becomes much easier to understand.
+
+DNS isn't merely the phone book of the internet.
+
+It's more like a **distributed directory with a hierarchy, delegation, caching, and a surprisingly rich set of records**—and almost every time you visit a website, send an email, or connect to an internet service, you're relying on it.

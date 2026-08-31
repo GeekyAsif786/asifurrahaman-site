@@ -37,13 +37,12 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { post, prev, next, related } = Astro.props;
-const { Content, headings } = await render(post);
+const { Content } = await render(post);
 const readingTime = readingMinutes(post);
 ---
 
 <BlogPostLayout
   post={post}
-  headings={headings}
   readingTime={readingTime}
   prev={prev}
   next={next}

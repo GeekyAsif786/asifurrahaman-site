@@ -4,38 +4,31 @@
  *
  * Owns everything around the article body: SEO metadata (via BaseLayout),
  * breadcrumbs, the article header (title/description/dates/tags/reading time),
- * an optional table of contents, and the prev/next + related-posts footer.
+ * and the prev/next + related-posts footer.
  *
  * The rendered MDX/Markdown body is passed in through the default <slot />.
  * The page (`/blog/[slug]`) stays thin: it queries data, runs render(), and
  * hands the pieces to this layout.
  */
-import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
 import Container from '../components/Container.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Tag from '../components/Tag.astro';
-import TableOfContents from '../components/TableOfContents.astro';
 import { formatDate, formatLongDate, isoDate, readingTimeLabel } from '../utils/format';
 import type { PostEntry } from '../utils/blog';
 import { blogPostingSchema, breadcrumbSchema } from '../utils/structured-data';
 
 interface Props {
   post: PostEntry;
-  headings: MarkdownHeading[];
   readingTime: number;
   prev: PostEntry | null;
   next: PostEntry | null;
   related: PostEntry[];
 }
 
-const { post, headings, readingTime, prev, next, related } =
+const { post, readingTime, prev, next, related } =
   Astro.props as Props;
 const d = post.data;
-
-// Show a TOC only for longer articles: at least 3 section headings (h2/h3).
-const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
-const showToc = tocItems.length >= 3;
 
 // ---- Structured data (built from real frontmatter only) ----
 const postUrl = `/blog/${post.id}/`;
@@ -114,8 +107,6 @@ const breadcrumbJsonLd = breadcrumbSchema([
         />
       )
     }
-
-    {showToc && <TableOfContents headings={headings} />}
 
     <div class="prose">
       <slot />
