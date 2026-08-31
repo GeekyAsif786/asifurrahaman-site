@@ -109,6 +109,8 @@
   /* ---- Glass surface tokens (light) ---- */
   --glass-bg: rgba(255, 255, 255, 0.62);
   --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  /* Mobile nav dropdown: needs to stay legible over page content. */
+  --menu-panel-bg: rgba(255, 255, 255, 0.96);
   --glass-border: rgba(255, 255, 255, 0.7);
   --glass-border-line: rgba(20, 22, 27, 0.08);
   --glass-blur: 12px;
@@ -142,6 +144,8 @@
   /* ---- Glass surface tokens (dark) ---- */
   --glass-bg: rgba(24, 30, 40, 0.55);
   --glass-bg-strong: rgba(22, 28, 38, 0.8);
+  /* Mobile nav dropdown: needs to stay legible over page content. */
+  --menu-panel-bg: rgba(18, 23, 32, 0.97);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-border-line: rgba(255, 255, 255, 0.08);
   --glass-blur: 14px;
