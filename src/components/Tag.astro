@@ -34,19 +34,22 @@ const href = `/tags/${tagToSlug(tag)}`;
 <style>
   .tag {
     display: inline-block;
-    padding: 0.15rem 0.55rem;
+    padding: 0.15rem 0.6rem;
     font-size: var(--text-xs);
     font-family: var(--font-mono);
     color: var(--color-text-muted);
     background: var(--color-bg-subtle);
-    border: var(--border-width) solid var(--color-border);
+    border: var(--border-width) solid var(--glass-border-line);
     border-radius: 999px;
     text-decoration: none;
-    line-height: 1.5;
+    line-height: 1.6;
+    transition: color 0.15s ease, border-color 0.15s ease,
+      background-color 0.15s ease;
   }
   a.tag:hover {
     color: var(--color-accent);
     border-color: var(--color-accent);
+    background: var(--color-accent-soft);
   }
   .tag--static {
     cursor: default;

@@ -1,31 +1,395 @@
 ---
+/**
+ * About — personal engineering profile.
+ *
+ * Structure: About heading → glass profile card (photo + identity + socials)
+ * → personal introduction on a clean reading surface → "What I build" interest
+ * grid → Selected Projects (reusing the projects collection + ProjectCard).
+ *
+ * Reuses existing systems: BaseLayout/Container, design tokens + glass, the
+ * centralized social config (getSocials) + SocialIcon, the projects collection
+ * (getFeaturedProjects + toSummary) + ProjectCard, and personSchema for SEO.
+ * No new fonts, no new visual language.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
+import SocialIcon from '../components/SocialIcon.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE, AREAS_OF_INTEREST, getSocials } from '../utils/site';
+import { getFeaturedProjects, toSummary } from '../utils/projects';
 import { personSchema } from '../utils/structured-data';
+
+const socials = getSocials();
+const projects = (await getFeaturedProjects()).map(toSummary);
+
+/*
+ * Profile photo.
+ * TODO: replace with your real photograph. Save it under /public (e.g.
+ * public/profile.jpg) and update this path. A portrait aspect ratio (4:5)
+ * matches the frame styling below. Currently an abstract placeholder.
+ */
+const profileImage = '/profile.png';
+const profileAlt = `${SITE.name} — profile photo`;
 ---
 
 <BaseLayout
   title="About"
-  description="About Asifur Rahman — engineering interests, background, and this site."
+  description="About Asifur Rahaman — an engineering student and developer building software and writing about computer science, networking, and AI."
   jsonLd={personSchema()}
 >
-  <Container as="section" variant="prose" class="page">
-    <h1>About</h1>
-    <p>
-      {/* TODO: replace with a real bio. Do not invent achievements, degrees,
-          employment, or credentials — leave as placeholder until provided. */}
-      I’m Asifur Rahman, an engineering student and developer. This site
-      collects my projects, technical writing, and learning notes.
-    </p>
+  <Container as="section" class="about">
+    <h1 class="about-title">About</h1>
+
+    {/* ---- Profile card ---- */}
+    <div class="profile">
+      <div class="photo-frame">
+        <img
+          class="photo"
+          src={profileImage}
+          alt={profileAlt}
+          width="960"
+          height="1280"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+
+      <div class="identity">
+        <p class="eyebrow">Backend Developer and ML enthusiast</p>
+        <h2 class="name">{SITE.name}</h2>
+        <p class="role">Engineering Student · Developer</p>
+
+        {
+          socials.length > 0 && (
+            <ul class="socials" aria-label="Social links">
+              {socials.map((s) => (
+                <li>
+                  <a
+                    class="social-link"
+                    href={s.href}
+                    aria-label={s.label}
+                    {...(s.sameTab
+                      ? {}
+                      : { target: '_blank', rel: 'me noopener' })}
+                  >
+                    {s.icon && <SocialIcon name={s.icon} />}
+                    <span>{s.label}</span>
+                    {!s.sameTab && (
+                      <span class="visually-hidden"> (opens in a new tab)</span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+
+    {/* ---- Introduction (clean reading surface) ---- */}
+    <div class="intro">
+      <p>
+        I’m Asifur Rahaman, an engineering student and developer interested in
+        software, computer science, networking, artificial intelligence, and
+        practical problem-solving. I enjoy turning ideas into working systems
+        while continuously learning through experimentation, projects, and
+        technical research.
+      </p>
+      <p>
+        My projects include an <a href="/projects/ai-network-mapper">AI Network
+        Mapper</a>, where I explore intelligent approaches to network discovery
+        and visualization, and a <a href="/projects/road-traffic-manager">Road
+        Traffic Manager</a> focused on software-based traffic management and
+        simulation. Alongside building projects, I document what I learn through
+        technical articles, tutorials, and research notes.
+      </p>
+      <p>
+        Through this website, I aim to share my work, knowledge, experiments,
+        and progress while building useful and meaningful technology.
+      </p>
+    </div>
+
+    {/* ---- What I build / interested in ---- */}
+    {
+      AREAS_OF_INTEREST.length > 0 && (
+        <section class="areas-section" aria-labelledby="areas-h">
+          <h2 id="areas-h">What I build &amp; explore</h2>
+          <ul class="areas">
+            {AREAS_OF_INTEREST.map((area) => (
+              <li>{area}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* ---- Selected projects (reuses the collection + ProjectCard) ---- */}
+    {
+      projects.length > 0 && (
+        <section class="projects-section" aria-labelledby="projects-h">
+          <div class="section-head">
+            <h2 id="projects-h">Selected projects</h2>
+            <a href="/projects" class="see-all">All projects →</a>
+          </div>
+          <div class="project-grid">
+            {projects.map((project) => (
+              <ProjectCard project={project} headingLevel="h3" />
+            ))}
+          </div>
+        </section>
+      )
+    }
   </Container>
 </BaseLayout>
 
+```astro
 <style>
-  .page {
-    padding-block: var(--space-12);
+  .about {
+    padding-block: var(--space-16) var(--space-16);
   }
-  .page p {
-    margin-top: var(--space-4);
+
+  .about-title {
+    /* Space below the sticky header (the `.about` padding lives on the
+       Container's <section>, which is scoped to a different component, so we
+       set the top spacing directly on this heading instead). */
+    margin-top: var(--space-12);
+    /* Decent underline: a full accent rule beneath the heading, then generous
+       space before the profile card. */
+    display: inline-block;
+    padding-bottom: var(--space-3);
+    border-bottom: 3px solid var(--color-accent);
+    margin-bottom: var(--space-16);
+  }
+
+  /* ---- Profile card (subtle glass) ---- */
+  .profile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    align-items: center;
+    padding: var(--space-8);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    box-shadow: var(--glass-shadow);
+    text-align: center;
+  }
+
+  @supports (backdrop-filter: blur(1px)) or
+    (-webkit-backdrop-filter: blur(1px)) {
+    .profile {
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
+    }
+  }
+
+  /* Photo: refined editorial frame — soft border + restrained shadow +
+     a slight offset accent layer behind. Portrait 4:5. */
+  .photo-frame {
+    position: relative;
+    width: 100%;
+    max-width: 15rem;
+    margin-inline: auto;
+  }
+
+  .photo-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translate(10px, 10px);
+    border-radius: var(--radius);
+    background: var(--color-accent-soft);
+    z-index: 0;
+  }
+
+  .photo {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    max-width: 15rem;
+    aspect-ratio: 4 / 5;
+    object-fit: contain;
+    border-radius: var(--radius);
+    border: var(--border-width) solid var(--glass-border-line);
+    box-shadow: var(--glass-shadow);
+    /* A consistent near-white backing so the high-contrast portrait reads
+       clearly in BOTH themes (the image is black ink on transparency). Padding
+       gives it a subtle matted/print feel. Fixed value (not a theme token) is
+       intentional so the photo looks identical in light and dark. */
+    background: #f4f5f8;
+    padding: var(--space-2);
+  }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    font-family: var(--font-mono);
+    margin-bottom: var(--space-2);
+  }
+
+  .name {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+
+  .role {
+    margin-top: var(--space-2);
     color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+
+  .socials {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-6) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3) var(--space-5, 1.25rem);
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .social-link:hover {
+    color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  /* ---- Introduction: clean reading surface (no glass) ---- */
+  .intro {
+    max-width: var(--container-prose);
+    margin: var(--space-12) auto 0;
+    font-family: var(--font-body-alt);
+    font-size: 1.075rem;
+    line-height: 1.75;
+    text-align: justify;
+  }
+
+  .intro p + p {
+    margin-top: var(--space-4);
+  }
+
+  /* ---- Areas / interests ---- */
+  .areas-section {
+    margin-top: var(--space-16);
+    text-align: center;
+  }
+
+  .areas-section h2 {
+    margin-bottom: var(--space-6);
+    text-align: left;
+  }
+
+  .areas {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
+  }
+
+  .areas li {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    border: var(--border-width) solid var(--glass-border-line);
+    border-radius: var(--radius-sm);
+    background: var(--glass-bg);
+    text-align: center;
+  }
+
+  @supports (backdrop-filter: blur(1px)) or
+    (-webkit-backdrop-filter: blur(1px)) {
+    .areas li {
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
+    }
+  }
+
+  /* ---- Selected projects ---- */
+  .projects-section {
+    margin-top: var(--space-16);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .section-head h2 {
+    margin: 0;
+    text-align: left;
+  }
+
+  .see-all {
+    flex-shrink: 0;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .see-all:hover {
+    text-decoration: underline;
+  }
+
+  .project-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+  }
+
+  /* ---- Responsive ---- */
+  @media (min-width: 560px) {
+    .areas {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .project-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 760px) {
+    /* Two-column profile: photo left, identity right. */
+    .profile {
+      grid-template-columns: auto 1fr;
+      gap: var(--space-12);
+      align-items: center;
+      padding: var(--space-12);
+    }
+
+    .photo-frame {
+      margin-inline: 0;
+      width: 15rem;
+    }
+
+    .identity {
+      text-align: center;
+    }
+
+    .areas {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 </style>
+```
+

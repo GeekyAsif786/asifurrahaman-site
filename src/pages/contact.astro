@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
-import { SOCIALS } from '../utils/site';
+import SocialIcon from '../components/SocialIcon.astro';
+import { getSocials } from '../utils/site';
+
+const socials = getSocials();
 ---
 
-<BaseLayout title="Contact" description="Get in touch with Asifur Rahman.">
+<BaseLayout title="Contact" description="Get in touch with Asifur Rahaman.">
   <Container as="section" variant="prose" class="page">
     <h1>Contact</h1>
     <p>
@@ -12,17 +15,27 @@ import { SOCIALS } from '../utils/site';
       The best way to reach me is via the links below.
     </p>
     {
-      SOCIALS.length > 0 && (
+      socials.length > 0 ? (
         <ul class="links">
-          {SOCIALS.map((s) => (
+          {socials.map((s) => (
             <li>
-              <a href={s.href} rel="me noopener" target="_blank">
-                {s.label}
-                <span class="visually-hidden"> (opens in a new tab)</span>
+              <a
+                class="contact-link"
+                href={s.href}
+                aria-label={s.label}
+                {...(s.sameTab ? {} : { target: '_blank', rel: 'me noopener' })}
+              >
+                {s.icon && <SocialIcon name={s.icon} size={20} />}
+                <span>{s.label}</span>
+                {!s.sameTab && (
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                )}
               </a>
             </li>
           ))}
         </ul>
+      ) : (
+        <p class="muted">Contact links coming soon.</p>
       )
     }
   </Container>
@@ -37,10 +50,25 @@ import { SOCIALS } from '../utils/site';
     color: var(--color-text-muted);
   }
   .links {
+    list-style: none;
     margin-top: var(--space-6);
-    padding-left: var(--space-4);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
   }
-  .links li {
-    margin-bottom: var(--space-2);
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .contact-link:hover {
+    color: var(--color-accent);
+  }
+  .muted {
+    color: var(--color-text-muted);
   }
 </style>

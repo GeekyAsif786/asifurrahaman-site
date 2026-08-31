@@ -70,8 +70,6 @@ const { label, posts } = Astro.props;
   .list {
     display: flex;
     flex-direction: column;
-  }
-  .list :global(.blog-card:last-child) {
-    border-bottom: none;
+    gap: var(--space-4);
   }
 </style>

@@ -1,6 +1,6 @@
 # asifurrahaman-site
 
-Personal engineering site for **Asifur Rahman** — projects, technical writing,
+Personal engineering site for **Asifur Rahaman** — projects, technical writing,
 and learning notes. Built with [Astro](https://astro.build) + MDX, statically
 generated, and deployed to Netlify at
 [asifurrahaman.com](https://asifurrahaman.com).

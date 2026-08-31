@@ -5,27 +5,72 @@
   - All colors, spacing, and typography live here as CSS custom properties.
   - Light theme is the default (:root). Dark theme overrides tokens under
     [data-theme='dark']. This is driven by the theme system (see BaseLayout).
-  - Components should reference var(--token) instead of hard-coded values.
+  - Components reference var(--token) instead of hard-coded values.
+
+  Design language: minimal engineering portfolio with SUBTLE premium
+  glassmorphism. Glass tokens (--glass-*) provide translucent surfaces, thin
+  borders, restrained shadows, and backdrop blur. Every surface still reads
+  cleanly if the blur/translucency is removed.
+
+  Fonts are self-hosted variable fonts (bundled at build, no runtime network
+  request): Inter for UI/body, JetBrains Mono for code.
 */
+
+/* Self-hosted variable fonts (subset to the weights/axes we use). */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/*
+  Instrument Serif — local display/heading font.
+  Single regular (400) style; the supplied file has no bold weights, so we do
+  NOT declare synthetic 600/700/800 faces. Headings use font-synthesis:none so
+  they render in the genuine regular style rather than faux-bold.
+*/
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('/fonts/instrumentserif-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+  Space Grotesk — local regular (400) style. Used for specific body/reading
+  copy (currently the About introduction). No synthetic bold faces declared.
+*/
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* ---- Type ---- */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular',
+    'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  /* Display/heading font — Instrument Serif (regular only). Falls back to a
+     system serif, then the sans stack, if the local file fails to load. */
+  --font-display: 'Instrument Serif', ui-serif, Georgia, Cambria,
+    'Times New Roman', serif;
+  /* Alternate body font used for select reading copy (e.g. the About intro). */
+  --font-body-alt: 'Space Grotesk', var(--font-sans);
 
   /* Fluid type scale (clamp: min, preferred, max) */
-  --text-xs: 0.8rem;
-  --text-sm: 0.9rem;
+  --text-xs: 0.78rem;
+  --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.375rem;
   --text-2xl: clamp(1.6rem, 1.2rem + 1.6vw, 2.1rem);
   --text-3xl: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+  --text-hero: clamp(2.6rem, 1.6rem + 4.2vw, 4.5rem);
 
-  --leading-tight: 1.2;
-  --leading-normal: 1.65;
+  --leading-tight: 1.15;
+  --leading-normal: 1.7;
 
   /* ---- Spacing scale ---- */
   --space-1: 0.25rem;
@@ -40,42 +85,74 @@
 
   /* ---- Layout ---- */
   --container-max: 68rem;
-  --container-prose: 44rem;
-  --radius: 8px;
-  --radius-sm: 5px;
+  --container-prose: 42rem;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 18px;
   --border-width: 1px;
 
   /* ---- Light theme colors ---- */
-  --color-bg: #ffffff;
-  --color-bg-subtle: #f6f7f9;
+  --color-bg: #fbfcfe;
+  --color-bg-subtle: #f1f3f7;
   --color-surface: #ffffff;
-  --color-text: #16181d;
-  --color-text-muted: #5a6270;
-  --color-border: #e2e5ea;
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
+  --color-text: #14161b;
+  --color-text-muted: #565e6c;
+  --color-border: #e4e7ee;
+  --color-accent: #2f5fe0;
+  --color-accent-hover: #2049c4;
   --color-accent-contrast: #ffffff;
-  --color-code-bg: #f6f7f9;
-  --color-focus: #2563eb;
+  --color-accent-soft: rgba(47, 95, 224, 0.1);
+  --color-code-bg: #f5f6fa;
+  --color-focus: #2f5fe0;
   --color-selection: #cfe0ff;
 
-  /* Shiki dual-theme wiring: default to light values */
+  /* ---- Glass surface tokens (light) ---- */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-border-line: rgba(20, 22, 27, 0.08);
+  --glass-blur: 12px;
+  --glass-shadow: 0 1px 2px rgba(20, 22, 27, 0.04),
+    0 8px 24px rgba(20, 22, 27, 0.06);
+  --glass-shadow-hover: 0 2px 4px rgba(20, 22, 27, 0.06),
+    0 16px 40px rgba(20, 22, 27, 0.1);
+
+  /* ---- Ambient background depth (light) ---- */
+  --ambient-1: rgba(47, 95, 224, 0.06);
+  --ambient-2: rgba(120, 90, 220, 0.05);
+
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --color-bg: #0e1116;
-  --color-bg-subtle: #161a21;
-  --color-surface: #161a21;
-  --color-text: #e6e9ef;
-  --color-text-muted: #9aa4b2;
-  --color-border: #262b34;
-  --color-accent: #6ea8fe;
-  --color-accent-hover: #93c0ff;
-  --color-accent-contrast: #0e1116;
-  --color-code-bg: #12161c;
-  --color-focus: #6ea8fe;
+  --color-bg: #0b0e13;
+  --color-bg-subtle: #12161d;
+  --color-surface: #141922;
+  --color-text: #e7eaf0;
+  --color-text-muted: #98a2b3;
+  --color-border: #232935;
+  --color-accent: #7aa2ff;
+  --color-accent-hover: #9cbcff;
+  --color-accent-contrast: #0b0e13;
+  --color-accent-soft: rgba(122, 162, 255, 0.14);
+  --color-code-bg: #0f131a;
+  --color-focus: #7aa2ff;
   --color-selection: #24405f;
+
+  /* ---- Glass surface tokens (dark) ---- */
+  --glass-bg: rgba(24, 30, 40, 0.55);
+  --glass-bg-strong: rgba(22, 28, 38, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-line: rgba(255, 255, 255, 0.08);
+  --glass-blur: 14px;
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.3),
+    0 10px 30px rgba(0, 0, 0, 0.35);
+  --glass-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.35),
+    0 18px 44px rgba(0, 0, 0, 0.45);
+
+  /* ---- Ambient background depth (dark) ---- */
+  --ambient-1: rgba(122, 162, 255, 0.1);
+  --ambient-2: rgba(140, 110, 240, 0.08);
 
   color-scheme: dark;
 }
@@ -96,6 +173,9 @@ html {
   font-family: var(--font-sans);
   line-height: var(--leading-normal);
   scroll-behavior: smooth;
+  /* Guard against accidental horizontal overflow from decorative/fixed
+     elements. `clip` avoids creating a scroll container (unlike hidden). */
+  overflow-x: clip;
 }
 
 body {
@@ -103,10 +183,36 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-size: var(--text-base);
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/*
+  Subtle ambient background depth. Two very soft radial gradients, fixed so
+  they don't scroll. Barely noticeable; content stays the visual priority.
+  Purely decorative → aria-hidden not needed (it's a ::before pseudo-element).
+*/
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      60rem 40rem at 12% -8%,
+      var(--ambient-1),
+      transparent 60%
+    ),
+    radial-gradient(
+      50rem 38rem at 100% 0%,
+      var(--ambient-2),
+      transparent 55%
+    );
 }
 
 ::selection {
@@ -126,21 +232,27 @@ h1,
 h2,
 h3,
 h4 {
+  font-family: var(--font-display);
+  /* Instrument Serif ships a single regular style. Use weight 400 and disable
+     synthesis so component-level bold overrides don't produce faux-bold. */
+  font-weight: 400;
+  font-synthesis: none;
   line-height: var(--leading-tight);
-  font-weight: 650;
   text-wrap: balance;
+  letter-spacing: -0.02em;
 }
 
 h1 {
   font-size: var(--text-3xl);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 h2 {
   font-size: var(--text-2xl);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 h3 {
   font-size: var(--text-xl);
+  letter-spacing: -0.015em;
 }
 
 p {
@@ -151,6 +263,7 @@ a {
   color: var(--color-accent);
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
+  transition: color 0.15s ease;
 }
 
 a:hover {
@@ -163,13 +276,15 @@ pre,
 samp {
   font-family: var(--font-mono);
   font-size: 0.9em;
+  font-variant-ligatures: none;
 }
 
 :not(pre) > code {
   background: var(--color-code-bg);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: 0.12em 0.38em;
+  padding: 0.12em 0.4em;
+  font-size: 0.85em;
 }
 
 /* Astro/Shiki code blocks */
@@ -179,7 +294,23 @@ pre {
   border: var(--border-width) solid var(--color-border);
   overflow-x: auto;
   font-size: var(--text-sm);
-  line-height: 1.55;
+  line-height: 1.6;
+}
+
+/* ---- Glass surface utility ----
+   Reusable translucent surface. Components can add `.glass` or reference the
+   tokens directly. The @supports guard keeps a solid fallback where
+   backdrop-filter is unavailable. */
+.glass {
+  background: var(--glass-bg);
+  border: var(--border-width) solid var(--glass-border-line);
+  box-shadow: var(--glass-shadow);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+  }
 }
 
 /* ---- Accessibility: focus ---- */
@@ -189,7 +320,6 @@ pre {
   border-radius: 2px;
 }
 
-/* Remove default focus ring only where focus-visible is supported */
 :focus:not(:focus-visible) {
   outline: none;
 }

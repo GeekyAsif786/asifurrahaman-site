@@ -1,0 +1,80 @@
+---
+/**
+ * ScrollProgress — a thin bar fixed to the top edge that fills as the reader
+ * scrolls the document (0% at top → 100% at bottom) and reverses on scroll up.
+ *
+ * Implementation notes:
+ * - The bar is a full-width element scaled horizontally via transform:scaleX(),
+ *   which is GPU-accelerated and cheap to update.
+ * - The script listens to scroll/resize with requestAnimationFrame throttling
+ *   (minimal JS, no library).
+ * - It is purely decorative (aria-hidden) — it does not convey essential
+ *   information, and progress isn't communicated by color alone.
+ * - The fill transition is disabled under prefers-reduced-motion; the value
+ *   still updates so the bar remains accurate, just without easing.
+ */
+---
+
+<div class="scroll-progress" aria-hidden="true">
+  <div id="scroll-progress-bar" class="scroll-progress__bar"></div>
+</div>
+
+<style>
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 60; /* above the sticky header */
+    pointer-events: none;
+    background: transparent;
+  }
+  .scroll-progress__bar {
+    height: 100%;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent),
+      color-mix(in oklab, var(--color-accent) 70%, var(--color-accent-hover))
+    );
+    will-change: transform;
+    transition: transform 0.08s linear;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-progress__bar {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const bar = document.getElementById('scroll-progress-bar');
+  if (bar) {
+    let ticking = false;
+
+    function update() {
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - doc.clientHeight;
+      const progress = scrollable > 0 ? doc.scrollTop / scrollable : 0;
+      // Clamp to [0,1] and drive the horizontal scale.
+      const clamped = Math.min(1, Math.max(0, progress));
+      bar!.style.transform = `scaleX(${clamped})`;
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    // Set the initial value (e.g. when navigating to a mid-page anchor).
+    update();
+  }
+</script>

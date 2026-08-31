@@ -15,7 +15,7 @@ function abs(path: string): string {
 }
 
 /**
- * Person schema for Asifur Rahman. `sameAs` links to configured social
+ * Person schema for Asifur Rahaman. `sameAs` links to configured social
  * profiles (only real ones), which search engines use for entity linking.
  */
 export function personSchema(): Schema {

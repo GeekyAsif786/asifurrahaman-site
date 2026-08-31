@@ -46,16 +46,18 @@
     width: 2.4rem;
     height: 2.4rem;
     padding: 0;
-    border: var(--border-width) solid var(--color-border);
+    border: var(--border-width) solid var(--glass-border-line);
     border-radius: var(--radius-sm);
-    background: var(--color-surface);
+    background: var(--glass-bg);
     color: var(--color-text);
     cursor: pointer;
-    transition: border-color 0.15s ease, color 0.15s ease;
+    transition: border-color 0.15s ease, color 0.15s ease,
+      background-color 0.15s ease;
   }
   .theme-toggle:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
+    background: var(--color-accent-soft);
   }
   .icon {
     display: none;

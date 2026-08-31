@@ -12,7 +12,7 @@ import { getPublishedPosts, toSummary } from '../../utils/blog';
 const posts = (await getPublishedPosts()).map(toSummary);
 ---
 
-<BaseLayout title="Blog" description="Technical writing and notes by Asifur Rahman.">
+<BaseLayout title="Blog" description="Technical writing and notes by Asifur Rahaman.">
   <Container as="section" variant="prose" class="page">
     <header class="page-head">
       <h1>Blog</h1>
@@ -40,7 +40,7 @@ const posts = (await getPublishedPosts()).map(toSummary);
     padding-block: var(--space-12);
   }
   .page-head {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-8);
   }
   .intro {
     margin-top: var(--space-3);
@@ -49,9 +49,7 @@ const posts = (await getPublishedPosts()).map(toSummary);
   .list {
     display: flex;
     flex-direction: column;
-  }
-  .list :global(.blog-card:last-child) {
-    border-bottom: none;
+    gap: var(--space-4);
   }
   .empty {
     color: var(--color-text-muted);
