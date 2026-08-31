@@ -26,7 +26,7 @@ function isActive(href: string): boolean {
   <Container>
     <div class="bar">
       <a href="/" class="brand" aria-label={`${SITE.name} — home`}>
-        {SITE.name}
+        Asifur
       </a>
 
       <button
@@ -53,12 +53,30 @@ function isActive(href: string): boolean {
                   class:list={['nav-link', { active: isActive(item.href) }]}
                 >
                   {item.label}
+                  {item.label === 'Contact' && (
+                    <svg
+                      class="nav-link-icon"
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M7 17 17 7"></path>
+                      <path d="M7 7h10v10"></path>
+                    </svg>
+                  )}
                 </a>
               </li>
             ))
           }
         </ul>
         <div class="nav-actions">
+          <span class="nav-divider" aria-hidden="true"></span>
           <ThemeToggle />
         </div>
       </nav>
@@ -93,7 +111,8 @@ function isActive(href: string): boolean {
     letter-spacing: -0.03em;
     color: var(--color-text);
     text-decoration: none;
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
+    line-height: 1;
     transition: color 0.15s ease;
   }
   .brand:hover {
@@ -137,22 +156,53 @@ function isActive(href: string): boolean {
   }
   .nav-link {
     position: relative;
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
     padding: var(--space-2) var(--space-1);
     color: var(--color-text-muted);
     text-decoration: none;
     font-size: var(--text-base);
     transition: color 0.15s ease;
   }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: var(--space-1);
+    right: var(--space-1);
+    bottom: 0.2rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 999px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.18s ease;
+  }
   .nav-link:hover {
     color: var(--color-text);
+  }
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    transform: scaleX(1);
   }
   .nav-link.active {
     color: var(--color-text);
     font-weight: 600;
   }
+  .nav-link-icon {
+    flex-shrink: 0;
+  }
   .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     margin-top: var(--space-3);
+  }
+  .nav-divider {
+    display: block;
+    width: 1px;
+    height: 1.5rem;
+    background: var(--color-border);
   }
 
   /* Expanded mobile menu — glass panel dropping below the bar. */
@@ -191,14 +241,15 @@ function isActive(href: string): boolean {
     }
     .nav-link {
       padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-sm);
     }
-    /* Subtle active/hover pill on desktop. */
+    .nav-link::after {
+      left: var(--space-3);
+      right: var(--space-3);
+    }
     .nav-link:hover {
-      background: var(--color-accent-soft);
+      color: var(--color-text);
     }
     .nav-link.active {
-      background: var(--color-accent-soft);
       color: var(--color-accent);
     }
     .nav-actions {

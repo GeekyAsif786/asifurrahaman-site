@@ -31,7 +31,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
 <BaseLayout jsonLd={personSchema()}>
   {/* ---- Hero ---- */}
   <Container as="section" class="hero">
-    <p class="eyebrow">Personal engineering site</p>
+    <p class="eyebrow">Backend Developer and ML Engineer</p>
     <h1 class="hero-title">{SITE.name}</h1>
     <p class="lede">
       {/* TODO: replace with a concise, accurate self-description.
@@ -123,7 +123,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
 
 <style>
   /* ---- Hero ---- */
-  .hero {
+  :global(.hero) {
     padding-block: var(--space-24) var(--space-16);
   }
   .eyebrow {
@@ -169,8 +169,8 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
   }
 
   /* ---- Generic section ---- */
-  .section {
-    padding-block: var(--space-12);
+  :global(.section) {
+    padding-block: var(--space-16);
     border-top: var(--border-width) solid var(--color-border);
   }
   .section-head {
@@ -178,7 +178,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
     align-items: baseline;
     justify-content: space-between;
     gap: var(--space-4);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-8);
   }
   .section-head h2 {
     margin: 0;
@@ -196,7 +196,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
   /* ---- Featured projects grid ---- */
   .project-grid {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-6);
     grid-template-columns: 1fr;
   }
   @media (min-width: 640px) {
@@ -209,7 +209,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
   .post-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-6);
   }
 
   /* ---- About ---- */
@@ -217,7 +217,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
     max-width: var(--container-prose);
   }
   .about h2 {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
   }
   .about p {
     color: var(--color-text-muted);
@@ -231,7 +231,7 @@ const githubUrl = SOCIALS.find((s) => s.label === 'GitHub')?.href;
     color: var(--color-text-muted);
     font-size: var(--text-sm);
     max-width: var(--container-prose);
-    margin-block: var(--space-3) var(--space-6);
+    margin-block: var(--space-4) var(--space-8);
   }
   .areas {
     list-style: none;

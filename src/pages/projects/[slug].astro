@@ -14,8 +14,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
+import SocialIcon from '../../components/SocialIcon.astro';
 import Tag from '../../components/Tag.astro';
-import { formatDate, isoDate } from '../../utils/format';
+import { formatDate, formatLongDate, isoDate } from '../../utils/format';
 
 export const getStaticPaths = (async () => {
   const projects = await getCollection('projects');
@@ -32,6 +33,7 @@ const { Content } = await render(project);
 const statusLabel: Record<string, string> = {
   'in-progress': 'In progress',
   completed: 'Completed',
+  published:'Published',
   maintained: 'Maintained',
   archived: 'Archived',
   planned: 'Planned',
@@ -58,6 +60,13 @@ if (d.startDate) {
 
     <header class="head">
       <h1>{d.title}</h1>
+      {
+        d.pubDate && (
+          <p class="published-date">
+            <time datetime={isoDate(d.pubDate)}>{formatLongDate(d.pubDate)}</time>
+          </p>
+        )
+      }
       <p class="summary">{d.longDescription ?? d.description}</p>
 
       <div class="meta">
@@ -91,10 +100,16 @@ if (d.startDate) {
         (d.github || d.demo) && (
           <div class="actions">
             {d.github && (
-              <Button href={d.github} rel="noopener" target="_blank" size="sm">
-                GitHub
+              <a
+                href={d.github}
+                rel="noopener"
+                target="_blank"
+                class="repo-link"
+                aria-label={`${d.title} GitHub repository`}
+              >
+                <SocialIcon name="github" size={20} />
                 <span class="visually-hidden"> (opens in a new tab)</span>
-              </Button>
+              </a>
             )}
             {d.demo && (
               <Button
@@ -154,7 +169,14 @@ if (d.startDate) {
   .summary {
     margin-top: var(--space-3);
     color: var(--color-text-muted);
+    font-family: var(--font-body-alt);
     font-size: var(--text-lg);
+  }
+  .published-date {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
   }
   .meta {
     display: flex;
@@ -182,8 +204,29 @@ if (d.startDate) {
   .actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: var(--space-3);
     margin-top: var(--space-6);
+  }
+  .repo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    color: var(--color-text);
+    text-decoration: none;
+    border: var(--border-width) solid var(--glass-border-line);
+    border-radius: var(--radius-sm);
+    background: var(--glass-bg);
+    transition: border-color 0.15s ease, color 0.15s ease,
+      background-color 0.15s ease, transform 0.15s ease;
+  }
+  .repo-link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
+    transform: translateY(-1px);
   }
 
   /* Article body typography. Reused conceptually by the blog in Phase 4. */
@@ -201,6 +244,9 @@ if (d.startDate) {
   .prose :global(ol) {
     margin-top: var(--space-4);
     color: var(--color-text);
+  }
+  .prose :global(p) {
+    font-family: var(--font-body-alt);
   }
   .prose :global(ul),
   .prose :global(ol) {

@@ -11,6 +11,16 @@ export function formatDate(date: Date): string {
   });
 }
 
+/** Format a date as e.g. "Monday, August 31, 2026". */
+export function formatLongDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
 /** Machine-readable date for <time datetime>, e.g. "2026-08-30". */
 export function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10);

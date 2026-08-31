@@ -21,3 +21,16 @@
   for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Tag navigation fallback.
+# Generated /tags/<slug>/ pages are static files and are served first (Netlify
+# serves existing files before applying non-forced redirects). Any /tags/*
+# request that does NOT match a generated tag page — i.e. an unknown or
+# mistyped tag — falls through to this rule and redirects to the blog listing
+# instead of showing a 404. `force = false` (the default) is essential so real
+# tag pages keep working.
+[[redirects]]
+  from = "/tags/*"
+  to = "/blog"
+  status = 302
+  force = false

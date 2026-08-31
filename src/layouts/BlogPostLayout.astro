@@ -16,7 +16,7 @@ import Container from '../components/Container.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Tag from '../components/Tag.astro';
 import TableOfContents from '../components/TableOfContents.astro';
-import { formatDate, isoDate, readingTimeLabel } from '../utils/format';
+import { formatDate, formatLongDate, isoDate, readingTimeLabel } from '../utils/format';
 import type { PostEntry } from '../utils/blog';
 import { blogPostingSchema, breadcrumbSchema } from '../utils/structured-data';
 
@@ -79,15 +79,17 @@ const breadcrumbJsonLd = breadcrumbSchema([
 
     <header class="post-head">
       <h1>{d.title}</h1>
+      <p class="published-date">
+        <time datetime={isoDate(d.pubDate)}>{formatLongDate(d.pubDate)}</time>
+      </p>
       <p class="desc">{d.description}</p>
       <div class="meta">
-        <time datetime={isoDate(d.pubDate)}>{formatDate(d.pubDate)}</time>
         {
           d.updatedDate && (
-            <span>· Updated <time datetime={isoDate(d.updatedDate)}>{formatDate(d.updatedDate)}</time></span>
+            <span>Updated <time datetime={isoDate(d.updatedDate)}>{formatDate(d.updatedDate)}</time></span>
           )
         }
-        <span>· {readingTimeLabel(readingTime)}</span>
+        <span>{readingTimeLabel(readingTime)}</span>
       </div>
       {
         d.tags.length > 0 && (
@@ -171,7 +173,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .desc {
     margin-top: var(--space-3);
     color: var(--color-text-muted);
+    font-family: var(--font-body-alt);
     font-size: var(--text-lg);
+  }
+  .published-date {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
   }
   .meta {
     display: flex;
@@ -234,6 +243,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
   }
   .prose :global(p) {
     margin-top: var(--space-4);
+    font-family: var(--font-body-alt);
   }
   .prose :global(ul),
   .prose :global(ol) {

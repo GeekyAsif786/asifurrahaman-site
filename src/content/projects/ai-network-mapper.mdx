@@ -1,12 +1,12 @@
 ---
-title: "AI Network Mapper"
-description: "TODO: one-line summary of what the AI Network Mapper does."
+title: "Sentinel AI"
+description: "SentinelAI is a defensive security analytics platform for defensive network scanning"
 # longDescription is optional — add a 2–3 sentence summary when ready.
-# longDescription: "TODO: longer summary shown at the top of the project page."
-technologies: []          # TODO: list the actual technologies used.
-status: in-progress       # TODO: confirm real status.
+longDescription: "SentinelAI is a defensive security analytics platform for turning network scan data into asset inventory, vulnerability context, graph analysis, MITRE ATT&CK mappings, and evidence-grounded security explanations."
+technologies: [MITRE ATT&CK mappings, Shodan, FastAPI, ]         
+status: Published       # TODO: confirm real status.
 featured: true
-# github: "https://github.com/USERNAME/REPO"   # TODO: add real repo URL.
+github: "https://github.com/GeekyAsif786/sentinelAI/"
 # demo: "https://example.com"                   # TODO: add if a live demo exists.
 screenshots: []           # TODO: add { src, alt } entries when images exist.
 # startDate: 2026-01-01    # TODO: set real dates if you want them shown.
@@ -24,38 +24,134 @@ order: 1
 
 ## Overview
 
-TODO: Describe what the AI Network Mapper is and what it does, in a few
-sentences. Keep it factual.
+SentinelAI is a defensive security analytics platform for turning network scan data into asset inventory, vulnerability context, graph analysis, MITRE ATT&CK mappings, and evidence-grounded security explanations.
 
+The project is intentionally defensive. It does not generate exploits, create payloads, harvest credentials, or execute attacks.
 ## Problem
 
-TODO: What problem does this project address?
+Security teams — especially small ones without a dedicated SOC — end up drowning in raw scan output. An Nmap sweep of a network produces a pile of open ports and service banners, and a vulnerability feed adds CVE IDs and CVSS scores on top. Neither tells you what actually matters: which of these 40 medium-severity findings is one hop away from your domain controller, and which is on an isolated dev box nobody will ever touch. CVSS alone is a bad prioritization signal because it ignores exposure, exploit likelihood, and blast radius.
+
+SentinelAI addresses that gap: it turns network scan data into a proper asset inventory, layers vulnerability context and deterministic risk scoring on top, and then models the network as a graph so you can actually see attack paths and choke points instead of a flat list of CVEs. It's built as a defensive, analytical platform by design — it does not generate exploits, payloads, or credential-harvesting tooling, and it never executes offensive actions, rather it switches itself to a defensive security protocol and helps orchestrate an effective security mapping and advanced protection system from the future projected attacks.
 
 ## Solution
 
-TODO: Describe your approach at a high level.
-
+The high-level approach is a pipeline, not a single tool:
+ 
+1. **Ingest** — scan output (Nmap XML first) is parsed through a typed `DiscoveryProvider` abstraction so future scanners (Masscan, RustScan, Shodan, Nessus, OpenVAS) can plug in without rewriting ingestion.
+2. **Govern** — every scan request passes through mandatory policy validation (allowed/blocked CIDR ranges, target limits, provider restrictions) before target validation, before it's even queued. No route runs a scanner process directly.
+3. **Normalize & persist** — discovered hosts and services are upserted idempotently into PostgreSQL, which is the single source of truth for inventory, findings, users, and audit records.
+4. **Enrich & score** — findings get matched to CVE/CVSS/EPSS data, and a composite, versioned risk score combines CVSS severity, EPSS exploit probability, network exposure, and asset criticality — not CVSS in isolation.
+5. **Project into a graph** — the same inventory is projected into Neo4j as a derived, retryable graph (hosts, services, vulnerabilities, findings, trust relationships), which is what makes path analysis possible.
+6. **Analyze** — BFS/DFS/Dijkstra-style traversal finds shortest and lowest-risk attack paths, and identifies choke points and critical nodes an attacker would have to pass through.
+7. **Map to MITRE ATT&CK** — findings and paths get mapped to tactics/techniques with evidence attached, so a finding isn't just "CVE-2023-XXXX" but "this maps to lateral movement, here's why."
+8. **Explain (optional)** — an AI analyst layer can generate human-readable explanations of findings and paths, but it's disabled by default, grounded in the deterministic evidence already computed, and never treated as authoritative.
+9. **Visualize** — a React/TypeScript dashboard surfaces inventory, risk, graph views, and timelines for an analyst to actually work from.
 ## Architecture
 
-TODO: Outline the main components and how they fit together. You can include
-diagrams (as images) or code blocks here later.
+The system is split into five operational layers:
+ 
+```
+              +----------------------+
+              |      React UI        |
+              |  Vite + TypeScript   |
+              +----------+-----------+
+                         |  HTTPS / JSON API
+                         v
+              +----------------------+
+              |      FastAPI API     |
+              | auth, RBAC, REST     |
+              +----+------------+----+
+                   |            | enqueue jobs
+                   |            v
+                   |   +------------------+
+                   |   | Celery Workers   |
+                   |   | scans, imports,  |
+                   |   | graph builds, AI |
+                   |   +----+--------+----+
+                   |        |        |
+                   v        v        v
+       +--------------+ +--------+ +----------------+
+       | PostgreSQL   | | Redis  | | External Scan  |
+       | source of    | | cache, | | Providers      |
+       | record       | | queue  | | Nmap first     |
+       +------+-------+ +--------+ +----------------+
+              | graph projection events
+              v
+       +--------------+        +------------------+
+       | Neo4j        |<-------| Graph Engine     |
+       | topology and |        | projection, path |
+       | attack graph |        | algorithms       |
+       +------+-------+        +------------------+
+              v
+       +--------------+
+       | Prometheus / |
+       | Grafana      |
+       +--------------+
+```
+ 
+**Core components:**
+ 
+- **FastAPI API** — the only public boundary. Owns auth, RBAC, validation, rate limiting, audit logging, and health checks. It never runs a scanner directly; it validates and enqueues.
+- **Celery workers + Redis** — background execution for scans, enrichment, graph projection, and AI calls, so nothing slow blocks a request.
+- **PostgreSQL** — authoritative store for hosts, services, findings, risk scores, users, and audit trail. Writes are idempotent (repeated scans update `last_seen_at` rather than duplicating assets).
+- **Neo4j** — a *derived* graph projection, not a second source of truth. Every node carries a stable PostgreSQL UUID so projection can be retried without duplication, and a graph-projection job tracks freshness so stale data is visible rather than silently trusted.
+- **React + TypeScript dashboard** — asset inventory, bounded graph slices (never the whole graph at once), risk views, attack-path explorer, and timelines.
+- **Prometheus/Grafana** — observability across API latency, scan duration, queue depth, and graph projection health.
+Design rule worth calling out explicitly: PostgreSQL is truth, Neo4j is a retryable projection of that truth, and AI is optional and off by default. That ordering shows up throughout the rest of the system.
 
 ## Implementation
 
-TODO: Notes on how key parts were built. Code samples can go here:
-
-```text
-TODO: replace with a real, representative snippet when available.
+A few of the more interesting implementation decisions:
+ 
+**Scan governance is a hard gate, not a suggestion.** Every scan — including scheduled ones — has to pass through this exact sequence before anything gets queued:
+ 
 ```
+User → Scan Request → Policy Validation → Target Validation → Queue Scan
+```
+ 
+A `scan_policy` defines allowed/blocked CIDR ranges, max targets, max scan rate, and which providers are permitted. Users pick a `scanner_profile` (e.g., "quick discovery," "safe internal scan") rather than supplying raw scanner flags, which keeps dangerous configuration out of user-facing input entirely.
+ 
+**Risk scoring is deterministic and versioned, on purpose.** Instead of one live formula that quietly changes over time, each stored risk score references an immutable `risk_model` definition. That means a score computed six months ago stays reproducible even after the scoring formula is improved later — old scores don't silently drift when the model changes.
+ 
+**The attack path engine outputs structured, bounded results.** It runs BFS for shortest unweighted paths, DFS for bounded exploration, and Dijkstra-style traversal for lowest-risk weighted paths, plus separate choke-point and critical-node detection. A representative output shape, straight from the project's own docs:
+ 
+```json
+{
+  "path": ["host:a", "service:b", "host:c"],
+  "risk_score": 87,
+  "critical_nodes": ["service:b"],
+  "confidence": 0.72
+}
+```
+ 
+Failure handling is explicit rather than implicit: empty or disconnected graphs return "no path" (not an error), cycles are bounded so traversal can't run forever, and low-confidence relationships are surfaced in the output instead of being silently treated as certain.
+ 
+**AI is architecturally a side-car, not a dependency.** The `AISecurityAnalyst` abstraction sits behind provider adapters (Ollama, OpenAI-compatible APIs) and is disabled by default. Every other part of the platform — inventory, risk scoring, graph analysis, MITRE mapping — has to work with zero AI availability, and provider failures are contractually not allowed to affect anything else.
+
 
 ## Challenges
 
-TODO: What was hard, and how did you deal with it?
+The recurring hard problem across this project is **trust boundaries between deterministic and probabilistic components**, showing up in a few different forms:
+ 
+- **Unauthorized or accidental scanning.** Letting a user fire a scan straight from the API is an easy way to accidentally (or maliciously) scan something out of scope. The fix was making policy validation happen *before* target validation, for every scan path with no exceptions — including scheduled scans, which are easy to forget about.
+- **Graph drift.** Because Neo4j is a derived projection and not the source of truth, there's a real risk of the graph silently diverging from PostgreSQL if projection jobs aren't idempotent. The mitigation is stable external IDs on every graph node plus first-class tracking of projection jobs, so a failed or stale projection is visible instead of hidden.
+- **AI overconfidence.** An LLM asked to "explain this finding" will happily generate a plausible-sounding but unsupported claim. Keeping AI output disabled by default, evidence-grounded, and stored separately from deterministic findings was the direct response to that risk — the goal is that an analyst can always tell what's a fact and what's a model's gloss on that fact.
+- **Resource exhaustion from unbounded graph queries.** A shortest-path or neighborhood query on a large graph can get expensive fast. Depth and result-size bounds on every graph query were treated as a hard requirement rather than an optimization to add later.
+- **CVE/version matching false positives.** Matching a discovered service to a specific CVE by product/version string is inherently fuzzy, and the roadmap explicitly flags this as a risk that CVSS-only prioritization would make worse, not better — part of the reasoning behind the composite score.
 
 ## Lessons learned
 
-TODO: What would you do differently, or what did you learn?
+The clearest lesson embedded in this project's own decision log is about **sequencing**: build the smallest correct vertical slice before adding the next layer of complexity, rather than building all five layers in parallel. The roadmap is explicitly phased — auth and persistence first, then a single scan provider working end-to-end, then risk scoring, *then* the graph projection, *then* attack-path analysis, and AI last. Each phase has its own acceptance criteria and its own list of things explicitly deferred. That's a deliberate hedge against the more common failure mode in projects like this: building an impressive-looking graph UI or AI layer on top of an inventory pipeline that doesn't actually work yet.
+ 
+The other lesson is about **where to put authority**. The PostgreSQL-as-truth / Neo4j-as-projection split is a real tradeoff (it introduces eventual consistency) but it was chosen deliberately because transactional writes and auditability matter more for canonical inventory than graph query performance does. Same logic applies to AI: it's kept explicitly non-authoritative because deterministic, reproducible risk scores are the thing an analyst actually needs to trust.
 
 ## Future improvements
 
-TODO: Planned or possible next steps.
+Per the project's own roadmap, several things are intentionally out of scope for the MVP and planned as later phases rather than being missing by accident:
+ 
+- **Additional scan providers** — Masscan, RustScan, Shodan, Nessus, and OpenVAS are all designed for via the `DiscoveryProvider` interface but not implemented; Nmap XML is the only MVP provider.
+- **Continuous monitoring and alerting** (Phase 10) — scheduled scans with delta detection (new/missing hosts, new/resolved vulnerabilities, topology changes) and rule-based alerting.
+- **Full AI Security Analyst rollout** (Phase 8) — the abstraction and safety constraints are designed, but this is explicitly the last phase before dashboard/production work.
+- **Active Directory graph modeling** — trust and identity relationships (`User`, `Domain`, `Group` nodes) are listed as future additions to the graph model, not current ones.
+- **Production hardening and release readiness** (Phase 11) — rate limiting, security headers, dependency scanning, and >80% test coverage are on the roadmap but explicitly not yet done.
+- **Open questions the team hasn't settled yet**, per the roadmap's own decision log: whether local scanner execution should be worker-only vs. upload-only, what target validation policy applies to private/public/reserved IP ranges, and whether auth should support OIDC early or stay local-only for now.

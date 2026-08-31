@@ -7,9 +7,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import TagNav from '../../components/TagNav.astro';
 import { getPublishedPosts, toSummary } from '../../utils/blog';
+import { collectTags } from '../../utils/tags';
 
-const posts = (await getPublishedPosts()).map(toSummary);
+const publishedPosts = await getPublishedPosts();
+const posts = publishedPosts.map(toSummary);
+const tags = collectTags(publishedPosts);
 ---
 
 <BaseLayout title="Blog" description="Technical writing and notes by Asifur Rahaman.">
@@ -20,6 +24,8 @@ const posts = (await getPublishedPosts()).map(toSummary);
         Notes, explanations, and write-ups on things I’m learning and building.
       </p>
     </header>
+
+    {tags.length > 0 && <TagNav tags={tags} activeSlug={null} />}
 
     {
       posts.length > 0 ? (
@@ -40,16 +46,25 @@ const posts = (await getPublishedPosts()).map(toSummary);
     padding-block: var(--space-12);
   }
   .page-head {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-6);
   }
   .intro {
     margin-top: var(--space-3);
     color: var(--color-text-muted);
   }
+  /* Space between the tag nav and the post list. */
+  /* Space between the tag nav and the post list. Use :global because the
+     <nav class="tag-nav"> is rendered by the TagNav component (its own scope),
+     and it lives in the Container's slot (Container's scope) — so a
+     page-scoped `.tag-nav` selector would not match it. This global rule is
+     safe: .tag-nav only appears on the blog/tag listing pages. */
+  :global(.tag-nav) {
+    margin-bottom: var(--space-12);
+  }
   .list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-2);
   }
   .empty {
     color: var(--color-text-muted);

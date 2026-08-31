@@ -20,6 +20,7 @@ import { z } from 'astro/zod';
 const projectStatus = z.enum([
   'in-progress',
   'completed',
+  'Published',
   'maintained',
   'archived',
   'planned',
@@ -41,6 +42,8 @@ const projects = defineCollection({
     demo: z.url().optional(),
     /** Representative image (public path or import). Optional. */
     image: z.string().optional(),
+    /** Optional published date shown below the project heading. */
+    pubDate: z.coerce.date().optional(),
     /** Screenshot list: image + descriptive alt (required for accessibility). */
     screenshots: z
       .array(

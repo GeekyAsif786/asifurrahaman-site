@@ -75,11 +75,11 @@ export const NAV: NavItem[] = [
  * clicking it opens the visitor's mail client. Do not use a webmail URL here.
  */
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/asifurrahaman-site', // TODO: confirm exact GitHub username/URL
-  email: '', // TODO: e.g. 'you@example.com' (becomes mailto:)
-  twitter: '', // TODO: e.g. 'https://x.com/yourhandle'
-  instagram: '', // TODO: e.g. 'https://instagram.com/yourhandle'
-  linkedin: '', // TODO: e.g. 'https://www.linkedin.com/in/yourhandle'
+  github: 'https://github.com/GeekyAsif786/',
+  email: 'mailto:asif@asifurrahaman.com', 
+  twitter: 'https://x.com/Asif64077466',
+  instagram: 'https://www.instagram.com/xshredz/', 
+  linkedin: 'https://www.linkedin.com/in/asifur-rahaman-dev', 
 } as const;
 
 /**

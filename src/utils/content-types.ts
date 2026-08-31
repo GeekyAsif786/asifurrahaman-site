@@ -13,6 +13,7 @@
 export type ProjectStatus =
   | 'in-progress'
   | 'completed'
+  | 'Published'
   | 'maintained'
   | 'archived'
   | 'planned';

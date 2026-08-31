@@ -11,6 +11,7 @@
  * Sections (status, tech, links) render only when their data exists.
  */
 import type { ProjectSummary } from '../utils/content-types';
+import SocialIcon from './SocialIcon.astro';
 import Tag from './Tag.astro';
 
 interface Props {
@@ -28,6 +29,7 @@ const { slug, title, description, technologies, status, github, demo } =
 const statusLabel: Record<string, string> = {
   'in-progress': 'In progress',
   completed: 'Completed',
+  published:'Published',
   maintained: 'Maintained',
   archived: 'Archived',
   planned: 'Planned',
@@ -60,8 +62,14 @@ const statusLabel: Record<string, string> = {
     (github || demo) && (
       <div class="links">
         {github && (
-          <a href={github} rel="noopener" target="_blank" class="ext">
-            GitHub
+          <a
+            href={github}
+            rel="noopener"
+            target="_blank"
+            class="repo-link"
+            aria-label={`${title} GitHub repository`}
+          >
+            <SocialIcon name="github" size={20} />
             <span class="visually-hidden"> (opens in a new tab)</span>
           </a>
         )}
@@ -165,5 +173,22 @@ const statusLabel: Record<string, string> = {
   }
   .ext:hover {
     text-decoration: underline;
+  }
+  .repo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s ease, background-color 0.15s ease,
+      transform 0.15s ease;
+  }
+  .repo-link:hover {
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+    transform: translateY(-1px);
   }
 </style>
