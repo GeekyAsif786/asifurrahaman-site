@@ -1,0 +1,172 @@
+---
+/**
+ * PostListRow — a single flat post entry for the blog listing.
+ *
+ * Layout (adapted from a reference editorial blog index into this site's
+ * tokens): mono date → serif title → outlined tag pills → 2-line truncated
+ * excerpt, followed by a hairline separator. No glass/card surface here — the
+ * list reads as a quiet editorial index, distinct from the glass BlogCard used
+ * on the homepage and tag pages.
+ *
+ * `featured` renders the title in the accent color (used for the first post on
+ * the page), mirroring the reference's highlighted lead entry.
+ */
+import type { PostSummary } from '../utils/content-types';
+import { tagToSlug } from '../utils/tags';
+import { formatDate, isoDate, readingTimeLabel } from '../utils/format';
+
+interface Props {
+  post: PostSummary;
+  /** Heading level for the title. 'h2' under the page h1 (default). */
+  headingLevel?: 'h2' | 'h3';
+  /** Position in the list, used for the capped staggered entrance delay. */
+  index?: number;
+}
+
+const {
+  post,
+  headingLevel = 'h2',
+  index = 0,
+} = Astro.props as Props;
+const TitleTag = headingLevel;
+const { slug, title, description, pubDate, tags, readingTime } = post;
+
+// Cap the stagger so the total entrance delay stays small (max 5 steps ≈
+// 300ms) no matter how many posts exist — the list should feel assembled,
+// never like a page that makes you wait.
+const rowIndex = Math.min(index, 5);
+---
+
+<article class="row" style={`--row-index: ${rowIndex}`}>
+  <p class="date">
+    <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
+    {readingTime && <span class="rt"> · {readingTimeLabel(readingTime)}</span>}
+  </p>
+
+  <TitleTag class="title">
+    <a href={`/blog/${slug}`}>{title}</a>
+  </TitleTag>
+
+  {
+    tags.length > 0 && (
+      <ul class="tags" aria-label="Tags">
+        {tags.map((t) => (
+          <li>
+            <a class="tag" href={`/tags/${tagToSlug(t)}`}>
+              {t}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <p class="excerpt">{description}</p>
+</article>
+
+<style>
+  .row {
+    padding-block: var(--space-8);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  .row:first-child {
+    padding-top: 0;
+  }
+
+  /* Entrance: a quiet rise + fade so the list assembles as a list. Rows are
+     fully visible by default; the animation only runs when motion is welcome,
+     so a failed script or reduced-motion never hides content. The per-row
+     delay (--row-index) is set by the listing page and capped there. */
+  @media (prefers-reduced-motion: no-preference) {
+    .row {
+      opacity: 0;
+      transform: translateY(0.75rem);
+      animation: row-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: calc(var(--row-index, 0) * 60ms);
+    }
+  }
+  @keyframes row-in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .date {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    letter-spacing: 0.01em;
+  }
+  .rt {
+    color: var(--color-text-muted);
+  }
+
+  .title {
+    margin-top: var(--space-3);
+    font-size: var(--text-2xl);
+    line-height: 1.12;
+  }
+  .title a {
+    color: var(--color-text);
+    text-decoration: none;
+    /* Underline grows from the left on hover — a small, legible acknowledgment
+       of the link using the accent, drawn with background so it animates
+       cheaply (no layout shift). */
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    padding-bottom: 0.06em;
+    transition: color 0.15s ease, background-size 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .title a:hover {
+    color: var(--color-accent);
+    background-size: 100% 2px;
+  }
+
+  /* Outlined tag pills — flat, thin border, no glass. Reuses the site's mono
+     label voice and pill radius. */
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-4) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .tag {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 999px;
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease,
+      transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .tag:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  /* Excerpt: muted sans, clamped to 2 lines with an ellipsis like the
+     reference. */
+  .excerpt {
+    margin-top: var(--space-4);
+    max-width: 60ch;
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

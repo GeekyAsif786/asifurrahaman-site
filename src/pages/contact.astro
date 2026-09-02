@@ -9,7 +9,7 @@ const socials = getSocials();
 
 <BaseLayout title="Contact" description="Get in touch with Asifur Rahaman.">
   <Container as="section" variant="prose" class="page">
-    <h1>Contact</h1>
+    <h1 class="page-title">Contact</h1>
     <p>
       {/* TODO: add preferred contact method(s). Do not invent an email. */}
       The best way to reach me is via the links below.
@@ -17,8 +17,8 @@ const socials = getSocials();
     {
       socials.length > 0 ? (
         <ul class="links">
-          {socials.map((s) => (
-            <li>
+          {socials.map((s, i) => (
+            <li style={`--i: ${i}`}>
               <a
                 class="contact-link"
                 href={s.href}
@@ -43,31 +43,111 @@ const socials = getSocials();
 
 <style>
   .page {
-    padding-block: var(--space-12);
+    padding-block: var(--space-12) var(--space-16);
   }
+
+  /* Bolder: the title is raised to the display strength the rest of the site
+     reaches (hero + Projects/Blog headers), in the system's own vocabulary —
+     fluid --text-hero and the restrained accent gradient on the display serif.
+     No new tokens. */
+  .page-title {
+    font-size: var(--text-hero);
+    letter-spacing: -0.04em;
+    /* Gradient text (background-clip:text) clips descenders when line-height is
+       too tight; give the line room plus a little bottom padding. */
+    line-height: 1.12;
+    padding-bottom: 0.08em;
+    background: linear-gradient(
+      180deg,
+      var(--color-text) 30%,
+      color-mix(in oklab, var(--color-text) 78%, var(--color-accent))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  @media (forced-colors: active) {
+    .page-title {
+      background: none;
+      -webkit-text-fill-color: currentColor;
+      color: CanvasText;
+    }
+  }
+
   .page > p {
     margin-top: var(--space-4);
+    max-width: 42ch;
     color: var(--color-text-muted);
+    font-size: var(--text-lg);
   }
+
   .links {
     list-style: none;
-    margin-top: var(--space-6);
+    margin-top: var(--space-8);
     padding: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
   }
+
+  /* Bolder: each link becomes a glass card, reusing the exact surface language
+     ProjectCard/BlogCard already own (glass bg, thin border, restrained shadow,
+     hover lift). The list turns from bare rows into the site's card system. */
   .contact-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-6);
     color: var(--color-text);
     text-decoration: none;
-    transition: color 0.15s ease;
+    font-size: var(--text-lg);
+    border: var(--border-width) solid var(--glass-border-line);
+    border-radius: var(--radius);
+    background: var(--glass-bg);
+    box-shadow: var(--glass-shadow);
+    transition:
+      color 0.16s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @supports (backdrop-filter: blur(1px)) or
+    (-webkit-backdrop-filter: blur(1px)) {
+    .contact-link {
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
+    }
   }
   .contact-link:hover {
     color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: var(--glass-shadow-hover);
+    transform: translateY(-3px);
   }
+  /* The icon leans into the accent alongside the label on hover. */
+  .contact-link:hover :global(svg) {
+    color: var(--color-accent);
+  }
+
+  /* Animate: the cards assemble as a list — a quiet rise + fade, capped so the
+     total delay stays small. Cards are visible by default; the entrance only
+     runs when motion is welcome, so reduced-motion or a failed render never
+     hides a contact method. */
+  @media (prefers-reduced-motion: no-preference) {
+    .links li {
+      opacity: 0;
+      transform: translateY(0.75rem);
+      animation: link-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: calc(min(var(--i, 0), 5) * 70ms);
+    }
+  }
+  @keyframes link-in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   .muted {
     color: var(--color-text-muted);
   }

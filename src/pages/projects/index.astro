@@ -14,7 +14,7 @@ const projects = (await getAllProjects()).map(toSummary);
 <BaseLayout title="Projects" description="Engineering projects by Asifur Rahaman.">
   <Container as="section" class="page">
     <header class="page-head">
-      <h1>Projects</h1>
+      <h1 class="page-title">Projects</h1>
       <p class="intro">
         A selection of things I’ve built and am building. Each project has its
         own page with more detail and learning spectrum.
@@ -40,12 +40,48 @@ const projects = (await getAllProjects()).map(toSummary);
     padding-block: var(--space-12);
   }
   .page-head {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-12);
+    /* Center the title + intro only; the project cards below keep their
+       existing left-aligned layout (ProjectCard is shared with the homepage). */
+    text-align: center;
+  }
+  /* The page title is raised to the same display strength the homepage hero
+     reaches — the system's strongest move, turned up for this header rather
+     than invented for it. Reuses the hero's fluid --text-hero size and its
+     restrained accent gradient on the display serif (no new tokens). */
+  .page-title {
+    font-size: var(--text-hero);
+    letter-spacing: -0.04em;
+    /* Descenders (e.g. the "j" in Projects) are clipped when gradient text
+       (background-clip:text) is combined with a very tight line-height, because
+       the clip box is only as tall as the line. Give the line room plus a touch
+       of bottom padding so descenders render fully. */
+    line-height: 1.12;
+    padding-bottom: 0.08em;
+    background: linear-gradient(
+      180deg,
+      var(--color-text) 30%,
+      color-mix(in oklab, var(--color-text) 78%, var(--color-accent))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Forced-colors / High Contrast: gradient-clipped text can render invisible,
+     so restore a solid system color and drop the clip. */
+  @media (forced-colors: active) {
+    .page-title {
+      background: none;
+      -webkit-text-fill-color: currentColor;
+      color: CanvasText;
+    }
   }
   .intro {
     margin-top: var(--space-3);
     color: var(--color-text-muted);
+    /* Readable measure, centered in the viewport. */
     max-width: var(--container-prose);
+    margin-inline: auto;
   }
   .grid {
     display: grid;

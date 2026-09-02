@@ -157,6 +157,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
 <style>
   .post {
     padding-block: var(--space-8) var(--space-16);
+    text-align: center;
   }
   .post-head {
     margin-block: var(--space-6) var(--space-8);
@@ -176,6 +177,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .meta {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.35rem;
     margin-top: var(--space-4);
     font-family: var(--font-mono);
@@ -188,10 +190,12 @@ const breadcrumbJsonLd = breadcrumbSchema([
     margin: var(--space-4) 0 0;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-2);
   }
   .hero {
     margin-block: var(--space-6);
+    margin-inline: auto;
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius);
     width: 100%;
@@ -239,7 +243,10 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .prose :global(ul),
   .prose :global(ol) {
     margin-top: var(--space-4);
-    padding-left: var(--space-6);
+    /* Body text is centered on this surface; drop the left indent and place
+       markers inline so centered list items read correctly. */
+    padding-left: 0;
+    list-style-position: inside;
   }
   .prose :global(li + li) {
     margin-top: var(--space-2);
@@ -263,6 +270,10 @@ const breadcrumbJsonLd = breadcrumbSchema([
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     color: var(--color-text);
     font-style: normal;
+    /* The quote keeps its left accent border, so its text stays left-aligned
+       to sit against that border (like code and tables, the block is centered
+       in the column but its contents are not). */
+    text-align: left;
   }
   .prose :global(blockquote p) {
     color: var(--color-text-muted);
@@ -273,6 +284,9 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .prose :global(.code-block) {
     position: relative;
     margin-top: var(--space-6);
+    /* Code must not be centered — indentation carries meaning. Center the
+       block within the column, keep its contents left-aligned. */
+    text-align: left;
   }
   .prose :global(pre) {
     margin: 0;
@@ -280,6 +294,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
     border-radius: var(--radius);
     border: var(--border-width) solid var(--color-border);
     overflow-x: auto;
+    text-align: left;
   }
   .prose :global(.copy-btn) {
     position: absolute;
@@ -329,6 +344,9 @@ const breadcrumbJsonLd = breadcrumbSchema([
     overflow-x: auto;
     border-collapse: collapse;
     margin-top: var(--space-6);
+    /* Center the table block in the column; cell text stays left-aligned. */
+    margin-inline: auto;
+    text-align: left;
     font-size: var(--text-base);
   }
   .prose :global(th),
@@ -343,6 +361,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
   }
   .prose :global(img) {
     border-radius: var(--radius);
+    /* Center images within the centered reading column. */
+    margin-inline: auto;
+  }
+
+  /* Center the breadcrumb trail on the (centered) post. Scoped to .post so the
+     shared Breadcrumbs component keeps its default alignment elsewhere. */
+  .post :global(.breadcrumbs ol) {
+    justify-content: center;
   }
 
   /* ---- Related ---- */
@@ -360,7 +386,9 @@ const breadcrumbJsonLd = breadcrumbSchema([
     gap: var(--space-2);
   }
 
-  /* ---- Pager ---- */
+  /* ---- Pager ----
+     Prev/next navigation keeps its left/right split rather than centering, so
+     the directional relationship stays legible. */
   .pager {
     display: grid;
     grid-template-columns: 1fr;
@@ -368,6 +396,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
     margin-top: var(--space-12);
     padding-top: var(--space-6);
     border-top: var(--border-width) solid var(--color-border);
+    text-align: left;
   }
   @media (min-width: 480px) {
     .pager {

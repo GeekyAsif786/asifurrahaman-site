@@ -1,13 +1,20 @@
 ---
 /**
- * Blog listing (Phase 4).
- * Renders all published posts (newest first) as BlogCards. Drafts are excluded
- * in production by getPublishedPosts().
+ * Blog listing.
+ *
+ * Two-column editorial index (adapted from a reference blog layout into this
+ * site's design system): a left tag rail with post counts and a wide right
+ * column of flat post rows (date → title → tags → excerpt, hairline-separated).
+ * The lead post's title is rendered in the accent color.
+ *
+ * The tag rail is rendered inline here (not via the shared TagNav component)
+ * so tag pages keep their own horizontal TagNav untouched. Posts render as
+ * PostListRow, not the glass BlogCard, so the homepage and tag pages are
+ * unaffected. Drafts are excluded in production by getPublishedPosts().
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Container from '../../components/Container.astro';
-import BlogCard from '../../components/BlogCard.astro';
-import TagNav from '../../components/TagNav.astro';
+import PostListRow from '../../components/PostListRow.astro';
 import { getPublishedPosts, toSummary } from '../../utils/blog';
 import { collectTags } from '../../utils/tags';
 
@@ -17,22 +24,33 @@ const tags = collectTags(publishedPosts);
 ---
 
 <BaseLayout title="Blog" description="Technical writing and notes by Asifur Rahaman.">
-  <Container as="section" variant="prose" class="page">
-    <header class="page-head">
-      <h1>Blog</h1>
-      <p class="intro">
-        Notes, explanations, and write-ups on things I’m learning and building.
-      </p>
-    </header>
-
-    {tags.length > 0 && <TagNav tags={tags} activeSlug={null} />}
-
+  <Container as="section" class="page">
     {
       posts.length > 0 ? (
-        <div class="list">
-          {posts.map((post) => (
-            <BlogCard post={post} headingLevel="h2" />
-          ))}
+        <div class="layout">
+          {/* Left rail: tag filter with counts */}
+          <aside class="rail" aria-label="Filter posts by tag">
+            <p class="rail-head">All Posts</p>
+            <nav aria-label="Tags">
+              <ul>
+                {tags.map((t) => (
+                  <li>
+                    <a class="rail-link" href={`/tags/${t.slug}`}>
+                      <span class="rail-tag">{t.tag}</span>
+                      <span class="rail-count">{t.count}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          {/* Right column: flat post list */}
+          <div class="posts">
+            {posts.map((post, i) => (
+              <PostListRow post={post} index={i} headingLevel="h2" />
+            ))}
+          </div>
         </div>
       ) : (
         <p class="empty">No posts yet — check back soon.</p>
@@ -43,28 +61,88 @@ const tags = collectTags(publishedPosts);
 
 <style>
   .page {
-    padding-block: var(--space-12);
+    padding-block: var(--space-12) var(--space-16);
   }
-  .page-head {
-    margin-bottom: var(--space-6);
+
+  /* Two-column layout: fixed-ish rail + fluid post column. Stacks on mobile. */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
   }
-  .intro {
-    margin-top: var(--space-3);
-    color: var(--color-text-muted);
+  @media (min-width: 820px) {
+    .layout {
+      grid-template-columns: 14rem 1fr;
+      gap: var(--space-16);
+    }
   }
-  /* Space between the tag nav and the post list. */
-  /* Space between the tag nav and the post list. Use :global because the
-     <nav class="tag-nav"> is rendered by the TagNav component (its own scope),
-     and it lives in the Container's slot (Container's scope) — so a
-     page-scoped `.tag-nav` selector would not match it. This global rule is
-     safe: .tag-nav only appears on the blog/tag listing pages. */
-  :global(.tag-nav) {
-    margin-bottom: var(--space-12);
+
+  /* ---- Left rail ---- */
+  .rail-head {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
   }
-  .list {
+  .rail nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+  }
+  @media (min-width: 820px) {
+    .rail {
+      position: sticky;
+      top: 5rem;
+      align-self: start;
+    }
+    .rail nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  .rail-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block: var(--space-2);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: color 0.15s ease,
+      transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .rail-link:hover {
+    transform: translateX(3px);
+  }
+  .rail-link:hover .rail-tag {
+    color: var(--color-accent);
+  }
+  .rail-link:hover .rail-count {
+    color: var(--color-accent);
+  }
+  .rail-tag {
+    color: inherit;
+    transition: color 0.15s ease;
+  }
+  .rail-count {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    transition: color 0.15s ease;
+  }
+
+  /* ---- Post column ---- */
+  .posts {
+    min-width: 0;
   }
   .empty {
     color: var(--color-text-muted);
