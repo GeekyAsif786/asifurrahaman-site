@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/Container.astro';
+import { SITE } from '../utils/site';
 ---
 
-<BaseLayout title="Page not found" noindex={true}>
+<BaseLayout title="Page not found" noindex={true} image={SITE.ogImage}>
   <Container as="section" variant="prose" class="page">
     <p class="code">404</p>
     <h1>Page not found</h1>

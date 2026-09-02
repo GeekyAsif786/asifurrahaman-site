@@ -43,7 +43,7 @@ interface Props {
 const {
   title,
   description = SITE.description,
-  image = SITE.ogImage,
+  image,
   noindex = false,
   ogType = 'website',
   publishedTime,
@@ -55,7 +55,28 @@ const pageTitle = title ? `${title} — ${SITE.name}` : SITE.title;
 
 // Canonical + absolute OG URL derived from the configured production `site`.
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE.url);
-const ogImageURL = new URL(image, Astro.site ?? SITE.url);
+
+/**
+ * Per-page Open Graph image.
+ *
+ * Every page/post gets a build-time generated image (see src/pages/og/) whose
+ * filename matches its route, so social previews are page-specific instead of
+ * one shared default. The mapping mirrors the `pages` map in the OG endpoint:
+ *   /                 → /og/home.png
+ *   /blog             → /og/blog.png
+ *   /blog/<slug>      → /og/blog/<slug>.png
+ *   /projects/<slug>  → /og/projects/<slug>.png
+ * An explicit `image` prop still overrides (e.g. a curated share image); the
+ * static SITE.ogImage remains the ultimate fallback for unmapped routes.
+ */
+function ogRouteForPath(pathname: string): string {
+  const clean = pathname.replace(/^\/+|\/+$/g, ''); // trim slashes
+  if (clean === '') return 'og/home.png';
+  return `og/${clean}.png`;
+}
+
+const resolvedOgImage = image ?? `/${ogRouteForPath(Astro.url.pathname)}`;
+const ogImageURL = new URL(resolvedOgImage, Astro.site ?? SITE.url);
 
 // Sitewide WebSite structured data (present on every page).
 const websiteSchema: JsonLdSchema = {
