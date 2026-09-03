@@ -166,6 +166,13 @@ if (d.startDate) {
     padding-bottom: var(--space-6);
     border-bottom: var(--border-width) solid var(--color-border);
   }
+  /* Project title: Fraunces (scoped display font) + centered, matching the
+     blog. Only the h1 is centered so the meta/tech/actions rows keep their
+     existing left-aligned layout. text-align:center is inherently responsive. */
+  .head h1 {
+    font-family: var(--font-display-blog);
+    text-align: center;
+  }
   .summary {
     margin-top: var(--space-3);
     color: var(--color-text-muted);

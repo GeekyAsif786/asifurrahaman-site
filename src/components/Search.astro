@@ -1,0 +1,59 @@
+---
+/**
+ * Search — command-palette search (Cmd/Ctrl+K), a vanilla-TS reimplementation
+ * of the reference site's Pliny `kbar` search so behavior/UI/model match on a
+ * static, zero-framework Astro site. This file renders only the trigger button
+ * (placed in the header). The modal + logic live in SearchModal.astro, rendered
+ * once via BaseLayout. Any element with [data-search-open] opens the modal.
+ */
+---
+
+<button
+  type="button"
+  class="search-btn"
+  data-search-open
+  aria-label="Search"
+  aria-keyshortcuts="Meta+K Control+K"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="1.5"
+    stroke="currentColor"
+    class="search-icon"
+    aria-hidden="true"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+    ></path>
+  </svg>
+</button>
+
+<style>
+  .search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0.5rem;
+    color: var(--color-text-muted);
+    background: var(--glass-bg);
+    border: var(--border-width) solid var(--glass-border-line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .search-btn:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .search-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+</style>

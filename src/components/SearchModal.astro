@@ -1,0 +1,412 @@
+---
+/**
+ * SearchModal — the command-palette modal, rendered once (via BaseLayout).
+ *
+ * Replicates the reference site's Pliny/kbar UI and behavior on a static Astro
+ * site with a small vanilla-TS island:
+ *   - Cmd/Ctrl+K toggles the modal; ESC closes it; click on backdrop closes.
+ *   - On first open, fetches /search.json once (the build-time index).
+ *   - Each document → an action; typing filters by title + summary.
+ *   - Results are grouped by section ("Content", "Projects"); each row shows
+ *     the subtitle (date) above the title, matching kbar's RenderResults.
+ *   - Up/Down arrows move the active row (highlighted); Enter navigates.
+ *   - Loading and "No results for your search..." states mirror the original.
+ */
+---
+
+<div
+  id="search-modal"
+  class="search-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search"
+  hidden
+>
+  <div class="search-backdrop" data-search-close></div>
+  <div class="search-animator" role="document">
+    <div class="search-inputbar">
+      <input
+        id="search-input"
+        class="search-input"
+        type="text"
+        placeholder="Type to search..."
+        aria-label="Search"
+        aria-controls="search-results"
+        aria-expanded="true"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <kbd class="search-esc">ESC</kbd>
+    </div>
+    <div id="search-results" class="search-results" role="listbox">
+      <div class="search-status" data-search-loading>Loading...</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12vh var(--space-4) var(--space-4);
+  }
+  .search-overlay[hidden] {
+    display: none;
+  }
+  .search-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 12, 16, 0.55);
+  }
+  @supports (backdrop-filter: blur(1px)) or
+    (-webkit-backdrop-filter: blur(1px)) {
+    .search-backdrop {
+      -webkit-backdrop-filter: blur(2px);
+      backdrop-filter: blur(2px);
+    }
+  }
+  .search-animator {
+    position: relative;
+    width: 100%;
+    max-width: 40rem;
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--glass-shadow-hover);
+    overflow: hidden;
+  }
+  .search-inputbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+  .search-input {
+    flex: 1;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--color-text);
+    font-size: var(--text-lg);
+    font-family: var(--font-sans);
+  }
+  .search-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  .search-esc {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    background: var(--color-bg-subtle);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.4rem;
+  }
+  .search-results {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: var(--space-2);
+  }
+  .search-status {
+    padding: var(--space-6) var(--space-4);
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+</style>
+
+<!--
+  Result rows are injected via innerHTML from the script below, so they do NOT
+  receive Astro's scoped [data-astro-cid] attribute. These rules must therefore
+  be global — but every selector is nested under #search-results so nothing
+  leaks outside the search modal.
+-->
+<style is:global>
+  #search-results .search-section {
+    padding: var(--space-4) var(--space-3) var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+  #search-results .search-result {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: var(--space-3);
+    row-gap: 0.1rem;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-2);
+    /* Always-visible frame so every result reads as a distinct card. */
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    /* Plain text — kill the global <a> underline/accent in every state. */
+    text-decoration: none !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+      transform 0.12s ease, box-shadow 0.15s ease;
+  }
+  #search-results .search-result,
+  #search-results .search-result:link,
+  #search-results .search-result:visited,
+  #search-results .search-result:hover,
+  #search-results .search-result:focus,
+  #search-results .search-result:active {
+    text-decoration: none !important;
+  }
+  #search-results .search-result-subtitle {
+    grid-column: 1;
+    grid-row: 1;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+  #search-results .search-result-title {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: var(--text-base);
+    font-weight: 550;
+    color: var(--color-text);
+    text-decoration: none !important;
+  }
+  /* When a row has no subtitle, the title still sits in the first column. */
+  #search-results .search-result > .search-result-title:first-child {
+    grid-row: 1;
+  }
+  /* Enter/return affordance revealed on the active row. */
+  #search-results .search-result-enter {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  /* Active (keyboard/hover) row — subtle glassmorphic surface + accent frame. */
+  #search-results .search-result.active,
+  #search-results .search-result:hover {
+    background: var(--glass-bg);
+    border-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    box-shadow: var(--glass-shadow);
+    transform: translateY(-1px);
+  }
+  @supports (backdrop-filter: blur(1px)) or
+    (-webkit-backdrop-filter: blur(1px)) {
+    #search-results .search-result.active,
+    #search-results .search-result:hover {
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      backdrop-filter: blur(var(--glass-blur));
+    }
+  }
+  #search-results .search-result.active .search-result-title,
+  #search-results .search-result:hover .search-result-title {
+    color: var(--color-accent);
+  }
+  #search-results .search-result.active .search-result-enter {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  interface SearchDoc {
+    id: string;
+    name: string;
+    keywords: string;
+    section: string;
+    subtitle: string;
+    path: string;
+  }
+
+  const overlay = document.getElementById('search-modal');
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  const resultsEl = document.getElementById('search-results');
+
+  if (overlay && input && resultsEl) {
+    let docs: SearchDoc[] | null = null;
+    let loading = false;
+    let flat: SearchDoc[] = []; // current filtered docs in display order
+    let active = 0; // index into `flat`
+    let lastFocused: HTMLElement | null = null;
+
+    const isOpen = () => !overlay.hasAttribute('hidden');
+
+    async function loadDocs() {
+      if (docs || loading) return;
+      loading = true;
+      try {
+        const res = await fetch(new URL('/search.json', window.location.origin));
+        docs = (await res.json()) as SearchDoc[];
+      } catch {
+        docs = [];
+      }
+      loading = false;
+      render(input!.value);
+    }
+
+    function filter(q: string): SearchDoc[] {
+      if (!docs) return [];
+      const term = q.trim().toLowerCase();
+      if (!term) return docs;
+      return docs.filter(
+        (d) =>
+          d.name.toLowerCase().includes(term) ||
+          d.keywords.toLowerCase().includes(term)
+      );
+    }
+
+    function render(q: string) {
+      if (!resultsEl) return;
+      if (!docs) {
+        resultsEl.innerHTML =
+          '<div class="search-status">Loading...</div>';
+        return;
+      }
+      flat = filter(q);
+      active = 0;
+
+      if (flat.length === 0) {
+        resultsEl.innerHTML =
+          '<div class="search-status">No results for your search...</div>';
+        return;
+      }
+
+      // Group by section, preserving first-seen section order.
+      const sections: string[] = [];
+      const bySection = new Map<string, SearchDoc[]>();
+      for (const d of flat) {
+        if (!bySection.has(d.section)) {
+          bySection.set(d.section, []);
+          sections.push(d.section);
+        }
+        bySection.get(d.section)!.push(d);
+      }
+
+      let idx = 0;
+      let html = '';
+      for (const section of sections) {
+        html += `<div class="search-section">${escapeHtml(section)}</div>`;
+        for (const d of bySection.get(section)!) {
+          html += `<a class="search-result" role="option" data-idx="${idx}" href="/${escapeAttr(
+            d.path
+          )}">`;
+          if (d.subtitle) {
+            html += `<span class="search-result-subtitle">${escapeHtml(
+              d.subtitle
+            )}</span>`;
+          }
+          html += `<span class="search-result-title">${escapeHtml(
+            d.name
+          )}</span>`;
+          html += `<span class="search-result-enter" aria-hidden="true">↵</span>`;
+          html += `</a>`;
+          idx++;
+        }
+      }
+      resultsEl.innerHTML = html;
+      highlight();
+    }
+
+    function highlight() {
+      const rows = resultsEl!.querySelectorAll<HTMLElement>('.search-result');
+      rows.forEach((row, i) => {
+        if (i === active) {
+          row.classList.add('active');
+          row.setAttribute('aria-selected', 'true');
+          row.scrollIntoView({ block: 'nearest' });
+        } else {
+          row.classList.remove('active');
+          row.removeAttribute('aria-selected');
+        }
+      });
+    }
+
+    function navigate(i: number) {
+      const d = flat[i];
+      if (d) window.location.href = '/' + d.path;
+    }
+
+    function open() {
+      if (isOpen()) return;
+      lastFocused = document.activeElement as HTMLElement | null;
+      overlay!.removeAttribute('hidden');
+      input!.value = '';
+      loadDocs();
+      render('');
+      // Focus after paint so the input is ready.
+      window.setTimeout(() => input!.focus(), 0);
+    }
+
+    function close() {
+      if (!isOpen()) return;
+      overlay!.setAttribute('hidden', '');
+      lastFocused?.focus();
+    }
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+    function escapeAttr(s: string): string {
+      return escapeHtml(s).replace(/"/g, '&quot;');
+    }
+
+    // Triggers: any [data-search-open], plus Cmd/Ctrl+K.
+    document.querySelectorAll('[data-search-open]').forEach((btn) => {
+      btn.addEventListener('click', open);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        isOpen() ? close() : open();
+        return;
+      }
+      if (!isOpen()) return;
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (flat.length) {
+          active = (active + 1) % flat.length;
+          highlight();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (flat.length) {
+          active = (active - 1 + flat.length) % flat.length;
+          highlight();
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        navigate(active);
+      }
+    });
+
+    input.addEventListener('input', () => render(input.value));
+
+    // Close when clicking the backdrop / anything marked data-search-close.
+    overlay.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.hasAttribute('data-search-close')) close();
+    });
+
+    // Clicking a result should navigate normally (it's an <a>), no extra JS.
+  }
+</script>

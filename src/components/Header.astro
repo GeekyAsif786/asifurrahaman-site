@@ -11,6 +11,7 @@
  */
 import Container from './Container.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import Search from './Search.astro';
 import { NAV, SITE } from '../utils/site';
 
 const pathname = Astro.url.pathname;
@@ -77,6 +78,7 @@ function isActive(href: string): boolean {
         </ul>
         <div class="nav-actions">
           <span class="nav-divider" aria-hidden="true"></span>
+          <Search />
           <ThemeToggle />
         </div>
       </nav>

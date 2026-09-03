@@ -19,6 +19,9 @@
 /* Self-hosted variable fonts (subset to the weights/axes we use). */
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
+/* Fraunces — self-hosted variable font. Scoped to blog & project post titles
+   only (see --font-display-blog); does NOT replace the site-wide display font. */
+@import '@fontsource-variable/fraunces';
 
 /*
   Instrument Serif — local display/heading font.
@@ -56,6 +59,10 @@
      system serif, then the sans stack, if the local file fails to load. */
   --font-display: 'Instrument Serif', ui-serif, Georgia, Cambria,
     'Times New Roman', serif;
+  /* Display font applied ONLY to blog & project post titles (scoped in those
+     layouts). Mirrors the friend's site, which uses Fraunces for post titles.
+     Kept separate from --font-display so the rest of the site is unaffected. */
+  --font-display-blog: 'Fraunces Variable', var(--font-display);
   /* Alternate body font used for select reading copy (e.g. the About intro). */
   --font-body-alt: 'Space Grotesk', var(--font-sans);
 

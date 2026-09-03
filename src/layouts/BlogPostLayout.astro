@@ -162,6 +162,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .post-head {
     margin-block: var(--space-6) var(--space-8);
   }
+  /* Post title uses Fraunces (scoped display font), matching the reference
+     site. Only the font-family changes; weight/size/etc. are unchanged.
+     text-align:center is set explicitly (like the project h1) so centering
+     does not depend on inheritance. */
+  .post-head h1 {
+    font-family: var(--font-display-blog);
+    text-align: center;
+  }
   .desc {
     margin-top: var(--space-3);
     color: var(--color-text-muted);
