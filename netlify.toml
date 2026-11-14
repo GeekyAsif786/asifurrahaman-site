@@ -31,8 +31,8 @@
 # tag pages keep working.
 [[redirects]]
   from = "/reels"
-  to = "/reels/"
-  status = 301
+  to = "https://asif-reels.netlify.app/reels/"
+  status = 200
   force = true
 
 [[redirects]]
