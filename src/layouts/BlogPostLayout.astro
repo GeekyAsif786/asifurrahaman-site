@@ -159,6 +159,22 @@ const breadcrumbJsonLd = breadcrumbSchema([
     padding-block: var(--space-8) var(--space-16);
     text-align: center;
   }
+  /* Reading column width — replicates the reference site's article behavior
+     (its SectionContainer: max-w-3xl → xl:max-w-5xl). A centered column capped
+     at 48rem, stepping up to 64rem at the 1280px breakpoint (its `xl`). Below
+     the cap the text reflows fluidly with the window; at/above it the column
+     freezes and the surplus becomes equal side margin; the only discrete jump
+     is at 1280px. Centered via the Container's margin-inline:auto. The compound
+     selector (.post.container) outranks `.container--prose { max-width }`, so
+     this affects only the blog article. */
+  .post.container {
+    max-width: 48rem;
+  }
+  @media (min-width: 1280px) {
+    .post.container {
+      max-width: 64rem;
+    }
+  }
   .post-head {
     margin-block: var(--space-6) var(--space-8);
   }
@@ -220,10 +236,14 @@ const breadcrumbJsonLd = breadcrumbSchema([
 
   /* ---- Article body typography ----
      A clean, publication-style reading surface. No glassmorphism here — the
-     text is the priority. Comfortable measure via the prose container width. */
+     text is the priority. The header above stays centered; the body reads
+     left-aligned. No measure cap — text fills the full column width, matching
+     the reference site's `prose max-w-none`; line length is governed by the
+     column caps in .post.container (48rem → 64rem at 1280px) instead. */
   .prose {
     font-size: 1.075rem;
     line-height: 1.75;
+    text-align: left;
   }
   .prose :global(h2) {
     margin-top: var(--space-16);
@@ -251,10 +271,9 @@ const breadcrumbJsonLd = breadcrumbSchema([
   .prose :global(ul),
   .prose :global(ol) {
     margin-top: var(--space-4);
-    /* Body text is centered on this surface; drop the left indent and place
-       markers inline so centered list items read correctly. */
-    padding-left: 0;
-    list-style-position: inside;
+    /* Left-aligned body: standard hanging markers with a comfortable indent. */
+    padding-left: var(--space-6);
+    list-style-position: outside;
   }
   .prose :global(li + li) {
     margin-top: var(--space-2);

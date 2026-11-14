@@ -1,0 +1,1778 @@
+---
+title: "Human Brain Manipulation: What Modern Technology Can Actually Do"
+description: "A rigorously sourced examination of how technology measures, decodes, and perturbs human neural activity — what has been demonstrated in peer-reviewed research, what remains experimental, and where the real limits are."
+slug: "human-brain-manipulation-what-technology-can-do"
+pubDate: "2026-09-07"
+tags:
+  - neurotechnology
+  - brain-computer-interfaces
+  - neuromodulation
+  - machine-learning
+keywords:
+  - brain manipulation technology
+  - brain-computer interface
+  - neural decoding
+  - deep brain stimulation
+  - transcranial magnetic stimulation
+  - speech neuroprosthesis
+  - closed-loop neuromodulation
+  - neural data privacy
+  - mind reading technology limits
+readingTime: 34
+draft: false
+---
+
+> As the AI revolution enters a new phase, with powerful models like GPT-Astra 6 and
+Anthropic's Fable 5 and Mythos commanding constant public attention, I decided to put my new
+and ongoing research-focused project **Veritas Engine** to the test.
+> I gave it a seemingly simple yet deeply complex subject — "**The Correlation Between Human
+Brain Manipulation and Modern Technology**" — and tasked it with transforming that statement
+into a structured research topic and extracting as much meaningful insight from it as
+possible.
+> What followed was an exploration into the capabilities, evidence, limitations, and realities
+surrounding this fascinating field.
+> Engage with this article, explore the research, and dive into the facts, findings, and
+conclusions uncovered along the way.
+
+
+In 2006, a 25-year-old man with a spinal cord injury moved a computer cursor using a 96-electrode array implanted in his motor cortex. He had not moved his hand in three years. The signals recorded from roughly a hundred neurons were enough to open email and control a television while he held a conversation [42].
+
+In 2024, a man with ALS used a similar system — four arrays, 256 electrodes — to speak through a computer with a 125,000-word vocabulary at roughly 99% accuracy on his first day of use, after 30 minutes of calibration [51].
+
+Eighteen years and a staggering amount of engineering separate those two moments. Both are real. Both are peer-reviewed. Both happened in a single person. And neither one is mind reading.
+
+The distance between what neurotechnology actually does and what most people picture it doing is what this article is about. Whether technology can "manipulate the brain" isn't really in question — it can, and clinicians have been doing it since the 1990s. The sharper question is this:
+
+> **To what extent can modern technology measure, influence, alter, decode, or manipulate human brain activity and behavior — how does it physically work, what has actually been demonstrated, and where are the real limits?**
+
+---
+
+### How to Read This Article
+
+Most arguments about neurotechnology start by blurring a distinction that matters. A result in a mouse isn't a result in a human. A one-patient proof-of-concept isn't a clinical technology. A statistical inference isn't a transcript. To keep those apart, the article tags every major technology against one maturity scale:
+
+| Label | Meaning |
+| --- | --- |
+| **Clinically established** | Regulatory-approved, used in routine care, supported by controlled trials |
+| **Strong experimental evidence** | Reproducible human demonstrations, but limited or no clinical deployment |
+| **Preliminary** | Small human studies, single cases, or unreplicated results |
+| **Contested** | Credible studies point in conflicting directions |
+| **Speculative** | No convincing demonstration in humans |
+
+Where a number appears, it comes from the cited paper. Where the literature disagrees, the disagreement is shown rather than smoothed over.
+
+---
+
+### What "Brain Manipulation" Actually Means
+
+It's a hopelessly broad phrase. In practice the technologies that touch the brain sort into four functional buckets, and mixing them up is where most of the confusion starts.
+
+**1. Measurement — observing activity.** Recording electrical, magnetic, or metabolic signals: EEG, MEG, fMRI, fNIRS, electrocorticography (ECoG), intracortical arrays. It observes; it changes nothing.
+
+**2. Modulation — changing activity.** Delivering energy to alter neuronal behaviour: transcranial magnetic stimulation (TMS), transcranial direct and alternating current stimulation (tDCS/tACS), deep brain stimulation (DBS), transcranial ultrasound stimulation (TUS), vagus nerve stimulation (VNS). It perturbs; it does not read.
+
+**3. Decoding — converting signals into information.** Models mapping recorded activity onto an intended movement, a phoneme, or a semantic feature. Decoding is inference, and inference has error bars.
+
+**4. Closed-loop intervention — the two coupled together.**
+
+```text
+Measure  →  Interpret  →  Decide  →  Stimulate
+   ↑                                     │
+   └──────── Measure response ───────────┘
+                    ↓
+                 Adapt
+```
+
+This fourth category is where the field is heading, and it is why the distinction between "reading the brain" and "changing the brain" is dissolving: a device that senses a pathological rhythm and stimulates in response does both continuously, with no human in the loop. Such systems are already FDA-approved [34][35].
+
+Keep these categories separate and most claims become easy to evaluate. A "mind reading" headline is a *decoding* claim — judge it on accuracy, vocabulary size, training requirements, and whether the subject had to cooperate. A "behaviour control" headline is a *modulation* claim — judge it on targeting precision, effect size, and reproducibility.
+
+---
+
+### The Brain You Are Trying to Manipulate
+
+You can't judge any of this without a rough picture of what it's acting on. A few facts carry most of the weight.
+
+**Neurons are electrochemical cells, not switches.** A neuron maintains a membrane potential of roughly −70 mV at rest via ion pumps and selective channels. When depolarizing input crosses threshold, voltage-gated sodium channels open and produce an **action potential** — a self-propagating ~1 ms spike travelling down the axon. At the terminal, that spike releases **neurotransmitters** across a **synapse**: glutamate is the principal excitatory transmitter, GABA the principal inhibitory one. The receiving neuron integrates thousands of such inputs across space and time; whether it fires depends on the sum, the timing, and its own recent history.
+
+**This is why "controlling a neuron" is the wrong mental model.** No current technology addresses individual neurons in a living human brain in a targeted, addressable way. Every technology in this article acts on *populations*: thousands to millions of cells at once, with the precise composition of the affected population depending on anatomy, orientation, and the physics of whatever energy is being delivered.
+
+**Computation is distributed and rhythmic.** Populations of neurons synchronize into **oscillations** — conventionally divided into delta (~0.5–4 Hz), theta (~4–8 Hz), alpha (~8–13 Hz), beta (~13–30 Hz), and gamma (>30 Hz) bands, with boundaries that vary somewhat between sources. These rhythms are not incidental; they structure the timing of information flow, and they are the primary signal that most non-invasive technologies actually measure.
+
+**Function is organized into regions and networks.** Primary motor cortex has a somatotopic map; ventral sensorimotor cortex handles articulatory control of speech. But language, memory, and decision-making are distributed across networks spanning regions, with membership shifting by task and state.
+
+**The brain rewires itself.** **Neuroplasticity** — activity-dependent change in synaptic strength and network organization — means the target is not static. This is why a person can learn to control a brain-computer interface, and why the mapping between activity and intent drifts, forcing recalibration.
+
+**What follows from all this.** A technology never really interacts with "a brain region." It interacts with a population of cells, inside a circuit, embedded in a network, in a particular rhythmic and behavioural state, in one person's specific anatomy. Almost every limit described in the rest of this article traces back to that one fact.
+
+---
+
+### Part I — Measurement: Reading Without Touching
+
+---
+
+### EEG: A Century Old and Still the Workhorse
+
+EEG puts electrodes on the scalp and reads voltage changes over time. Those changes come mostly from synchronized postsynaptic currents in big populations of pyramidal neurons that happen to point perpendicular to the cortical surface. It isn't picking up individual spikes — it's picking up the summed field of a huge number of cells firing more or less together.
+
+**What EEG is good at.** Millisecond-scale timing. Sampling is routinely sub-millisecond, which makes EEG the standard tool for studying the temporal dynamics of perception and for event-related potentials.
+
+**What EEG is bad at, and why.** Spatial localization, on the order of centimetres. The cause is **volume conduction**: current from a cortical source spreads through cerebrospinal fluid, skull, and scalp before reaching the electrode, and the skull is a poor, spatially smearing conductor. Every scalp electrode sees a blurred mixture of many sources. A subtler point is frequently missed: Burle and colleagues showed volume conduction distorts not only the spatial pattern but the recovered *time course*, so EEG's celebrated temporal resolution is often overestimated in practice [2].
+
+EEG is also strongly biased toward superficial cortex — hippocampus, thalamus, and basal ganglia contribute little recoverable scalp signal. Channel counts range from a handful in consumer devices to 256 in research systems; more electrodes improve source separation but cannot undo the skull's blurring. Amplitudes are small, on the order of tens of microvolts, leaving recordings vulnerable to artifacts far larger than the signal: blinks, eye movements, jaw and neck EMG, heartbeat, and mains interference. Much of what looks like "brain activity" in poorly controlled setups is muscle.
+
+> **Maturity: clinically established** for epilepsy diagnosis, sleep staging, and intraoperative monitoring. **Strong experimental evidence** for laboratory brain-computer interface control. **Preliminary to contested** for most consumer cognitive-state claims.
+
+---
+
+### What an EEG Classifier Is Actually Doing
+
+Consider the canonical motor-imagery paradigm: a person imagines squeezing their left or right hand, and a system attempts to determine which.
+
+```text
+   Brain (population activity in sensorimotor cortex)
+        │
+        ▼
+   Scalp electrodes  ──────────────  volume conduction blurs the source
+        │
+        ▼
+   Amplifier + ADC   ──────────────  µV-scale signal, high gain, noise-limited
+        │
+        ▼
+   Preprocessing     ──────────────  band-pass filter, re-reference,
+        │                            artifact rejection (EOG/EMG)
+        ▼
+   Feature extraction ─────────────  band power (e.g. mu/beta), common
+        │                            spatial patterns, covariance features
+        ▼
+   Classifier         ─────────────  LDA / SVM / CNN → discrete label
+        │
+        ▼
+   Output + feedback  ─────────────  cursor moves; user adapts; decoder drifts
+```
+
+The mechanism is real: imagining movement of one hand suppresses mu-band (~8–13 Hz) power over the contralateral sensorimotor cortex, and the classifier detects that spatial-spectral asymmetry.
+
+But be clear about what's happening. The system isn't reading an intention. It's running a **two-class statistical discrimination** on band-power features, after being trained on labelled examples from that one person. It needs calibration. It works well for some people and poorly for others — a meaningful share of users never get good control from the standard paradigm at all. And the mapping drifts as the brain adapts and the electrodes shift, so it needs retraining. None of this scales up to reading arbitrary thoughts. It tells two agreed-upon mental actions apart, imperfectly.
+
+---
+
+### MEG: Better Physics, Worse Logistics
+
+Magnetoencephalography measures the magnetic fields produced by neuronal currents rather than the voltages they produce. Those fields are on the femtotesla scale — roughly a billionth of the Earth's magnetic field — and are conventionally detected with SQUIDs (superconducting quantum interference devices) requiring liquid-helium cooling [3].
+
+The advantage: magnetic fields are far less distorted by skull and scalp than electric potentials, so MEG localizes better than EEG while retaining millisecond timing. The cost: a large, expensive instrument requiring a magnetically shielded room, with the subject still inside a fixed helmet.
+
+The notable recent development is **optically pumped magnetometers** (OPMs), which run at room temperature and sit within millimetres of the scalp; Boto and colleagues demonstrated a wearable, movement-tolerant OPM-MEG system [4]. These still generally need a shielded room with field-nulling coils, and channel counts remain modest. Défossez and colleagues noted in 2023 that room-temperature sensors already match SQUID signal-to-noise but "are not commonly deployed in clinical settings" [10].
+
+> **Maturity: clinically established** for presurgical epilepsy mapping. **Strong experimental evidence** in cognitive neuroscience. OPM-MEG: **preliminary to strong experimental**, maturing quickly.
+
+---
+
+### fMRI: Measuring Blood, Inferring Neurons
+
+Functional MRI does not measure neural activity. It measures the **BOLD signal** — blood-oxygen-level-dependent contrast — which reflects local changes in the ratio of oxygenated to deoxygenated hemoglobin following changes in blood flow and oxygen metabolism. Active neural tissue triggers a local vascular response, and BOLD detects that vascular response.
+
+This indirection dominates fMRI's limitations. The **hemodynamic response** is slow: an impulse of neural activity causes BOLD to rise and fall over approximately 10 seconds [9]. Volume acquisition times (TR) are commonly 1–3 seconds (TR = 2.00 s in [9]; 3.0 s in [8]). Spatial resolution is far better than EEG at roughly 1–3 mm voxels (2.6 mm isotropic in [9], 3 mm in [8]), and unlike EEG, fMRI sees deep structures. So fMRI trades EEG's weaknesses for the opposite set: excellent spatial coverage and depth, poor temporal resolution, and a signal one causal step removed from spiking.
+
+> **Maturity: clinically established** for structural imaging and presurgical functional mapping. **Strong experimental evidence** for cognitive neuroscience research and for the decoding work described below.
+
+---
+
+### ECoG and Intracortical Arrays: Going Inside
+
+Two invasive recording modalities matter for this article.
+
+**Electrocorticography (ECoG)** places an electrode array directly on the cortical surface, beneath the skull and usually beneath the dura. Skipping the skull eliminates most volume-conduction blurring and gives access to higher-frequency activity, notably high-gamma, which correlates well with local population firing. Clinical grids used for epilepsy monitoring have relatively coarse spacing; research micro-arrays go much finer — one documented human micro-ECoG device used 96 microelectrodes at 400 µm spacing over 16 mm². The high-density grids used in the UCSF speech work carry 128 to 253 channels [49][48].
+
+**Intracortical microelectrode arrays** penetrate the cortex itself. The dominant device in human research is the "Utah" array: a silicon base bearing a grid of needle-like electrodes at 400 µm pitch, penetrating roughly 1–1.5 mm into cortex. These resolve **single-unit and multi-unit spiking activity** — actual action potentials from identifiable neurons — plus local field potentials. Chronic human clinical implantation has, as of a 2023 assessment, been achieved with devices of up to 96 channels per array, with participants receiving up to four arrays [51].
+
+The trade-off is stark: intracortical arrays deliver by far the richest signal available from a human brain, at the cost of brain surgery, and the signal degrades. Sponheim and colleagues found an average usable recording lifespan of 622 days across many implants, some exceeding 1,000 days [56]. Signal quality in human BCI participants deteriorates rapidly in the first year then declines more slowly — yet functional performance has remained high five years post-implant in individual users. Failure modes include glial encapsulation, insulation breakdown, and material degradation.
+
+> **Maturity:** ECoG is **clinically established** as a diagnostic tool in epilepsy surgery, and **strong experimental evidence** as a BCI substrate. Chronic intracortical arrays are **strong experimental evidence** in research contexts, not yet a routine clinical therapy.
+
+---
+
+### Part II — Decoding: What "Mind Reading" Actually Means
+
+---
+
+This is the topic where popular belief and the actual papers part company most violently, so it's worth following the evidence step by step.
+
+---
+
+### The Foundational Result
+
+In 2005, Kamitani and Tong published "Decoding the visual and subjective contents of the human brain" in *Nature Neuroscience* [5]. Using fMRI and multivariate pattern classification of early visual areas, they showed that ensemble signals could "reliably predict on individual trials which of eight stimulus orientations the subject was seeing."
+
+It's a real landmark: it showed that distributed activity patterns carry information a voxel-by-voxel analysis would miss. Stated precisely, though, it is an eight-way forced-choice guess about which grating someone saw. Haynes and Rees surveyed the young field a year later [6].
+
+The trajectory from there ran through progressively richer stimuli: Nishimoto and colleagues reconstructed approximations of natural movie clips by inverting a motion-energy encoding model with a Bayesian decoder [7]; Horikawa and Kamitani decoded both seen and imagined object categories by predicting hierarchical CNN feature vectors, in 5 subjects (aged 23–38), and reported significantly reduced accuracy for imagery compared to perception [8]. More recently, Takagi and Nishimoto used Stable Diffusion conditioned on fMRI-decoded latents to produce high-resolution image reconstructions from the Natural Scenes Dataset [11].
+
+Every one of these built a **separate decoder for each individual subject**. Takagi and Nishimoto's reconstructions used 4 of the 8 NSD subjects, with per-subject linear decoders mapping voxels to latent features. The models do not transfer to a new person without retraining on that person.
+
+---
+
+### The Most Important Paper on This Question
+
+Tang, LeBel, Jain, and Huth's 2023 *Nature Neuroscience* paper, "Semantic reconstruction of continuous language from non-invasive brain recordings," deserves detailed treatment because it is simultaneously the most impressive non-invasive language decoding result to date and the most rigorous public demonstration of that approach's limits [9].
+
+**Method.** An encoding model mapped GPT-derived semantic features of narrative speech onto voxel-wise BOLD responses. Decoding inverted this with a language-model prior and beam search (beam width 200) to generate candidate word sequences.
+
+**Data requirement.** Sixteen hours of narrative-listening fMRI per subject — which the authors describe as "over five times more data than the typical language fMRI experiment." Main analyses used **3 subjects**; privacy and cross-subject analyses added four more, for 7 total.
+
+**Performance.** The output is a **paraphrase, not a transcript**. Word error rate on the perceived-speech test story was 0.92–0.94 — near-verbatim recovery is rare. The meaningful metric is semantic similarity (BERTScore), by which 72–82% of time-points were significantly decoded. Story identification reached the 0.85–0.91 percentile rank. For *imagined* speech, story identification was 100% across five one-minute stories. For silent film — a cross-modal test — 21–45% of time-points were decoded.
+
+**Now the limits, in the authors' own findings:**
+
+*Subject cooperation is required to train the decoder.* Cross-subject decoders "performed barely above chance." Quantitatively: within-subject decoders recovered 65–82% of time-points; volumetric cross-subject decoders recovered 1–2%, and surface-based cross-subject decoders 1–5%.
+
+*Decoding can be consciously resisted.* The authors ran an explicit adversarial experiment. Subjects silently performed one of three tasks during listening: counting by sevens, naming and imagining animals, or telling a different story internally. All three significantly lowered decoding performance. Against a within-subject baseline of 52–57% of time-points recovered during passive listening, performance fell to 4–50% when counting, **0–3% when naming animals**, and 1–26% when telling a different story. The authors conclude that "semantic decoding can be consciously resisted in an adversarial scenario, and that this resistance cannot be overcome by focusing the decoder only on specific brain regions."
+
+*Attention gates the output.* When two speakers were presented simultaneously, the decoder reconstructed only the attended stream — 0–3% for the unattended one. Subjects have "conscious control over decoder output."
+
+The authors withheld the resistance-experiment data from public release, specifically out of concern it could be used to find ways around subject resistance. They also flag a risk that is easy to miss: "even if decoder predictions are inaccurate without subject cooperation, they could be intentionally misinterpreted for malicious purposes."
+
+**What this paper demonstrates:** with a willing subject, 16 hours of individualized training data, and a multi-million-dollar scanner, you can recover the gist of what someone is hearing, saying internally, or watching.
+
+**What it does not demonstrate:** any capacity to read the thoughts of an unwilling, untrained, or unaware person.
+
+---
+
+### The MEG/EEG Result, Stated Precisely
+
+Défossez and colleagues at Meta AI published "Decoding speech perception from non-invasive brain recordings" in *Nature Machine Intelligence* in 2023 [10]. It is frequently misreported, so the details matter.
+
+**Design.** 175 volunteers across four public datasets (two MEG, two EEG), **passively listening** to speech. This is speech *perception*, not speech *production* — the subjects were not trying to communicate anything.
+
+**Method.** A convolutional "brain module," shared across subjects with one participant-specific layer, trained with a contrastive (CLIP-style) objective to align 3-second brain windows with wav2vec 2.0 speech embeddings.
+
+**Results as published:** top-10 accuracy up to 70.7% on average across MEG participants, top-1 up to 41.3%, out of more than 1,000 candidate segments, with up to 80% in the best participants. EEG performed far worse: 17.7% and 25.7% top-10 for the two EEG datasets. Random baseline is under 1%.
+
+**The framing that gets lost.** This is *zero-shot segment identification*: the model computes the probability of each candidate 3-second speech segment given the brain representation and picks the best match from a predetermined set. It does not generate open-ended text. The authors say so directly in the discussion: "the current contrastive-learning objective can identify only the most likely word or speech segment from a predetermined set. The model thus needs to be supplemented with a generative module."
+
+One bibliographic caution: the 2022 arXiv preprint reported different figures (72.5% top-10 out of 1,594 segments; 44% top-1). Cite the published *Nature Machine Intelligence* numbers.
+
+> **Maturity of non-invasive semantic/speech decoding: strong experimental evidence** for subject-specific decoding of attended or intended content with extensive per-subject training. **Speculative** for generalized decoding of an untrained or uncooperative person.
+
+---
+
+### The Honest Summary of "Mind Reading"
+
+When a headline says a system "reads minds," it is describing one of these:
+
+| What the system did | What that requires | What it is not |
+| --- | --- | --- |
+| Classified one of N pre-agreed mental states | Per-subject labeled training data | Open-ended thought access |
+| Matched brain activity to the best candidate from a fixed set | A predetermined candidate set | Generating unknown content |
+| Reconstructed the *gist* of attended narrative | ~16 h per-subject fMRI, cooperation | A verbatim transcript |
+| Decoded *attempted speech* motor commands | Implanted electrodes, deliberate attempt | Reading inner monologue |
+
+The last row is the subject of Part IV, and it is the most capable of the four — but note that it works by decoding the *motor intention to speak*, which is a voluntary act, not by accessing thought.
+
+---
+
+### Part III — Modulation: Changing Neural Activity
+
+---
+
+### TMS: Electromagnetic Induction Through the Skull
+
+In 1985 Barker, Jalinous, and Freeston reported in *The Lancet* that a magnetic coil could stimulate human motor cortex straight through the intact skull, painlessly [1]. That one-page note launched an entire field.
+
+**The physics.** A capacitor bank discharges a kiloamp-scale current pulse (~100 µs) through a coil held against the scalp, producing a rapidly changing magnetic field of roughly 1–2 tesla at the coil surface. By Faraday's law this induces an electric field in nearby conductive tissue, and it is that *induced electric field* — not the magnetic field — which depolarizes neuronal membranes. Crucially, magnetic fields pass through skull and scalp essentially unattenuated, which is why TMS avoids the current-shunting problem that limits transcranial electrical stimulation (below).
+
+```text
+   Capacitor discharge (kA, ~100 µs)
+        │
+        ▼
+   Coil: rapidly changing B field (~1–2 T at surface)
+        │  passes through scalp and skull largely unattenuated
+        ▼
+   Induced E field in cortical tissue (Faraday induction)
+        │
+        ▼
+   Depolarization of axons — preferentially at bends and
+   terminations, oriented along the induced field
+        │
+        ▼
+   Local population activation / inhibition
+        │
+        ▼
+   Propagation through connected network
+        │
+        ▼
+   Measurable output: MEP, phosphene, behavioral change
+```
+
+**Single-pulse vs. repetitive.** A single pulse over motor cortex produces a **motor evoked potential** (MEP) — a measurable twitch — making motor cortex the field's calibration standard, with intensity expressed relative to an individual's *motor threshold*. Single pulses can also transiently disrupt processing in a target region, the basis of the "virtual lesion" method for testing causal necessity. **Repetitive TMS** delivers pulse trains with effects outlasting stimulation, conventionally excitatory at higher frequencies (~10 Hz) and inhibitory at lower (~1 Hz) — a simplification individual studies frequently violate.
+
+**State dependence.** The same pulse can facilitate or suppress depending on task, attention, and ongoing oscillatory phase. This is a fundamental property rather than noise, and it is why TMS protocols resist standardization.
+
+**Clinical status.** rTMS for major depressive disorder was first cleared by the FDA in October 2008 (NeuroStar, DEN070003) for patients failing at least one antidepressant, with later clearances for BrainsWay's Deep TMS H-coil in depression (2013), OCD (2018), and smoking cessation (2020) — all 510(k)/De Novo clearances rather than PMA approvals.
+
+Trial evidence is real but effect sizes are modest. O'Reardon and colleagues randomized 301 medication-free treatment-resistant patients (155 active, 146 sham) and found active rTMS superior on MADRS [14]. George and colleagues found a remission odds ratio of 4.2 (95% CI 1.32–13.24), number-needed-to-treat 12 — but absolute remission was roughly 14% active versus 5% sham [15]. Blumberger and colleagues' THREE-D trial (414 randomized, 388 analyzed) showed 3-minute intermittent theta-burst is non-inferior to 37.5-minute 10 Hz rTMS, transforming clinic throughput [16].
+
+**A cautionary case in reporting.** Stanford Neuromodulation Therapy (SNT, earlier SAINT) uses accelerated, fMRI-guided theta-burst stimulation. An open-label 2020 study of about 21–22 patients reported remission near 90% [18], and that figure entered public circulation. The subsequent double-blind sham-controlled trial, reported at planned interim analysis, included **29 randomized patients (14 active, 15 sham)** and found mean MADRS reduction of 52.5% active versus 11.1% sham [17]. The controlled result is genuinely positive — and it is a tiny single-site interim sample, not the 90% figure. Both numbers are real; only one is controlled.
+
+**Why targeting is imperfect.** Deng, Lisanby, and Peterchev simulated 50 coil designs and demonstrated a strict **depth–focality tradeoff** that no coil escapes [12]: reaching deeper structures necessarily means stimulating a larger superficial volume. This is geometry, not an engineering deficiency awaiting a fix. Practically, TMS is effective for roughly the outer couple of centimetres of cortex and cannot focally target deep structures such as striatum or amygdala. "Deep TMS" H-coils achieve greater depth at the cost of markedly lower focality. Individual gyral anatomy, skull geometry, and coil positioning add further imprecision.
+
+**Safety.** Rossi and colleagues' consensus guidelines, updated 2021, describe seizure risk as low with conventional parameters and focal coils, even in patients on CNS-active drugs [13]; common side effects are scalp discomfort and headache.
+
+> **Maturity: clinically established** for treatment-resistant depression and OCD (with modest effect sizes). **Strong experimental evidence** as a causal research tool in cognitive neuroscience.
+
+---
+
+### tDCS and tACS: The Field's Hardest Reproducibility Problem
+
+Transcranial direct current stimulation passes a weak constant current — conventionally 1–2 mA — between scalp electrodes. Transcranial alternating current stimulation does the same with an oscillating waveform, with the aim of entraining endogenous rhythms.
+
+**The foundational finding.** Nitsche and Paulus showed in 2000 that weak transcranial DC produces polarity-specific changes in motor cortex excitability — anodal increasing and cathodal decreasing MEP amplitude by up to roughly 40%, lasting minutes after stimulation ended [19]. Unlike TMS, tDCS does not directly trigger action potentials; the accepted mechanism is a subthreshold shift in resting membrane potential that changes the *probability* of firing.
+
+That narrow, solid finding then became the foundation for a sprawling literature claiming boosts to memory, attention, learning, even arithmetic. The gear is cheap and the method is easy — which drove up both the volume of research and the size of the problem.
+
+**The problem.** In 2015 Horvath, Forte, and Carter published two systematic reviews the field still argues about. The first, in *Brain Stimulation*, examined cognitive and behavioural outcomes of single-session tDCS in healthy populations and found across 59 analyses **no significant effect on any measure** [20]. The second, in *Neuropsychologia*, found little-to-no reliable neurophysiological effect **beyond MEP amplitude modulation** [21]. Critics responded that the inclusion criteria excluded most relevant data and that pooling heterogeneous protocols obscures real effects; Antal and colleagues published a methodological critique [22], and Horvath and colleagues replied maintaining their findings after reanalysis. The dispute is unresolved.
+
+**The physics problem.** Vöröslakos and colleagues measured intracranial electric fields directly, combining rodent recordings with intracranial measurements in 11 human cadavers and EEG in 19 healthy subjects [23]. Roughly **75% of scalp-applied current is attenuated before reaching the brain** — 58 ± 7% shunted through skin and soft tissue plus 16 ± 8% by the skull — leaving about 25%. They estimated at least 1 mV/mm is needed to affect spiking, that conventional 1–2 mA protocols fall short, and that 4–6 mA at the scalp would be required; living tissue likely shunts even more than cadaver tissue. **But this too is contested:** Farahani and colleagues, in a 2024 paper including Vöröslakos and Bikson as authors, report firing-rate modulation at clinically relevant intensities, with effects at fields as low as 0.35 V/m [24]. Whether conventional-dose tDCS does anything directly to neurons remains genuinely open.
+
+**Individual variability.** López-Alonso and colleagues found bimodal response distributions, with only 39%, 45%, and 43% of subjects responding "as expected" to PAS25, anodal tDCS, and iTBS [25]. Roughly half of participants are non-responders or paradoxical responders. Variability sources include montage, current intensity, duration, skull and gyral anatomy, baseline brain state, and prior activity of the target circuit.
+
+**The large clinical trial.** Brunoni and colleagues' ELECT-TDCS randomized 245 depressed patients to tDCS (94), escitalopram (91), or placebo (60) [26]. Mean HDRS-17 decreases: 11.3 ± 6.5 escitalopram, 9.0 ± 7.1 tDCS, 5.8 ± 7.9 placebo. tDCS **did not** show non-inferiority to escitalopram and produced more adverse events, including new-onset mania. It beat placebo and lost to the drug.
+
+> **Maturity: contested.** The foundational motor-cortex physiology is established. Direct-current effects on cognition in healthy people are contested at best, with a serious dose/mechanism problem and high inter-individual variability. Consumer tDCS marketed for cognitive enhancement is not supported by reliable evidence.
+
+This section matters beyond tDCS. It is the clearest illustration in neurotechnology of how a solid, narrow physiological finding can be extrapolated into a large literature of weak claims, and of how hard it is to walk that back.
+
+---
+
+### Deep Brain Stimulation: The Strongest Case for Real Neuromodulation
+
+DBS is the most convincing existing proof that technology can deliberately and therapeutically alter human brain circuit function. Roughly 200,000 people worldwide have been implanted.
+
+**The system.** One or more quadripolar (or segmented) electrode leads are stereotactically implanted into a deep target, guided by imaging and often by intraoperative electrophysiology. The leads connect via extension wires under the scalp and neck to an implanted pulse generator, typically below the clavicle. Stimulation is conventionally high-frequency — around 130–185 Hz — with pulse widths of tens of microseconds and amplitudes of a few volts or milliamperes. All of those parameters, plus the choice of active contacts, are programmed post-operatively and iteratively.
+
+**Origins.** Benabid and colleagues reported combined thalamotomy and stimulation of the VIM thalamic nucleus in 1987 in *Applied Neurophysiology* [27] — note, not *The Lancet*, a commonly propagated error — and followed with a long-term series in *The Lancet* in 1991 covering 43 thalami, with complete tremor relief in 27 and major improvement in 11 [28]. The founding observation was serendipitous: high-frequency stimulation during lesioning surgery suppressed tremor much as the lesion would, but reversibly.
+
+**Regulatory history.** FDA approval for essential tremor via VIM thalamus came in 1997 (Medtronic Activa, PMA P960009). Parkinson's disease targets (subthalamic nucleus and globus pallidus internus) followed in 2002. Dystonia (2003) and OCD (2009) were approved under **Humanitarian Device Exemptions**, a lower evidentiary standard than full PMA — a distinction routinely omitted in popular coverage. Epilepsy (anterior nucleus of the thalamus) was approved in 2018.
+
+**Controlled evidence in Parkinson's disease.** Deuschl and colleagues randomized patients to DBS plus medical therapy versus best medical therapy, analyzing 156 pairs [29]. At six months the DBS group showed roughly 25% improvement in quality of life (PDQ-39) and about 41% motor improvement (UPDRS-III off-medication), against near-zero change in the medical group. Serious adverse events were more common with neurostimulation: 13% versus 4%. Schuepbach and colleagues' EARLYSTIM trial extended this to earlier disease — 251 patients, mean age 52, mean disease duration 7.5 years — and found an 8.0-point (~26%) quality-of-life advantage for neurostimulation at two years (P = 0.002) [30].
+
+**Why DBS is not "sending electricity into the brain."** The naive model — electricity excites the target — is wrong, and the mechanism is still not fully settled. High-frequency stimulation of the subthalamic nucleus improves parkinsonian motor symptoms in a way that partially mimics *lesioning* the same structure, which is difficult to explain as simple excitation. Current thinking involves several simultaneous effects: differential activation of axons versus cell bodies (axons are more excitable, so stimulation may drive output projections while functionally decoupling the local soma); disruption of pathological beta-band oscillatory synchrony in the basal ganglia–thalamocortical loop; antidromic activation of afferent fibers modulating cortex; and network-level changes in information flow. The therapeutic action is best understood as **interfering with a pathological network dynamic**, not as switching a region on or off.
+
+**Risks and limits.** Surgical risks include intracranial hemorrhage, infection, and lead misplacement, with hardware complications requiring revision over the device's life. Stimulation-induced side effects — paresthesia, dysarthria, gait disturbance, mood and impulse-control changes — are common and depend sensitively on current spread beyond the intended target. Programming is labor-intensive, often requiring many clinic visits across a large parameter space. Reported complication rates vary widely across series, and I would treat any single pooled figure with caution; the trial-level serious-adverse-event contrast in Deuschl (13% vs 4%) is the better-anchored number [29].
+
+**Psychiatric DBS: an instructive failure.** Open-label series of subcallosal cingulate DBS for treatment-resistant depression reported response rates of 41–64% and remission up to roughly 37–63%. Then the controlled trials arrived. Holtzheimer and colleagues' BROADEN trial — multisite, randomized, sham-controlled, 90 patients (60 active, 30 sham) — was **stopped for futility** at a pre-planned analysis; response during the six-month double-blind phase was 20% active versus 17% sham, not statistically significant, with 40 serious adverse events across 28 patients [32]. Dougherty and colleagues' sham-controlled trial of ventral capsule/ventral striatum DBS in 30 patients found 20% response (3/15) versus 14.3% sham (2/14) — no significant difference [33].
+
+This divergence between enthusiastic open-label results and null sham-controlled results is one of the most important patterns in the entire field. It is what placebo control is for.
+
+> **Maturity: clinically established** for Parkinson's disease, essential tremor, and dystonia. **Preliminary and contested** for depression. **Clinically established under HDE** — a weaker standard — for OCD.
+
+---
+
+### Responsive Neurostimulation: Closed-Loop, Already Approved
+
+The NeuroPace RNS System is the clearest existing example of a closed-loop brain device in routine clinical use. It continuously monitors electrocorticographic activity from leads placed at one or two seizure foci, detects patterns matching programmed signatures of seizure onset, and delivers stimulation in response.
+
+**Pivotal trial.** Morrell and colleagues implanted 191 adults with medically intractable partial epilepsy and randomized them 1:1 to active stimulation or sham after one month [34]. Over the 12-week blinded period, seizures fell 37.9% in the treatment group (n = 97) versus 17.3% in sham (n = 94), P = 0.012, with no difference in adverse events. This provided Class I evidence. FDA approval followed in 2013.
+
+**Long-term outcomes.** Nair and colleagues followed participants for nine years [35]. Of 256 patients treated in the initial trials, 230 enrolled in the long-term study. At nine years, median seizure-frequency reduction was 75% (P < 0.0001), the responder rate was 73%, and 35% had a ≥90% reduction. Notably, 18.4% (47 of 256) experienced at least one year of seizure freedom, with an average seizure-free period of 3.2 years. There were no serious adverse events related to stimulation, and SUDEP rates were lower than predefined comparators.
+
+Two caveats. The long-term phase is open-label, so the growth from 37.9% to 75% cannot be cleanly attributed to the device alone — regression to the mean, medication changes, and the natural course all contribute. The authors themselves classify the nine-year data as **Class IV evidence** [35]. The blinded 37.9% versus 17.3% remains the causally clean number.
+
+> **Maturity: clinically established** for focal epilepsy, with high-quality controlled short-term evidence and lower-quality long-term evidence.
+
+---
+
+### Adaptive DBS: The Loop Closes in Parkinson's
+
+Conventional DBS stimulates continuously at fixed parameters regardless of what the brain is doing. Adaptive DBS uses a recorded biomarker — typically subthalamic beta-band (~13–30 Hz) power, which correlates with parkinsonian bradykinesia and rigidity — to modulate stimulation in real time.
+
+Little and colleagues published the key proof-of-concept: a small acute crossover study in advanced Parkinson's [31]. Motor scores improved 66% unblinded and 50% blinded with adaptive DBS — respectively 29% and 27% better than continuous DBS — while reducing stimulation time by 56% (P < 0.001). The sample was very small and the setup was acute and intraoperatively tethered, so this was a demonstration of principle rather than a clinical result.
+
+It nonetheless led somewhere concrete. On **24 February 2025**, the FDA approved Medtronic's BrainSense Adaptive DBS along with the BrainSense Electrode Identifier — the first adaptive, closed-loop DBS system approved for Parkinson's disease. The supporting ADAPT-PD trial (NCT04547712) was an international, multicenter, prospective, single-blind randomized crossover study in 68 patients already receiving DBS. The Electrode Identifier reportedly reduces initial programming time by about 85%.
+
+Two limitations are worth stating: the crossover design enrolled patients who were already DBS responders, so this is not evidence about who should receive DBS in the first place, and beta power is a useful but imperfect proxy for symptom state.
+
+> **Maturity: newly clinically established** (approved February 2025) for Parkinson's disease in patients already suitable for DBS.
+
+---
+
+### Focused Ultrasound: Promising, and Two Different Things
+
+Transcranial focused ultrasound is frequently discussed as a single technology. It is at least two, at completely different maturity levels, and conflating them produces bad reporting.
+
+**The physics.** Acoustic waves from a phased array of transducers can be steered and focused to a millimeter-to-centimeter scale spot at depth. Unlike electric and magnetic fields, ultrasound can be focused deep *without* obligatorily depositing more energy superficially, which is why it is the most interesting candidate for non-invasive deep-brain targeting. The skull is the central obstacle: it attenuates, absorbs, and aberrates the beam, and skull thickness and density vary between individuals. Modern systems use hundreds to over a thousand elements with CT-derived per-element phase correction to compensate.
+
+---
+
+### Use 1: Thermal ablation — clinically established
+
+Elias and colleagues ran a randomized, sham-controlled trial (3:1) of MRI-guided focused ultrasound thalamotomy for essential tremor in 76 patients (56 thalamotomy, 20 sham) [38]. Hand-tremor score improved 47% at three months versus 0.1% in sham, with benefit persisting at 12 months with partial regression. Adverse events included gait disturbance and paresthesias. The FDA approved the Insightec Exablate Neuro for essential tremor in 2016.
+
+**This is permanent thermal lesioning, not reversible neuromodulation.** It heats tissue to destroy it, without opening the skull. Calling this "focused ultrasound brain stimulation" is a category error.
+
+---
+
+### Use 2: Reversible neuromodulation (TUS) — experimental
+
+At lower intensities, ultrasound appears to modulate neural excitability without ablation, likely through mechanical effects on membranes and mechanosensitive ion channels. Legon and colleagues reported that transcranial focused ultrasound to primary somatosensory cortex attenuated somatosensory evoked potentials and enhanced sensory discrimination in humans, with a beam lateral resolution of 4.9 mm and axial resolution of 18 mm [37].
+
+**Then came a serious methodological problem.** In the same 2018 issue of *Neuron*, two independent groups reported that in rodents, ultrasound activates broad regions of cortex **indirectly, via a cochlear/auditory pathway** [39][40]. Transecting the auditory nerves or removing cochlear fluid eliminated the apparent "neuromodulation." An accompanying commentary framed the implication bluntly. This does not invalidate all TUS work, and human studies have since incorporated auditory masking and sham controls, but it means a substantial body of earlier results may partly reflect an auditory artifact rather than direct target engagement.
+
+As of 2025, TUS for reversible neuromodulation in humans remains investigational: small samples, no large pivotal trials, no FDA clearance for TUS neuromodulation as distinct from ablation.
+
+---
+
+### Use 3: Blood-brain barrier opening — early clinical research
+
+Combined with intravenously injected microbubbles, focused ultrasound can transiently and reversibly open the blood-brain barrier, potentially allowing drugs or antibodies to reach brain tissue. Lipsman and colleagues demonstrated first-in-human safety and feasibility in a small pilot in Alzheimer's disease patients, opening the barrier safely, reversibly, and repeatedly with no serious adverse events and no significant cognitive worsening at three months [41]. This was a safety and feasibility study, not an efficacy trial.
+
+> **Maturity:** ablation — **clinically established** for essential tremor. Reversible neuromodulation — **preliminary**, with an unresolved confound. BBB opening — **preliminary**, safety demonstrated.
+
+---
+
+### Vagus Nerve Stimulation: A Note on Approval Standards
+
+VNS stimulates the vagus nerve in the neck rather than the brain directly, modulating brainstem nuclei and their widespread projections. FDA approval for refractory partial-onset seizures came via PMA P970003 in July 1997. The pivotal randomized trials (E03, E05) showed roughly 25–28% seizure reduction versus an active low-stimulation control — modest.
+
+The depression indication, added in July 2005, is a genuinely instructive case. The pivotal short-term sham-controlled trial **did not meet its primary acute endpoint**. Approval rested substantially on open-label long-term comparison data, which drew significant methodological criticism and years of insurance coverage disputes.
+
+> **Maturity: clinically established** for refractory epilepsy, with modest effect sizes. **Contested** for depression, where the controlled evidence is weak.
+
+---
+
+### Part IV — Brain-Computer Interfaces
+
+---
+
+A BCI wires neural activity straight to an external device, skipping the peripheral nerves and muscles entirely. It's where the most astonishing results of the last twenty years have come from — and also where the gap between "shown in a handful of people" and "something you can actually get" is at its widest.
+
+---
+
+### The Pipeline
+
+```text
+   Neural activity (population spiking / field potentials)
+        │
+        ▼
+   Signal acquisition ────── Utah array (spikes) | ECoG (surface field)
+        │                    | EEG (scalp, non-invasive)
+        ▼
+   Amplification, digitization, referencing
+        │
+        ▼
+   Feature extraction ────── threshold crossings, spike-band power,
+        │                    high-gamma envelope, binned firing rates
+        ▼
+   Decoder ──────────────── RNN / LSTM / transformer / Kalman filter
+        │                   trained on labeled attempts
+        ▼
+   Intent estimate ──────── cursor velocity | phoneme sequence |
+        │                   joint torques | character
+        ▼
+   Language model / smoothing ── n-gram or LLM rescoring (for speech/text)
+        │
+        ▼
+   Device output ────────── cursor, robotic arm, synthesized voice, avatar
+        │
+        ▼
+   Sensory feedback ─────── vision, audio, (rarely) somatosensory ICMS
+        │
+        ▼
+   Brain adaptation ─────── user learns the decoder; decoder drifts;
+                            recalibration required
+```
+
+That last loop is the piece outsiders almost always miss. A BCI isn't a passive readout. It's a **co-adaptive system** — the decoder learns the user's neural patterns while the user learns to produce patterns the decoder handles well. The performance you see is the product of both sides meeting in the middle.
+
+---
+
+### Invasive vs. Non-Invasive: An Unavoidable Trade-off
+
+| | Non-invasive (EEG) | ECoG | Intracortical |
+| --- | --- | --- | --- |
+| Signal | Blurred population sum | Local field, high-gamma | Single/multi-unit spikes |
+| Surgery | None | Craniotomy, on surface | Craniotomy, penetrating |
+| Information rate | Low | High | Highest |
+| Typical use | Research, communication aids | Speech decoding | Speech and high-DOF motor |
+| Longevity concern | Electrode setup, drift | Moderate | Signal degradation over years |
+| Risk | Negligible | Surgical | Surgical + tissue response |
+
+There is no free lunch. The skull is an information bottleneck, and no amount of machine learning recovers information that never crossed it.
+
+---
+
+### Case Studies: Restoring Movement
+
+---
+
+### Case Study 1: The First Human Intracortical BCI
+
+**Research question.** Can a person with long-standing tetraplegia control external devices using recorded motor cortex activity, years after the injury that severed the path to their muscles?
+
+**Participants.** 1 — a 25-year-old man ("MN") with tetraplegia from spinal cord injury, ~3 years post-injury.
+
+**Technology.** A single 96-microelectrode Utah array in the arm/hand region of primary motor cortex (BrainGate).
+
+**Method.** Ensemble activity recorded while he attempted hand movements; a decoder mapped population activity to cursor velocity and device commands.
+
+**Result.** Motor cortex activity still modulated with intended hand motion despite years of paralysis. He achieved point-and-click cursor control, opened email, played games, operated a television, and controlled a prosthetic hand — while conversing [42].
+
+**Interpretation.** This established the field's founding premise: **motor cortex remains functionally intact and volitionally controllable years after disconnection from the body.**
+
+**Limitation.** One participant; modest accuracy and robustness; heavy technical support. Feasibility, not utility.
+
+**Why it matters.** It converted intracortical BCI from a primate result into a human research programme.
+
+---
+
+### Case Study 2: From Cursors to Robotic Limbs
+
+**Research question.** Can neural control extend from a 2D cursor to functional three-dimensional manipulation, and how much dexterity is available from a few hundred neurons?
+
+**Participants.** 3 across two studies — two women with tetraplegia (~5 and ~15 years post-brainstem-stroke) [43], and a 53-year-old woman with spinocerebellar degeneration, ~13 years tetraplegic [44].
+
+**Technology.** 96-channel Utah arrays in motor cortex (two arrays in [44]); DLR, DEKA, and anthropomorphic prosthetic arms.
+
+**Method.** Decoded 3D endpoint velocity and grasp for reach-and-grasp with physical objects; in [44], progressive training over 13 weeks expanding from translation to orientation to grasp.
+
+**Result.** Both participants in [43] performed 3D reach and grasp — one drank coffee unaided for the first time since her stroke — with target-acquisition success of ~48.8% and ~69.2% across the two arms, and useful control demonstrated **five years after implantation**. In [44], simultaneous control of **7 degrees of freedom** (3 translation, 3 orientation, 1 grasp) with task success rising to ~91.6%.
+
+**Quantitative finding.** 7 DOF from roughly 200 channels — a major upward revision of expectations.
+
+**Interpretation.** The information in a few hundred motor cortex neurons suffices for high-dimensional coordinated limb control, and chronic arrays can stay useful for years.
+
+**Limitation.** Three participants total; control slower and less accurate than natural movement; success rates below what daily independence requires; performance decayed over time, requiring recalibration.
+
+---
+
+### Case Study 3: Communication Throughput
+
+**Research question.** How fast can people with paralysis communicate through an intracortical BCI, measured in information-theoretic terms?
+
+**Participants.** 3 — two with ALS, one with spinal cord injury.
+
+**Technology.** 96-channel Utah array(s) in motor cortex; point-and-click virtual keyboard.
+
+**Method.** Neural cursor control with click; performance quantified as achieved bit rate.
+
+**Result.** Peak throughput of ~6.13, 6.88, and 2.90 bits per second — the highest reported at the time — with typing averaging 24.4 ± 3.3 correct characters/min and a best block near 39 [45].
+
+**Interpretation.** Establishing bits per second as the metric was itself the contribution; it makes BCI performance comparable across paradigms and against natural communication.
+
+**Limitation.** Far below natural speech (~39 bits/s for conversation by common estimates); required recalibration; three participants.
+
+---
+
+### Case Study 4: Handwriting — A Change of Strategy
+
+**Research question.** Could decoding a *rapid, dexterous* movement like handwriting outperform decoding slow cursor movement?
+
+**Participants.** 1 — a 65-year-old man ("T5") with C4 spinal cord injury, hand paralyzed.
+
+**Technology.** Two 96-channel Utah arrays in the hand knob of precentral gyrus.
+
+**Method.** He attempted to *write* individual letters; an RNN decoded the attempted pen trajectories into characters in real time.
+
+**Result.** **90 characters per minute** (~18 words/min) at **94.1% raw online accuracy**, exceeding **99% offline with general-purpose autocorrect** [46].
+
+**Interpretation.** The insight was strategic, not hardware-based: temporally complex movements produce more separable neural patterns than slow ones. Choosing a richer motor output more than doubled the previous state of the art on the same class of implant.
+
+**Limitation.** One participant, who could still attempt handwriting movements; required daily retraining; not a self-contained clinical system.
+
+---
+
+### Case Studies: Speech Neuroprostheses
+
+---
+
+Speech decoding is where the field's progress has been fastest and where reporting has been loosest. Before the case studies, one distinction must be fixed firmly, because collapsing it produces almost every misleading claim in this area.
+
+---
+
+### Four Things That Are Not the Same
+
+**1. Decoding a constrained vocabulary.** The system chooses among a small fixed word set (say 50 words). Tractable, high accuracy, limited utility.
+
+**2. Decoding attempted speech with a large vocabulary.** The user actively *tries to speak*; the decoder maps articulatory motor commands to phonemes, then a language model assembles words from a large lexicon. This is where the state of the art lives.
+
+**3. Reconstructing continuous speech audio.** Synthesizing an audible voice waveform rather than text, ideally with the user's own vocal identity and prosody.
+
+**4. Translating arbitrary internal thought.** Reading unspoken, unattempted mentation — inner monologue, private reasoning, thoughts the person is not trying to express.
+
+The groundwork for categories 2 and 3 was laid by Anumanchipalli, Chartier, and Chang, who decoded ECoG activity into articulatory kinematics and then into synthesized audible speech in 5 epilepsy patients — though those participants could still speak, so it was not a restoration demonstration [50].
+
+**Categories 1 through 3 have been demonstrated. Category 4 has not.** Every current speech BCI requires the user to *attempt to speak*, which is a deliberate motor act under voluntary control. The system decodes the motor command, not the thought behind it. The user can simply not attempt to speak, and the decoder produces nothing.
+
+---
+
+### Case Study 6: The First Speech Neuroprosthesis in a Paralyzed Person
+
+**Research question.** Can attempted speech be decoded directly into words in someone who cannot speak at all?
+
+**Participants.** 1 — "Bravo-1," a man in his late 30s with anarthria and spastic quadriparesis following a brainstem stroke more than 15 years earlier.
+
+**Technology.** A high-density subdural **ECoG array of 128 electrodes** over sensorimotor cortex — surface recording, not penetrating electrodes.
+
+**Method.** He attempted to say words from a 50-word vocabulary. Deep-learning models detected speech attempts and classified words; a natural-language model constrained sentence-level output. 48 sessions across roughly 22 hours of cortical recording.
+
+**Result.** Real-time sentence decoding at a **median 15.2 words per minute** with a **median word error rate of 25.6%** [49].
+
+**Interpretation.** Proof that the cortical representation of attempted speech survives long-standing paralysis and is decodable from the cortical surface — a lower-risk approach than penetrating electrodes.
+
+**Limitation.** One participant. A 50-word vocabulary is a demonstration, not communication. A 25.6% word error rate means roughly one word in four is wrong.
+
+---
+
+### Case Study 7: Breaking the Vocabulary Barrier
+
+**Research question.** Can a speech BCI operate over an effectively unlimited vocabulary at conversational speed?
+
+**Participants.** 1 — "T12," a woman with bulbar-onset ALS, unable to produce intelligible speech.
+
+**Technology.** **Four** microelectrode arrays — two in area 6v (ventral premotor cortex) and two in area 44. Decoding relied on the two 6v arrays, comprising 128 electrodes.
+
+**Method.** An RNN decoded attempted speech into a **phoneme** sequence rather than directly into words; a language model then assembled phonemes into text. Phoneme-level decoding is the key architectural choice — a few dozen phonemes compose any word, so a large vocabulary requires no additional neural classes.
+
+**Result.** With a 50-word vocabulary, a **9.1% word error rate** (11.2% silent). With a **125,000-word vocabulary — the first large-vocabulary demonstration — a 23.8% word error rate** (24.7% silent), at **62 words per minute**. Raw phoneme error rate was 19.7%. Offline improvements reduced WER to 17.4%, and to 11.8% on temporally proximal sentences. Critically, the authors found that **doubling electrode count reduced WER by a factor of about 0.57** [47].
+
+**Interpretation.** Two things. First, unlimited-vocabulary neural speech is achievable. Second, that scaling relationship is the field's most actionable engineering result: it says performance is substantially **electrode-count-limited**, not algorithm-limited, which tells hardware developers exactly where to invest.
+
+**Limitation.** The authors are explicit that a ~24% WER is "probably not yet sufficiently low for everyday use." Required daily retraining. One participant. Must be confirmed in more people.
+
+---
+
+### Case Study 8: Voice and Face, Not Just Text
+
+**Research question.** Can a neuroprosthesis restore not only words but vocal identity and facial expression?
+
+**Participants.** 1 — "Bravo-3," a woman with quadriplegia and anarthria after a pontine stroke.
+
+**Technology.** A high-density ECoG array of **253 electrodes** over sensorimotor cortex.
+
+**Method.** A single neural signal stream was decoded simultaneously into three outputs: text, synthesized speech audio personalized to her pre-injury voice using recordings from her wedding video, and facial animation of an avatar.
+
+**Result.** Large-vocabulary text at a **median 78 words per minute with a median 25% word error rate**, plus personalized voice synthesis and avatar control [48].
+
+**Interpretation.** The neural representation of attempted speech is rich enough to drive multiple expressive modalities at once. Restoring *how* someone sounds and looks when speaking, not merely what they say, is a distinct and psychologically significant achievement.
+
+**Limitation.** One participant. 25% WER remains too high for unconstrained daily use. **Note a published correction:** an Author Correction reports that approximately half the neural channels were misordered in the data files. This did not affect real-time decoding performance or the main claims, but it altered electrode-to-anatomy mappings — relevant to anyone drawing anatomical conclusions from the paper.
+
+---
+
+### Case Study 9: The Accuracy Jump
+
+**Research question.** Can a speech neuroprosthesis be made accurate and fast to calibrate enough to be practically usable?
+
+**Participants.** 1 — a man with ALS and severe dysarthria.
+
+**Technology.** **Four 64-channel intracortical arrays — 256 electrodes total** — in ventral precentral gyrus.
+
+**Method.** Phoneme-level RNN decoding with rapid calibration, plus text-to-speech in his pre-ALS voice.
+
+**Result.** The system was turned on **25 days post-implant** and achieved **99.6% accuracy on a 50-word vocabulary after 30 minutes of calibration on the first day**. With further training on a **125,000-word vocabulary**, word error rates fell to as low as ~1% on the best days, averaging 2.66% — roughly a ninefold reduction in errors versus the prior state of the art. Accuracy was sustained at **97.5% beyond eight months** [51].
+
+**Interpretation.** This is the result that moved large-vocabulary speech BCI from "impressive demonstration" to "plausibly clinically useful." A ~2–3% word error rate is in the range of good automatic speech recognition. The combination of high accuracy, minimal calibration, and eight-month stability addressed the three practical objections to earlier work simultaneously.
+
+**Limitation.** One participant. Generalization to other etiologies and to a broader population is unproven, and intracortical array longevity beyond a few years remains an open question. Note also that this participant retained the ability to attempt speech — the decoder still requires voluntary articulatory effort.
+
+**Why it matters.** Compare Case Study 6 (2021): 50 words, 15.2 wpm, 25.6% WER. Case Study 9 (2024): 125,000 words, ~1–2.7% WER. That is three years apart.
+
+---
+
+### Case Study 10: Real-Time Voice
+
+**Research question.** Can synthesized speech be produced with low enough latency for genuine conversation, rather than after a completed sentence?
+
+**Participants.** 1 — the same UCSF participant as Case Study 8 (BRAVO-3).
+
+**Technology.** High-density ECoG over speech sensorimotor cortex; framework additionally validated on intracortical single-unit and EMG data.
+
+**Method.** A **streaming** decoder producing output in 80-millisecond increments rather than waiting for sentence completion.
+
+**Result.** Median latency to speech onset of approximately **1.0–1.67 seconds**, against multi-second delays in prior systems. Streaming synthesis ran at **46.5 words per minute** (99% CI 41.6–54.9) versus 24.8 wpm for delayed synthesis. Real-time text on a 1,024-word set had a median 30.7% WER; speech-synthesis median WER was 40.8%. The approach generalized across recording modalities [52].
+
+**Interpretation.** Latency is its own engineering axis, and it matters for conversation in a way that accuracy metrics do not capture — turn-taking requires sub-second responsiveness.
+
+**Limitation.** One participant. Synthesis error rates remain high (40.8%), notably worse than text decoding. The accuracy-versus-latency trade-off is visible in these numbers.
+
+A closely related 2025 *Nature* paper from the UC Davis group reported an instantaneous voice-synthesis neuroprosthesis using 256 intracortical microelectrodes in ventral precentral gyrus, with closed-loop audio feedback enabling conversation, intonation modulation, and even singing [53]. I was able to verify the paper's existence, participant, hardware, and core claims, but not its detailed intelligibility metrics — treat specific performance figures from that paper as unconfirmed here.
+
+---
+
+### Safety: The Least Glamorous and Most Important Data
+
+Rubin and colleagues published the interim safety profile of the BrainGate feasibility study — the largest and longest-running implanted BCI trial [54].
+
+**Participants.** 14 adults implanted between 2004 and 2021 (6 spinal cord injury, 6 ALS, 2 brainstem stroke; 3 female, 11 male; median age at implant 51).
+
+**Exposure.** 12,203 implant-days total (17,927 array-implant-days); mean duration 872 days, median 774, range 296–1,994.
+
+**Results.** 342 total adverse events, of which **68 were device-related, including 6 device-related serious adverse events**. The most common device-related event by far was skin irritation around the percutaneous pedestal (35 of 68). There were **no device explantations for safety reasons, no intracranial infections, no device-related deaths, and no permanent increases in disability**. One localized skin infection was managed with oral antibiotics. Six participants died of underlying disease progression; none was device-related. The authors judged the safety profile comparable to DBS and responsive neurostimulation devices.
+
+**Limitation, as stated by the authors.** No control arm, and the study is underpowered for rare events — they note under 1% power to detect a doubling of intracranial infection risk. The percutaneous pedestal remains suboptimal compared to fully implanted wireless systems.
+
+---
+
+### How Many People Is This, Really?
+
+This is the number that most changes one's sense of the field's maturity. Rubin and colleagues report that in addition to BrainGate's 14 participants, "as of April 2022, there have been approximately **21 other human research participants** who have participated in chronic intracortical BCI trials" across the US, China, and Germany — roughly **35 people total** with chronic intracortical implants at that point [54]. A broader 2024 review in *Nature Reviews Bioengineering* counted 21 research groups worldwide and 67 participants, but that figure spans intracortical, ECoG, and endovascular implants [55].
+
+Numbers have grown since, and no single authoritative count for late 2025 exists — the total is modality-dependent and any specific figure should be treated as approximate. But the order of magnitude is the point. **Every headline about brain implants in the past two decades rests on a cumulative human experience of roughly tens to low hundreds of people.**
+
+---
+
+### On Neuralink
+
+Because it dominates public discussion, its evidentiary status should be stated precisely.
+
+As of October 2025, Neuralink had **no peer-reviewed publication of its human trial results**. Public information came from company announcements, blog posts, and media reports — not peer review. Multiple outlets reported in early October 2025 that Neuralink had *submitted* its first human clinical study, covering the first three "Link" recipients, to the *New England Journal of Medicine*.
+
+**Submission is not publication.** As of the research cutoff for this article, that paper was under review, neither accepted nor published, and no peer-reviewed Neuralink human efficacy or safety data existed. The company's earlier 2019 *Journal of Medical Internet Research* white paper describes a preclinical engineering platform, not human results. Participant counts circulating in 2025 are company-sourced.
+
+This is not a claim that Neuralink's technology does not work. It is a statement about what can currently be independently evaluated, which is: very little. Contrast this with BrainGate, whose safety profile across 14 participants and 12,203 implant-days is publicly documented in *Neurology* [54].
+
+---
+
+### Part V — Where AI Actually Fits
+
+---
+
+Nearly every advance in Part IV is, in engineering terms, a machine-learning advance layered on largely similar hardware. Case Study 5's decisive gain came from an RNN plus a strategic choice of motor output, on the same 96-channel arrays used in 2006 [42][46]. Case Studies 7 and 9 came from phoneme-level RNN decoding plus language-model assembly [47][51].
+
+AI contributes in specific, identifiable places:
+
+**Artifact removal and preprocessing.** Learned models separate neural signal from EMG, EOG, and line noise more effectively than fixed filters.
+
+**Feature learning.** Rather than hand-designing features like mu-band power, convolutional networks learn representations directly from raw or minimally processed signals — the approach in Défossez and colleagues' work [10].
+
+**Decoding.** Recurrent networks and transformers handle the sequential, temporally extended structure of neural data far better than the linear filters and Kalman decoders of the 2000s.
+
+**Language priors.** This is subtle and important. In speech BCIs, the language model contributes a substantial share of final accuracy. When Case Study 7 reports a 19.7% raw phoneme error rate but a 23.8% word error rate over 125,000 words, the language model is doing heavy lifting to turn a noisy phoneme stream into plausible sentences [47]. Similarly, Case Study 5's jump from 94.1% raw to >99% accuracy came from autocorrect [46]. Tang and colleagues' decoder is explicitly built around a GPT prior with beam search [9].
+
+**Cross-subject and cross-session transfer.** Shared-backbone architectures with subject-specific layers [10] and self-supervised pretraining aim to reduce per-user calibration burden.
+
+**Adaptive stimulation.** Learned controllers map measured brain state to stimulation parameters — the basis of closed-loop systems.
+
+---
+
+### Why AI Does Not Dissolve the Hard Limits
+
+If you read one part of this article skeptically, make it this one — "AI will figure it out" is the single most common way the real limits get waved away.
+
+**Information the sensor never captured cannot be recovered.** Scalp EEG's spatial blurring from volume conduction is a physical mixing process that destroys information [2]. No decoder recovers what the skull removed. This is why the EEG results in Défossez and colleagues (17.7–25.7% top-10) are so much worse than the MEG results (70.7%) with the *same architecture* [10] — the model was identical; the information available was not.
+
+**Language priors can generate content that was never in the brain.** A powerful language model produces fluent, plausible text partly from its own statistics. When a decoder outputs a coherent sentence, some of that coherence comes from the prior, not the neural data. This is precisely why Tang and colleagues report BERTScore against a null distribution rather than simply displaying compelling-looking output [9] — and why their 0.92–0.94 word error rate is the honest counterweight to their impressive semantic results. A generative decoder can hallucinate, and the failure mode is *plausible-sounding fabrication*.
+
+**Supervised decoders need labeled data, which requires cooperation.** To train a decoder you need to know what the person was doing or intending. That is why cross-subject decoding fails so completely (1–5% versus 65–82%) [9] and why "subject cooperation is required both to train and to apply the decoder."
+
+**The target is non-stationary.** Neural representations drift across sessions, electrode impedances change, and arrays degrade [56]. Every deployed system needs recalibration.
+
+**Scaling appears hardware-limited.** Case Study 7's finding that doubling electrodes reduces word error rate by a factor of ~0.57 is a statement about *sensors*, not models [47].
+
+**Sample sizes are tiny.** Most landmark results come from single participants. Standard machine-learning intuitions about generalization do not apply to n = 1.
+
+---
+
+### Part VI — Closed-Loop Systems: The Real Frontier
+
+---
+
+Everything so far treats measurement and modulation separately. Coupling them is what changes the nature of the technology.
+
+```text
+        ┌──────────────────────────────────────────┐
+        │                                          │
+        ▼                                          │
+   ┌─────────┐                                     │
+   │  BRAIN  │                                     │
+   └─────────┘                                     │
+        │  neural signal                           │
+        ▼                                           
+   ┌──────────────┐                                │
+   │   SENSOR     │  ECoG / LFP / spikes           │
+   └──────────────┘                                │
+        │                                          │
+        ▼                                          │
+   ┌──────────────┐                                │
+   │ PROCESSING   │  filter, feature extraction    │
+   └──────────────┘                                │
+        │                                          │
+        ▼                                          │
+   ┌──────────────┐                                │
+   │ STATE EST.   │  "is this a seizure onset?"    │
+   │              │  "is beta power elevated?"     │
+   └──────────────┘                                │
+        │                                          │
+        ▼                                          │
+   ┌──────────────┐                                │
+   │ CONTROLLER   │  decide: stimulate? how much?  │
+   └──────────────┘                                │
+        │                                          │
+        ▼                                          │
+   ┌──────────────┐                                │
+   │ STIMULATION  │  ──────────────────────────────┘
+   └──────────────┘         effect measured, loop closes
+```
+
+---
+
+### The Control-Theory Analogy, and Where It Breaks
+
+A thermostat measures temperature, compares it to a setpoint, and actuates a heater. Closed-loop neuromodulation has the same skeleton: sense, compare, actuate. The RNS System's seizure detection and adaptive DBS's beta-power tracking both fit this shape [34][31].
+
+The analogy is genuinely useful. It clarifies why closed-loop is attractive: stimulation is delivered only when needed, which reduces side effects, extends battery life, and avoids the tolerance and habituation that continuous stimulation can produce. Little and colleagues' 56% reduction in stimulation time while *improving* motor scores is exactly the efficiency gain a control engineer would predict [31].
+
+**Where the analogy breaks down — and it breaks down badly:**
+
+**There is no thermometer for most brain states.** A thermostat measures the controlled variable directly. Adaptive DBS measures beta-band power as a *proxy* for parkinsonian motor state. Beta power correlates with bradykinesia and rigidity, but it is not the symptom, and it responds to movement, medication, and arousal. Every closed-loop neural system controls a proxy, and proxy error is unbounded in a way temperature measurement error is not.
+
+**The plant adapts to the controller.** A room does not learn to resist a thermostat. A brain does change in response to chronic stimulation, through plasticity and homeostatic mechanisms. The system being controlled is modified by the act of controlling it, which violates the stationarity assumption underlying most classical control design.
+
+**The setpoint is often unknown.** For epilepsy, the objective is clear: fewer seizures. For depression, there is no agreed neural setpoint for "well." This is the central obstacle to closed-loop psychiatry, and it is conceptual, not technical.
+
+**Latency and observability are unfavorable.** The relevant dynamics can be faster than the sensing-and-decision loop, and most of the brain is unobserved by any given implant.
+
+---
+
+### The n=1 Result That Defines the Frontier
+
+Scangos and colleagues published a single-patient proof-of-concept for closed-loop DBS in treatment-resistant depression [36]. The approach was methodologically novel and worth describing: rather than assuming a target, they conducted multi-day intracranial electrophysiological mapping to identify a *personalized* symptom biomarker — amygdala gamma activity — and a personalized effective stimulation site (ventral capsule/ventral striatum). They then implanted a chronic sensing-and-stimulation device (a NeuroPace RNS) to deliver biomarker-driven therapy. The patient showed rapid and sustained improvement.
+
+**One patient.** A proof-of-concept, not evidence of efficacy — and it has to be read alongside BROADEN and Dougherty, the two sham-controlled DBS-for-depression trials that came back negative [32][33]. What makes it matter is the *method*: find a personalized biomarker first, then close the loop around it. That's a credible explanation for why fixed-target, fixed-parameter psychiatric DBS kept failing. Whether it holds up under controlled testing, nobody yet knows.
+
+> **Maturity of closed-loop neuromodulation: clinically established** for focal epilepsy (RNS, 2013) and Parkinson's disease (BrainSense aDBS, February 2025). **Preliminary** for psychiatric applications.
+
+---
+
+### Part VII — Plasticity: The Brain Changes Itself
+
+---
+
+Neuroplasticity is why neurotechnology works better than a naive model predicts, and why its effects are harder to characterize.
+
+**Synaptic plasticity** — activity-dependent change in synaptic strength — is the cellular substrate of learning. **Hebbian** mechanisms strengthen connections between neurons that fire together in appropriate temporal order; long-term potentiation and depression are the canonical laboratory forms. At the network level, plasticity supports reorganization of functional maps after injury or altered use.
+
+Three consequences matter for this article.
+
+**1. Users learn interfaces.** BCI performance improves over sessions not only because decoders are retrained but because users' neural activity becomes more consistently discriminable. Case Study 3's 13-week progression to 7 degrees of freedom reflects genuine motor learning [44]. This is why BCIs are co-adaptive systems.
+
+**2. Stimulation can interact with plasticity rather than merely driving activity.** This is the crucial distinction between **temporary modulation** and **longer-term network adaptation**:
+
+| | Temporary modulation | Longer-term adaptation |
+| --- | --- | --- |
+| Mechanism | Immediate change in excitability or firing | Change in synaptic strength and network organization |
+| Duration | Milliseconds to tens of minutes | Days to months |
+| Example | Single TMS pulse producing an MEP [1] | Cumulative clinical response to a multi-week rTMS course [14] |
+| Persistence | Ends with stimulation | Outlasts stimulation |
+
+A single TMS pulse produces a twitch and is over. A six-week course of rTMS producing sustained antidepressant response is not plausibly explained by the immediate physical effect of the last pulse. Something in the network changed. The same logic applies to DBS, where some benefits appear immediately and others accrue over months. Mechanistically, this remains incompletely understood.
+
+**3. Plasticity also degrades stability.** The same adaptivity that lets a user learn a decoder causes the neural-to-intent mapping to drift, forcing recalibration. Plasticity is not uniformly a friend to engineering.
+
+---
+
+### Part VIII — Can Technology Control Human Behavior?
+
+---
+
+The honest answer requires levels, not a yes or no. Here is the ladder, with the evidence for each rung.
+
+---
+
+### Level 1 — Modifying neural activity: **demonstrated, clinically established**
+
+Not in dispute. TMS produces MEPs [1]. DBS alters basal ganglia network dynamics with measurable clinical effect [29]. tDCS shifts motor cortex excitability [19]. Electrical stimulation of cortex changes neural firing. This is the least interesting rung and the only one that is fully settled.
+
+---
+
+### Level 2 — Modifying perception or motor output: **demonstrated in controlled contexts**
+
+TMS over motor cortex produces involuntary movement. TMS over visual cortex produces phosphenes and can transiently disrupt visual detection. Focused ultrasound to somatosensory cortex altered somatosensory evoked potentials and sensory discrimination [37]. Direct cortical stimulation during neurosurgical mapping reliably produces motor and sensory phenomena.
+
+**The important qualification:** these are *crude* perceptual and motor effects — a twitch, a flash, a degradation of detection. Nobody has induced a specific complex percept, such as making someone see a particular face or hear a particular sentence, in a controlled and reproducible way.
+
+---
+
+### Level 3 — Influencing cognitive performance: **contested**
+
+This is where the tDCS literature lives, and it is the rung where popular claims most exceed evidence. Horvath and colleagues found no reliable cognitive effect of single-session tDCS across 59 analyses [20]. About half of subjects don't respond as expected to standard protocols [25]. Effects that do appear are small, context-dependent, and inconsistently replicated.
+
+Clinically, rTMS does improve depression symptoms with modest effect sizes and regulatory approval [14][15][16] — but treating a disorder is not enhancing a healthy brain's cognition. There is no reliable technology for making a healthy person meaningfully smarter.
+
+---
+
+### Level 4 — Predicting decisions or intentions: **possible in narrow controlled conditions**
+
+Decoders can predict binary choices above chance in constrained laboratory tasks, and motor intent decoding for BCI control is precisely intention prediction — done well, with implanted electrodes, for a *pre-agreed* movement vocabulary, after per-subject training [44][46].
+
+**The qualification:** "above chance in a two-alternative task" is a very long way from predicting real-world decisions. These paradigms involve simple, pre-specified choices, individualized training, and cooperative subjects.
+
+---
+
+### Level 5 — Reading arbitrary private thoughts: **not demonstrated as a general capability**
+
+The most capable non-invasive semantic decoder needs 16 hours of per-subject training data, produces paraphrase rather than transcript (WER 0.92–0.94), fails almost completely across subjects (1–5%), decodes only the *attended* stream, and can be defeated by the subject silently naming animals — reducing recovery to 0–3% [9]. The most capable invasive systems decode *attempted* speech, a voluntary motor act [47][51].
+
+There is no demonstrated technology that reads the thoughts of an untrained, unwilling, or unaware person.
+
+---
+
+### Level 6 — Complete mind control: **speculative; no scientific basis**
+
+Not an established capability, and the reasons are structural rather than a matter of insufficient engineering:
+
+**Access.** Reaching arbitrary deep circuits requires surgery. Non-invasive modulation faces a hard depth–focality tradeoff [12], and transcranial electrical stimulation loses ~75% of its current before reaching the brain [23].
+
+**Resolution.** No technology addresses individual neurons in a living human brain in a targeted way. Everything acts on populations.
+
+**Specificity.** Behavior is not localized to stimulable modules. Even *mood* — a comparatively simple target — produces heterogeneous, site- and patient-dependent responses to stimulation rather than a reliable mapping.
+
+**The inverse problem.** Even with perfect recording, mapping population activity to a specific desired behavior is underdetermined. Many activity patterns produce similar behavior and vice versa.
+
+**Adaptation.** The brain responds to intervention. Any control scheme fights a target that changes in response to being controlled.
+
+**Volition remains upstream.** Current speech BCIs decode attempted articulation. Motor BCIs decode attempted movement. The technologies read *voluntary* acts. That structural fact is why "the subject can simply refuse" keeps appearing in the results — it is not a temporary limitation but a property of what is being measured.
+
+---
+
+### Part IX — Memory Manipulation
+
+---
+
+Memory is the domain where the distance between animal research and human capability is largest, and where popular framing is most misleading.
+
+---
+
+### What Has Been Done in Animals
+
+**Reconsolidation.** Nader, Schafe, and LeDoux showed in **rats** that a consolidated fear memory, once reactivated by retrieval, becomes temporarily labile and requires new protein synthesis to persist — infusing a protein-synthesis inhibitor into the amygdala after reactivation impaired the memory [61]. This overturned the assumption that consolidated memories are permanently fixed. (Whether the effect reflects true reconsolidation or facilitated extinction remains debated.)
+
+**Engram manipulation.** Liu and colleagues labeled dentate gyrus neurons active during fear learning with channelrhodopsin-2 and showed that optically reactivating them in a different context drove increased freezing — artificial recall of a memory [63]. Ramirez and colleagues then labeled neurons active in Context A, optogenetically reactivated them while delivering foot shock in Context B, and produced **mice that later feared Context A** — a paper titled "Creating a False Memory in the Hippocampus" [62].
+
+These are landmark experiments. They also require stating precisely what was created: **a false contextual fear association**, read out as freezing behavior. Not an episodic narrative, not a fabricated autobiographical scene. A learned association between a context and threat.
+
+**And the enabling technology does not work in the human brain.** Optogenetics [64] requires genetically modifying target neurons to express light-sensitive channels, then delivering light to them. The only reported functional optogenetic application in a human is in the **retina, not the brain**: Sahel and colleagues restored partial visual function in **one** patient with retinitis pigmentosa using ChrimsonR in retinal ganglion cells plus light-stimulating goggles [65]. There is no optogenetic control of the human brain.
+
+> **Maturity: strong experimental evidence in rodents. Speculative in humans.**
+
+---
+
+### What Has Been Done in Humans
+
+Human work uses electrical stimulation in patients already implanted for epilepsy monitoring, and the results **conflict**.
+
+**Enhancement.** Suthana and colleagues stimulated the entorhinal area in **7** epilepsy patients during a spatial-navigation learning task and found improved spatial memory — participants reached landmarks via shorter routes. Hippocampal stimulation did not produce the effect [59].
+
+**Impairment.** Jacobs and colleagues published a paper titled, unambiguously, "Direct Electrical Stimulation of the Human Entorhinal Region and Hippocampus Impairs Memory" [60].
+
+Both are peer-reviewed human studies of overlapping targets reaching opposite conclusions. The field's working interpretation, reflected in the Ezzyat introduction, is that **open-loop medial temporal lobe stimulation is unreliable and frequently disruptive** — which motivated two different strategies.
+
+**Strategy 1 — go closed-loop, and change target.** Ezzyat and colleagues, under DARPA's Restoring Active Memory program, used a closed-loop system that decoded neural state from intracranial recordings, detected periods of poor encoding, and triggered 500 ms stimulation of **lateral temporal cortex** rather than the hippocampus. In **25** neurosurgical epilepsy patients, this increased the relative probability of word recall by **15%** (p = 0.02; odds ratio 1.18) [57]. Stimulation at non-lateral-temporal sites trended toward *impairment* — reinforcing how site-dependent this is.
+
+**Strategy 2 — model the circuit computation.** Hampson and colleagues built a multi-input multi-output nonlinear model of CA3→CA1 hippocampal firing and used it to deliver patterned stimulation mimicking the correct downstream code during encoding. In **8** stimulated epilepsy patients, they reported approximately **37%** facilitation of short-term memory on a delayed match-to-sample task and about **35%** improvement in longer-term retention [58].
+
+**What all of this shares:** very small samples, all in patients with epilepsy who already have electrodes implanted for clinical reasons, on specific laboratory memory tasks (word lists, delayed match-to-sample, spatial navigation), with modest effect sizes, and with results that depend critically on stimulation site and timing.
+
+**Pharmacological reconsolidation in humans.** Kindt, Soeter, and Vervliet gave humans 40 mg of oral propranolol before reactivating a conditioned fear memory and found that the behavioral expression of fear — fear-potentiated startle — was eliminated 24 hours later, with the return of fear prevented [66]. A follow-up reported persistence at one month. The crucial limitation: this affected the *expression* of the fear response, not declarative memory of the association. Participants still knew what had happened. Replication in the broader literature has been mixed.
+
+---
+
+### What Cannot Be Done
+
+Technology cannot insert arbitrary memories into a human being. There is no mechanism to write specific episodic content, no ability to genetically target and optically address human neurons, no known encoding scheme for a particular experience, and no demonstration remotely approaching it. What has been demonstrated in humans is **modest, task-specific modulation of encoding efficiency** — nudging how well a word list is remembered, in patients with implanted electrodes, by roughly 15–37% on specific measures.
+
+The honest summary: human memory can be measurably nudged. It cannot be authored.
+
+---
+
+### Part X — Emotion and Mood
+
+---
+
+Can technology influence mood, affect, arousal, reward, and attention? Partially, and with an important asymmetry between *modulating* and *specifying*.
+
+**Modulation is real.** Rao and colleagues stimulated lateral orbitofrontal cortex in **25** epilepsy patients with implanted electrodes and found acute mood improvement — but **specifically in subjects who had baseline depressive symptoms**, along with neural features associated with positive mood [67]. The conditionality is the finding, not a caveat to it.
+
+**Mood can be decoded.** Sani and colleagues decoded mood-state variations from distributed intracranial activity in **7** epilepsy subjects who self-reported mood over multiple days [68]. This is decoding from correlational data with self-report labels, not demonstrated closed-loop mood control. (I was unable to verify the specific decoding-accuracy figure; treat the feasibility claim as verified and any precise percentage as unconfirmed.)
+
+**Clinically, results are mixed at best.** rTMS for depression is approved with modest effect sizes [14][15][16]. DBS for depression failed both sham-controlled trials [32][33]. Closed-loop personalized DBS worked in one patient [36]. VNS for depression rests on weak controlled evidence.
+
+**Now the asymmetry.** Can stimulation reliably produce a *specific* emotion on demand? The evidence says no. Guillory and Bujarski reviewed 60 years of human intracranial electrophysiology on emotion and the picture is consistent: stimulation-evoked emotional responses are **largely site- and patient-dependent and heterogeneous** [69]. Related work has shown that the intensity of affective experience can be modulated by stimulation magnitude in orbitofrontal, cingulate, and insular sites, and case series report idiosyncratic responses. Even the clearest positive result — Rao and colleagues — was conditional on baseline symptoms [67].
+
+So: acute mood *modulation* is real and reproducible for some targets, notably lateral OFC and cingulate. A reliable button that produces a chosen discrete emotion across people does not exist. Responses vary by site, patient, current amplitude, and context.
+
+> **Maturity: strong experimental evidence** that intracranial stimulation can acutely shift affect in some patients at some sites. **Contested** clinically for psychiatric treatment. **Speculative** for reliably inducing specific emotions on demand.
+
+---
+
+### Part XI — The Ethical Problem
+
+---
+
+The ethics here are unusual because the technology is simultaneously less capable than feared and more capable than regulated.
+
+---
+
+### Mental Privacy
+
+Neural data is not like other biometric data. It is generated continuously, is not consciously controlled, and may contain information the person does not themselves know. The question of who owns it is genuinely unsettled.
+
+**The counterintuitive good news** is that current decoding is far weaker than feared: it needs cooperation, per-subject training, and can be consciously resisted [9]. **The bad news** is twofold. First, Tang and colleagues' own warning is that inaccurate predictions "could be intentionally misinterpreted for malicious purposes" — the risk is not accurate mind reading but *inaccurate output treated as authoritative*. Second, consumer devices are collecting neural data now, at scale, without meaningful constraints.
+
+**The consumer data situation, quantified.** The Neurorights Foundation assessed the privacy policies and user agreements of **30** consumer neurotechnology companies in April 2024. Findings: **29 of 30 companies have access to users' neural data and "provide no meaningful limitations to this access."** **Two-thirds (20 of 30) explicitly share or allow sharing of consumer data with third parties**, with nearly another third leaving it unclear. **Only one company explicitly stated it would not share data.** Fewer than half encrypt or de-identify [82].
+
+---
+
+### Cognitive Liberty
+
+Ienca and Andorno proposed four new human rights for the neurotechnology era: the right to **cognitive liberty**, **mental privacy**, **mental integrity**, and **psychological continuity** [76]. This framework has been influential in actual policy.
+
+The hardest cases are not coercive dystopias but ordinary clinical ambiguity. DBS can alter mood and impulse control as a side effect [29]. If a device changes a patient's personality in ways they endorse while stimulated but would not have endorsed before, whose preference governs? Adjusting stimulation parameters is a medical decision that can alter the person making the decision.
+
+---
+
+### Consent and Vulnerable Populations
+
+Note that nearly all human memory and emotion stimulation research described above was conducted in **patients with epilepsy who already had electrodes implanted for clinical reasons** [57][58][59][60][67][68]. This is scientifically indispensable — there is no other ethical way to record from inside a human brain at that resolution — and structurally fraught. Participants are patients, in hospital, awaiting surgery, often approached by clinicians involved in their care. The therapeutic misconception risk is high.
+
+Equally: implanted BCI trial participants have profound disabilities and strong motivation, which complicates voluntariness. And there is the post-trial obligation problem — what happens when a trial ends but a participant depends on the device? This is not hypothetical; device discontinuation has caused real distress in neuromodulation research.
+
+---
+
+### Regulation: What Actually Exists
+
+Unusually for an emerging technology, concrete legal instruments now exist.
+
+**International.** The **OECD Recommendation on Responsible Innovation in Neurotechnology** was adopted 11 December 2019 (OECD/LEGAL/0457), the first international standard in the field [79]. **UNESCO adopted the Recommendation on the Ethics of Neurotechnology in November 2025** at the 43rd session of its General Conference (Resolution 43 C/34), described as the first global standard on neurotechnology ethics [78].
+
+**Chile — the furthest along.** Constitutional reform via **Law No. 21.383 (2021)** amended Article 19 of the Chilean Constitution to protect brain activity and information derived from it [77]. Then, on **9 August 2023**, the Chilean Supreme Court ruled unanimously in a constitutional protection action brought by former senator Guido Girardi against **Emotiv Inc.**, a US company marketing the Emotiv Insight EEG headset. The court found for Girardi and **ordered Emotiv to delete the brain-activity data collected from him**, treating neurodata under the constitutional rights to privacy and psychological integrity. It did not create a comprehensive neurodata statute, and commentators note it left inferred or derived mental data in a gray zone.
+
+**United States — state level, moving fast.** Four states have enacted neural data protections: **Colorado HB24-1058** (signed 17 April 2024), adding "biological data" including neural data as sensitive data under the Colorado Privacy Act [80]; **California SB 1223** (signed 28 September 2024, effective 1 January 2025), defining neural data as sensitive personal information under the CCPA [81]; **Montana SB 163** (effective 1 October 2025), adding neurotechnology data to its Genetic Information Privacy Act; and **Connecticut**, via 2025 amendments to its data privacy act.
+
+---
+
+### Military Research
+
+Publicly documented DARPA programs, described from official sources without embellishment [83]:
+
+- **RAM (Restoring Active Memory)**, launched November 2013, aimed at an implantable closed-loop neural interface to restore memory formation and recall in service members with traumatic brain injury. This program funded both human memory studies described in Part IX [57][58].
+- **N3 (Next-Generation Nonsurgical Neurotechnology)**, announced 2018, with six funded teams announced May 2019, aimed at high-performance bidirectional brain-machine interfaces for **able-bodied** service members without surgery.
+- **NESD (Neural Engineering System Design)**, aimed at high-resolution implantable neurotechnology for the visual and auditory systems.
+
+Two observations, both factual. First, this is openly published research that has produced peer-reviewed papers — RAM funded the Ezzyat and Hampson studies. Second, N3's explicit focus on able-bodied personnel is a genuine departure from the medical-restoration framing that justifies most neurotechnology, and it is reasonable to note that as an ethically distinct category without alleging anything covert.
+
+---
+
+### Commercial Neurotechnology and Marketing Claims
+
+The gap between consumer marketing and evidence is wide.
+
+The FTC settled with **Lumos Labs (Lumosity) for $2 million in January 2016** over deceptive advertising — unfounded claims that its brain-training games improve real-world cognition and stave off cognitive decline and Alzheimer's [84].
+
+The authoritative scientific assessment is Simons and colleagues' systematic review in *Psychological Science in the Public Interest*, which evaluated the evidence cited by leading brain-training companies against defined best practices [85]. The conclusion: extensive evidence that people improve on **the trained tasks themselves**; less evidence for closely related "near transfer" tasks; and **little to no evidence for distantly related tasks or everyday cognitive performance** — far transfer. Many studies had methodological weaknesses.
+
+Combine this with the tDCS evidence base [20][21][25], the physics of transcranial current delivery [23], and the consumer neural data findings [82], and the practical guidance for consumer neurotech is: EEG headsets do measure real electrical signals, but claims about what those signals reveal and about cognitive enhancement generally outrun the evidence — while the data collection is real and largely unconstrained.
+
+---
+
+### Part XII — Cybersecurity of Brain-Computer Interfaces
+
+---
+
+Any implanted, wirelessly connected, software-controlled device that both records and stimulates has an attack surface. This section covers architecture, documented research, and defensive thinking. It contains no attack instructions.
+
+```text
+   Neural signal
+        │            ← physical layer; signal injection is hard,
+        ▼              but stimulus-driven probing is possible
+   Sensor / electrodes
+        │
+        ▼
+   Implant firmware      ← update integrity, authentication,
+        │                  safety parameter bounds
+        ▼
+   Communication link    ← wireless telemetry: encryption,
+        │                  authentication, replay protection
+        ▼
+   External device / host ← OS, driver, application security
+        │
+        ▼
+   Cloud / model backend ← data at rest, model integrity,
+        │                  adversarial robustness
+        ▼
+   Application layer     ← authorization, audit, clinical override
+```
+
+---
+
+### Documented Research Findings
+
+**Side-channel information leakage from consumer EEG.** Martinovic and colleagues, at USENIX Security 2012, used consumer-grade EEG headsets and a P300 oddball paradigm to probe for private information — PINs, known faces, banks, birth month [70]. Result: **the entropy of private information was reduced by roughly 15–40% compared to random guessing**. This is probabilistic leakage, not extraction, and required a cooperative seated subject viewing controlled stimuli. It remains the canonical demonstration that a device measuring involuntary neural responses can leak information the user did not choose to disclose.
+
+**Subliminal probing.** Frank, Hwu, Jain, Knight, and Martinovic extended this at ACM WPES 2017, using rapidly or subliminally presented visual stimuli with 27 participants, and found it feasible to subliminally learn probabilistic information about subjects — while explicitly noting the approach is "not perfect" [71].
+
+**Implant security analysis — "brainjacking."** Pycroft and colleagues published a threat analysis of invasive neuromodulation in *World Neurosurgery* [72], categorizing **blind attacks** requiring no patient-specific knowledge (stopping stimulation, draining batteries, inducing tissue damage, information theft) and **targeted attacks** requiring patient-specific information (altering stimulation to affect motor, affective, or cognitive states). This is a conceptual threat model, not a demonstrated exploit.
+
+**Adversarial machine learning against EEG decoders.** Zhang and Wu published the first investigation of adversarial attacks on EEG-based BCIs in *IEEE TNSRE*, showing that small crafted perturbations can fool CNN-based EEG classifiers [73]. Follow-on work extended to black-box settings. The important caveat: this work is largely offline and simulated. Injecting adversarial perturbations into a real physiological recording chain in real time is a substantially harder problem than perturbing a stored dataset.
+
+**Real-world implanted device vulnerabilities.** The most concrete documented case is not a neural device but is directly instructive: in 2019, an FDA Safety Communication and a DHS ICS-CERT advisory (**ICSMA-19-080-01**) disclosed that Medtronic's Conexus wireless telemetry protocol, used by certain implantable cardioverter-defibrillators and their monitors and programmers, **lacked encryption, authentication, and authorization** [75]. That is the class of design deficiency that matters — not exotic exploits, but missing fundamentals in device telemetry.
+
+---
+
+### The Regulatory Response
+
+FDA issued final guidance, **"Cybersecurity in Medical Devices: Quality System Considerations and Content of Premarket Submissions," on 27 September 2023** [74]. This is backed by statutory authority: **Section 524B of the FD&C Act** ("Ensuring Cybersecurity of Devices"), added by Section 3305 of the Consolidated Appropriations Act, 2023. Cybersecurity documentation is now a premarket submission requirement, not a recommendation.
+
+---
+
+### Defensive Architecture
+
+The sound engineering principles are unremarkable, which is the point: authenticated and encrypted telemetry with replay protection; **hardware-enforced bounds on stimulation parameters** so that no software fault or compromise can command physiologically dangerous output; signed firmware with rollback protection; fail-safe defaults that revert to a known-safe stimulation state; local processing to minimize neural data transmission; audit logging; and a clinician-accessible override independent of the wireless path.
+
+The one BCI-specific principle worth adding: **treat neural data as sensitive by default and minimize what leaves the device.** The strongest privacy guarantee is data that was never transmitted.
+
+**Realistic threat assessment.** There is no documented case of a malicious attack on an implanted neural device causing patient harm. The demonstrated risks are information leakage from consumer EEG under controlled conditions [70][71], theoretical implant attack surfaces [72], adversarial vulnerability of decoders in simulation [73], and — most concretely — poor telemetry security in real implanted medical devices [75]. The largest actual privacy exposure today is not hacking at all. It is the routine, consented, contractually permitted collection and third-party sharing of neural data by consumer neurotechnology companies [82].
+
+---
+
+### Part XIII — Comparing the Technologies
+
+---
+
+Values below are drawn from the cited literature. Where a parameter varies substantially by system, a range or qualitative descriptor is given rather than a false-precision number.
+
+| Technology | Invasive? | Measures | Stimulates | Spatial resolution | Temporal resolution | Typical depth reach | Main use | Maturity |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **EEG** | No | Yes | No | ~cm (volume conduction) [2] | ~ms sampling; effective resolution degraded by mixing [2] | Superficial cortex | Epilepsy dx, sleep, research BCI | Clinically established (dx) |
+| **MEG** | No | Yes | No | Better than EEG; sub-cm in favorable cases | ~ms | Superficial to mid-depth | Presurgical mapping, cognition | Clinically established |
+| **fMRI** | No | Yes (indirect) | No | ~1–3 mm voxels [8][9] | Seconds; BOLD rises/falls over ~10 s [9] | Whole brain | Mapping, decoding research | Clinically established |
+| **fNIRS** | No | Yes (indirect) | No | ~cm | Seconds | Superficial cortex only | Portable monitoring | Preliminary–strong exp. |
+| **ECoG** | Yes (surface) | Yes | Yes | Sub-mm to mm (400 µm micro-arrays; clinical grids coarser) | ~ms | Cortical surface | Epilepsy mapping, speech BCI | Clinically established (dx) |
+| **Intracortical array** | Yes (penetrating) | Yes | Yes (ICMS) | Single-unit | ~ms (sub-ms spikes) | ~1–1.5 mm into cortex | High-performance BCI | Strong experimental |
+| **TMS** | No | No | Yes | ~cm; strict depth–focality tradeoff [12] | ~ms per pulse | Outer ~2 cm of cortex [12] | Depression, OCD, research | Clinically established |
+| **tDCS / tACS** | No | No | Yes (weak) | Poor; diffuse | Seconds–minutes | Superficial, diffuse; ~75% current lost [23] | Research; contested clinical | Contested |
+| **DBS** | Yes (deep leads) | Yes (sensing models) | Yes | mm around contacts; network-wide effects | ~ms | Any stereotactic target | Parkinson's, tremor, dystonia | Clinically established |
+| **RNS (responsive)** | Yes | Yes | Yes | Focal at leads | ~ms detection | Cortical/depth foci | Focal epilepsy | Clinically established [34][35] |
+| **FUS — ablation** | No (incisionless) | No | Destroys tissue | ~mm focal spot | N/A (permanent lesion) | Deep (thalamus) [38] | Essential tremor | Clinically established |
+| **FUS — TUS** | No | No | Yes (reversible) | ~5 mm lateral, ~18 mm axial [37] | ~ms–s | Deep, in principle | Research | Preliminary (auditory confound) [39][40] |
+| **VNS** | Yes (neck) | No | Yes (indirect) | Non-focal (diffuse projections) | Seconds | Brainstem→whole brain | Refractory epilepsy | Clinically established |
+| **Optogenetics** | Yes + gene therapy | No | Yes (cell-type specific) | Single-cell, cell-type specific | ~ms | Animal work only | Animal research | Speculative in human brain [64][65] |
+
+**The structural trade-off visible in this table:** the technologies with the best resolution require surgery, and the technologies requiring no surgery have either poor spatial resolution (EEG, tDCS), poor temporal resolution (fMRI), a hard depth–focality limit (TMS), or unresolved methodological questions (TUS). This is not a temporary state of engineering. It reflects physics: the skull attenuates and blurs electric fields, magnetic fields obey an inverse depth–focality relationship, and hemodynamics are intrinsically slow.
+
+---
+
+### Part XIV — Charts
+
+---
+
+Each chart below answers a specific question and is built only from values cited in this article. Data is provided in implementation-ready form. Where a value is a qualitative range rather than a published measurement, it is marked.
+
+---
+
+### Chart 1 — Spatial vs. Temporal Resolution
+
+**Question it answers:** Why is there no single best brain-recording technology?
+
+A log-log scatter plot, spatial resolution (mm) on x, temporal resolution (seconds) on y. Both axes logarithmic. Lower-left is better on both axes.
+
+```json
+{
+  "chart": "scatter-loglog",
+  "xAxis": { "label": "Spatial resolution (mm, lower is better)", "scale": "log" },
+  "yAxis": { "label": "Temporal resolution (s, lower is better)", "scale": "log" },
+  "note": "Ranges reflect system variability; see per-point source. Points are plotted as ranges, not single values.",
+  "data": [
+    { "name": "EEG",                 "spatial_mm": [10, 30],   "temporal_s": [0.001, 0.01], "invasive": false, "source": "[2]" },
+    { "name": "MEG",                 "spatial_mm": [5, 15],    "temporal_s": [0.001, 0.01], "invasive": false, "source": "[3][4]" },
+    { "name": "fNIRS",               "spatial_mm": [20, 30],   "temporal_s": [1, 10],       "invasive": false, "source": "qualitative" },
+    { "name": "fMRI",                "spatial_mm": [1, 3],     "temporal_s": [1, 3],        "invasive": false, "source": "[8][9] (TR 2.0-3.0 s; 2.6-3 mm voxels)" },
+    { "name": "ECoG (clinical grid)","spatial_mm": [5, 10],    "temporal_s": [0.001, 0.01], "invasive": true,  "source": "[48][49]" },
+    { "name": "Micro-ECoG",          "spatial_mm": [0.4, 1],   "temporal_s": [0.001, 0.01], "invasive": true,  "source": "400 um pitch micro-array" },
+    { "name": "Intracortical array", "spatial_mm": [0.05, 0.4],"temporal_s": [0.0001, 0.001],"invasive": true, "source": "[42][47] Utah array, 400 um pitch, single-unit" }
+  ]
+}
+```
+
+**Reading the chart:** no point occupies the lower-left corner. fMRI achieves good spatial resolution but sits three orders of magnitude worse temporally. EEG and MEG achieve millisecond timing but centimetre-scale localisation. Only invasive methods approach both — which is the entire argument for surgery.
+
+---
+
+### Chart 2 — Invasiveness vs. Targeting Precision (Neuromodulation)
+
+**Question it answers:** What do you buy with surgical risk?
+
+```json
+{
+  "chart": "scatter-annotated",
+  "xAxis": { "label": "Invasiveness (ordinal)", "categories": ["None", "Incisionless", "Surface implant", "Penetrating implant"] },
+  "yAxis": { "label": "Effective targeting precision", "categories": ["Diffuse", "Regional (cm)", "Focal (mm)", "Cell-type specific"] },
+  "note": "Ordinal axes. Positions reflect the cited literature, not measured scalars. This is a structural comparison, not quantitative data.",
+  "data": [
+    { "name": "tDCS / tACS",  "x": "None",                "y": "Diffuse",             "source": "[23] ~75% current attenuated" },
+    { "name": "VNS",          "x": "Surface implant",     "y": "Diffuse",             "source": "diffuse brainstem projections" },
+    { "name": "TMS",          "x": "None",                "y": "Regional (cm)",       "source": "[12] depth-focality tradeoff" },
+    { "name": "TUS",          "x": "None",                "y": "Focal (mm)",          "source": "[37] 4.9 mm lateral / 18 mm axial; confound [39][40]" },
+    { "name": "FUS ablation", "x": "Incisionless",        "y": "Focal (mm)",           "source": "[38]" },
+    { "name": "DBS",          "x": "Penetrating implant", "y": "Focal (mm)",           "source": "[29][30]" },
+    { "name": "RNS",          "x": "Penetrating implant", "y": "Focal (mm)",           "source": "[34][35]" },
+    { "name": "Optogenetics", "x": "Penetrating implant", "y": "Cell-type specific",   "source": "[64] ANIMAL ONLY - not available in human brain" }
+  ]
+}
+```
+
+**Caveat that must be rendered on the chart:** the only point achieving cell-type specificity is unavailable in the human brain [64][65]. TUS is the interesting outlier — non-invasive with millimetre-scale focus — which is exactly why it attracts attention despite its unresolved auditory confound.
+
+---
+
+### Chart 3 — Milestone Timeline
+
+**Question it answers:** How fast is this actually moving?
+
+```json
+{
+  "chart": "timeline",
+  "note": "Every entry is cited in this article. FDA dates are regulatory actions; paper dates are publication years.",
+  "events": [
+    { "year": 1985, "label": "First transcranial magnetic stimulation of human motor cortex", "type": "research", "source": "[1]" },
+    { "year": 1987, "label": "Benabid: high-frequency VIM thalamic stimulation", "type": "research", "source": "[27]" },
+    { "year": 1997, "label": "FDA: DBS approved for essential tremor; VNS approved for epilepsy", "type": "regulatory", "source": "FDA P960009 / P970003" },
+    { "year": 2000, "label": "Nitsche & Paulus: weak transcranial DC alters cortical excitability", "type": "research", "source": "[19]" },
+    { "year": 2002, "label": "FDA: DBS approved for Parkinson's disease", "type": "regulatory", "source": "FDA" },
+    { "year": 2005, "label": "Kamitani & Tong: fMRI decoding of visual contents; Boyden et al.: optogenetics", "type": "research", "source": "[5][64]" },
+    { "year": 2006, "label": "First human intracortical BCI (BrainGate)", "type": "research", "source": "[42]" },
+    { "year": 2008, "label": "FDA: first rTMS clearance for major depression", "type": "regulatory", "source": "FDA DEN070003" },
+    { "year": 2011, "label": "RNS pivotal trial: 37.9% vs 17.3% seizure reduction", "type": "research", "source": "[34]" },
+    { "year": 2012, "label": "Neurally controlled robotic arm reach-and-grasp", "type": "research", "source": "[43]" },
+    { "year": 2013, "label": "7-DOF prosthetic control; adaptive DBS proof-of-concept; FDA approves RNS", "type": "mixed", "source": "[44][31]" },
+    { "year": 2014, "label": "First human transcranial focused ultrasound neuromodulation", "type": "research", "source": "[37]" },
+    { "year": 2016, "label": "FDA: MRgFUS thalamotomy for essential tremor", "type": "regulatory", "source": "[38]" },
+    { "year": 2017, "label": "BROADEN DBS-for-depression trial stopped for futility", "type": "research", "source": "[32]" },
+    { "year": 2018, "label": "Closed-loop stimulation improves human memory 15%; wearable OPM-MEG", "type": "research", "source": "[57][4]" },
+    { "year": 2021, "label": "Handwriting BCI: 90 char/min; first speech neuroprosthesis in anarthria", "type": "research", "source": "[46][49]" },
+    { "year": 2023, "label": "125,000-word speech BCI at 62 wpm; non-invasive semantic decoding", "type": "research", "source": "[47][48][9]" },
+    { "year": 2024, "label": "Speech BCI at ~97.5-99% accuracy; Colorado and California neural data laws", "type": "mixed", "source": "[51][80][81]" },
+    { "year": 2025, "label": "FDA approves adaptive closed-loop DBS (Feb); UNESCO neurotech ethics recommendation (Nov)", "type": "mixed", "source": "[78]" }
+  ]
+}
+```
+
+---
+
+### Chart 4 — Speech BCI Progress
+
+**Question it answers:** How fast did neural speech decoding actually improve, and on what axes?
+
+This is the most information-dense real dataset in the article. Grouped bar chart or dual-axis plot: word error rate and words per minute, annotated with vocabulary size.
+
+```json
+{
+  "chart": "grouped-bar-dual-axis",
+  "note": "All values published; all studies are single-participant. Vocabulary size differences are essential context - a 50-word WER is not comparable to a 125,000-word WER.",
+  "data": [
+    { "study": "Moses 2021 [49]",     "year": 2021, "vocab": 50,     "wer_pct": 25.6, "wpm": 15.2, "hardware": "128-ch ECoG" },
+    { "study": "Willett 2023 [47]",   "year": 2023, "vocab": 50,     "wer_pct": 9.1,  "wpm": 62,   "hardware": "128-ch intracortical (6v)" },
+    { "study": "Willett 2023 [47]",   "year": 2023, "vocab": 125000, "wer_pct": 23.8, "wpm": 62,   "hardware": "128-ch intracortical (6v)" },
+    { "study": "Metzger 2023 [48]",   "year": 2023, "vocab": "large","wer_pct": 25.0, "wpm": 78,   "hardware": "253-ch ECoG" },
+    { "study": "Card 2024 [51]",      "year": 2024, "vocab": 50,     "wer_pct": 0.4,  "wpm": null, "hardware": "256-ch intracortical" },
+    { "study": "Card 2024 [51]",      "year": 2024, "vocab": 125000, "wer_pct": 2.66, "wpm": null, "hardware": "256-ch intracortical" },
+    { "study": "Littlejohn 2025 [52]","year": 2025, "vocab": 1024,   "wer_pct": 30.7, "wpm": 46.5, "hardware": "ECoG, streaming" }
+  ],
+  "annotations": [
+    "Card 2024 50-word WER of 0.4% corresponds to the reported 99.6% first-day accuracy.",
+    "Littlejohn 2025 optimizes latency (~1.0-1.67 s to onset), not WER - its higher WER is a deliberate trade-off.",
+    "Willett 2023 reports that doubling electrode count multiplies WER by ~0.57."
+  ]
+}
+```
+
+**Reading the chart:** on the 125,000-word vocabulary, word error rate fell from 23.8% (2023) to 2.66% (2024) — roughly a ninefold error reduction in a year. But note the confound: the 2024 system also used twice the electrodes (256 vs 128), consistent with Willett's own scaling relationship. Progress is a mix of algorithms and sensor count, and the paper that reported the scaling law told us which mattered.
+
+---
+
+### Chart 5 — Evidence Maturity
+
+**Question it answers:** Which of these technologies would a physician actually rely on?
+
+Assigning numerical "evidence scores" would be arbitrary, so this chart uses **explicitly defined ordinal categories** with the classification rule stated on the chart.
+
+```json
+{
+  "chart": "categorical-matrix",
+  "methodology": "Classification rule: CLINICALLY ESTABLISHED = regulatory approval for a named indication AND at least one randomised controlled trial with a sham or active control. STRONG EXPERIMENTAL = reproducible human demonstrations across multiple participants or groups, without routine clinical deployment. PRELIMINARY = single-case or very small human studies, or unreplicated. CONTESTED = credible studies in conflicting directions. SPECULATIVE = no convincing human demonstration. Regulatory tier is noted separately because HDE is a lower evidentiary standard than PMA.",
+  "data": [
+    { "technology": "DBS - Parkinson's / essential tremor", "category": "Clinically established", "key_evidence": "RCTs [29][30]", "regulatory": "PMA 1997/2002" },
+    { "technology": "RNS - focal epilepsy", "category": "Clinically established", "key_evidence": "Sham-controlled RCT, Class I [34]; 9-yr Class IV [35]", "regulatory": "PMA 2013" },
+    { "technology": "Adaptive DBS - Parkinson's", "category": "Clinically established (new)", "key_evidence": "ADAPT-PD crossover, n=68", "regulatory": "FDA Feb 2025" },
+    { "technology": "MRgFUS ablation - essential tremor", "category": "Clinically established", "key_evidence": "Sham-controlled RCT n=76 [38]", "regulatory": "FDA 2016" },
+    { "technology": "rTMS - depression", "category": "Clinically established (modest effect)", "key_evidence": "Sham RCTs [14][15]; THREE-D [16]", "regulatory": "Cleared 2008" },
+    { "technology": "VNS - epilepsy", "category": "Clinically established (modest effect)", "key_evidence": "E03/E05 RCTs, ~25-28% reduction", "regulatory": "PMA 1997" },
+    { "technology": "DBS - OCD", "category": "Clinically established (weak standard)", "key_evidence": "Limited", "regulatory": "HDE 2009 - not PMA" },
+    { "technology": "Intracortical motor BCI", "category": "Strong experimental", "key_evidence": "[42][43][44][45][46]; safety [54]", "regulatory": "Investigational only" },
+    { "technology": "Speech neuroprosthesis", "category": "Strong experimental", "key_evidence": "[47][48][49][51][52]", "regulatory": "Investigational only" },
+    { "technology": "EEG-based BCI", "category": "Strong experimental (lab)", "key_evidence": "Large literature; high variability", "regulatory": "Some assistive clearances" },
+    { "technology": "Non-invasive semantic decoding", "category": "Strong experimental (subject-specific)", "key_evidence": "[9][10]", "regulatory": "Research only" },
+    { "technology": "Human memory modulation", "category": "Preliminary", "key_evidence": "[57] n=25, +15%; [58] n=8; contradicted by [59] vs [60]", "regulatory": "Research only" },
+    { "technology": "DBS - depression", "category": "Contested", "key_evidence": "Negative sham RCTs [32][33] vs positive open-label", "regulatory": "Not approved" },
+    { "technology": "TUS neuromodulation", "category": "Preliminary", "key_evidence": "[37]; auditory confound [39][40]", "regulatory": "Not cleared for TUS" },
+    { "technology": "tDCS - cognitive enhancement", "category": "Contested", "key_evidence": "Null meta-analyses [20][21]; dose problem [23]; ~50% non-responders [25]", "regulatory": "Not approved" },
+    { "technology": "VNS - depression", "category": "Contested", "key_evidence": "Pivotal acute RCT missed primary endpoint", "regulatory": "Approved 2005 on open-label data" },
+    { "technology": "Human brain optogenetics", "category": "Speculative", "key_evidence": "Retina only, n=1 [65]", "regulatory": "None" },
+    { "technology": "Memory implantation", "category": "Speculative", "key_evidence": "Rodent contextual fear only [62]", "regulatory": "None" },
+    { "technology": "Reading uncooperative subjects' thoughts", "category": "Speculative", "key_evidence": "Actively contradicted by [9]", "regulatory": "None" }
+  ]
+}
+```
+
+---
+
+### Part XV — What the Technology Cannot Do
+
+---
+
+Each misconception below is paired with what the research actually shows.
+
+---
+
+### "Scientists can read every thought"
+
+**What research shows.** The best non-invasive semantic decoder requires ~16 hours of per-subject fMRI training data, produces paraphrase with a word error rate of 0.92–0.94, works barely above chance across subjects (1–5% vs 65–82% within-subject), decodes only the attended stream, and is defeated by silently naming animals — dropping recovery to 0–3% [9].
+
+**Why the misconception exists.** "Decoded language from brain activity" is technically accurate and reads as mind reading. Published example outputs are cherry-picked best cases, as papers acknowledge, and the semantic-similarity metrics that make results look strong are less intuitive than the word error rate that makes them look weak.
+
+**Current limitation.** Requires cooperation, per-subject training, immobility in a scanner, and produces gist, not content.
+
+---
+
+### "TMS gives mind control"
+
+**What research shows.** TMS reliably produces motor twitches and phosphenes, and transiently disrupts processing in superficial cortex. Clinical antidepressant effects are real but modest — roughly 14% vs 5% remission in one sham-controlled trial [15]. It cannot focally reach deep structures, by a proven geometric tradeoff [12].
+
+**Why the misconception exists.** Videos of TMS causing involuntary hand movement or speech arrest are genuinely striking, and it is easy to extrapolate from "can disrupt finger movement" to "can control behavior."
+
+**Current limitation.** Depth ~2 cm, centimetre-scale focality, strong state dependence, roughly half of subjects not responding as expected to standard protocols [25].
+
+---
+
+### "Brain implants can download or upload memories"
+
+**What research shows.** In humans, closed-loop stimulation improved word-list recall probability by 15% in 25 patients [57], and hippocampal-model-based stimulation improved delayed match-to-sample performance by roughly 37% in 8 patients [58] — while other work found stimulation of overlapping targets *impaired* memory [60]. No specific memory content has ever been written into a human brain.
+
+**Why the misconception exists.** Conflation of rodent optogenetic engram work [62][63] with human capability. "Creating a False Memory in the Hippocampus" is a real paper title — in mice, producing a contextual fear association, measured by freezing.
+
+**Current limitation.** No mechanism to specify episodic content; optogenetics unavailable in the human brain [65]; effects are task-specific efficiency nudges.
+
+---
+
+### "AI can decode everything a person thinks"
+
+**What research shows.** Identical architectures produce 70.7% top-10 accuracy on MEG and 17.7–25.7% on EEG [10] — the model was the same; the available information was not. Language priors contribute substantially to apparent decoder performance [47][46][9], meaning fluent output is partly generated rather than decoded.
+
+**Why the misconception exists.** AI has genuinely driven most recent progress, which makes "AI will solve the rest" feel like extrapolation rather than assumption.
+
+**Current limitation.** Decoders cannot recover information the sensor never captured; supervised training requires labels and therefore cooperation; performance appears electrode-count-limited [47].
+
+---
+
+### "A consumer EEG headset can read your mind"
+
+**What research shows.** Consumer EEG measures real electrical activity, and controlled research showed it can reduce the entropy of private information by 15–40% versus guessing using P300 paradigms with a cooperative subject viewing controlled stimuli [70]. That is probabilistic leakage under laboratory conditions, not thought access. Meanwhile, brain-training claims fail on far transfer [85], and the FTC fined Lumosity $2 million for such claims [84].
+
+**Why the misconception exists.** Marketing, plus the fact that low-channel EEG produces confident-looking numbers on a screen. Much of what consumer devices detect is muscle artifact, not cortical activity.
+
+**Current limitation.** Few channels, poor spatial resolution, high artifact susceptibility. The genuine concern is not mind reading but data practices: 29 of 30 companies have unconstrained access, and two-thirds share or permit sharing with third parties [82].
+
+---
+
+### "Scientists can remotely control anyone's brain"
+
+**What research shows.** No technology influences neural activity at a distance without a device physically applied to or implanted in the person. TMS requires a coil against the scalp. tDCS requires electrodes on the head, and loses ~75% of its current anyway [23]. Ultrasound requires an acoustically coupled transducer with individualized skull correction. DBS requires surgery.
+
+**Why the misconception exists.** "Non-invasive" is misread as "remote," and electromagnetic stimulation sounds like it should work at range.
+
+**Current limitation.** Field strength falls off steeply with distance; effective stimulation requires physical coupling to the head. There is no known physical mechanism for targeted remote neural stimulation.
+
+---
+
+### "Neural implants automatically know what you're thinking"
+
+**What research shows.** Every implanted BCI requires a decoder trained on labeled data from that specific person, and requires recalibration as signals drift [46][47][56]. Speech BCIs decode *attempted* speech — a voluntary motor act [47][49][51]. The user must try.
+
+**Why the misconception exists.** Demonstration videos show fluid use after the training phase, which is invisible in the final footage.
+
+**Current limitation.** Per-user calibration, ongoing drift, voluntary effort required, and a decoder scoped to a pre-agreed output space.
+
+---
+
+### Part XVI — Realistic Near-Term Directions
+
+---
+
+Labeled by confidence. Anything speculative is marked as such.
+
+**Higher channel counts.** The best-supported prediction in the field, because it rests on a measured relationship: doubling electrodes multiplied word error rate by ~0.57 [47]. Human chronic clinical implantation has used devices of up to 96 channels per array [54], with participants receiving four arrays for 256 total [51]. Higher-density arrays are the obvious lever. *Well-grounded extrapolation.*
+
+**Fully implanted wireless systems.** The BrainGate safety data identify the specific problem: skin irritation around the percutaneous pedestal was the most common device-related adverse event (35 of 68), and the authors call the pedestal suboptimal versus fully implanted systems [54]. Eliminating the transcutaneous connector removes an infection route and a cosmetic and practical burden. *Strong experimental, actively developed.*
+
+**Flexible and biocompatible electrodes.** Signal degradation from glial encapsulation and material failure is documented [56]. Flexible polymer electrodes matched to brain mechanics aim to reduce the foreign-body response. *Preliminary in humans.*
+
+**Reduced calibration burden.** Case Study 9's 30-minute first-day calibration [51] versus earlier systems' daily retraining [46][47] shows this is tractable. Shared-backbone models with per-subject adaptation [10] and self-supervised pretraining are the main approaches. *Strong experimental, improving.*
+
+**Closed-loop expansion.** Two approved systems exist [34][35] plus adaptive DBS (2025). Extension to psychiatry depends on identifying reliable biomarkers — the personalized-biomarker approach [36] is the most promising method, but it is n=1 against two negative controlled trials [32][33]. *Preliminary for psychiatry.*
+
+**Focused ultrasound maturation.** The most consequential open question in non-invasive neuromodulation, because TUS is the only candidate for focal deep targeting without surgery. Requires resolving the auditory confound [39][40] with rigorous masking and sham design, and larger trials. *Preliminary.*
+
+**Multimodal imaging.** Combining EEG or MEG temporal resolution with fMRI spatial resolution, and wearable OPM-MEG [4] moving toward practical use. *Strong experimental.*
+
+**Sensory prostheses and bidirectional interfaces.** Intracortical microstimulation of somatosensory cortex to provide tactile feedback for prosthetic limbs is an active research area; closing the sensory loop is widely expected to improve motor control. Cochlear implants remain the field's great existing success. Optogenetic retinal therapy exists in a single reported patient [65]. *Preliminary to strong experimental depending on modality.*
+
+**Brain-to-brain communication.** Experimental demonstrations exist that couple one person's decoded EEG signal to another person's TMS-induced percept. These are genuine experiments, but the honest description is: a very-low-bandwidth channel in which one brain's binary decision is transmitted as a stimulus to another brain. It is a communication link between devices attached to two people, not telepathy. I did not independently verify specific papers in this area for this article, so treat it as an area of research rather than a result to cite. *Speculative as a practical capability.*
+
+**Speculative and explicitly labeled as such:** general-purpose thought decoding in untrained subjects; memory content writing; cognitive enhancement in healthy people beyond practice effects; consumer-grade high-bandwidth BCIs. None has a demonstrated pathway from current evidence.
+
+---
+
+### Part XVII — Image and Asset Recommendations
+
+---
+
+**A necessary caution on licensing.** I have not individually verified the license status of specific image files, and licenses on repositories change. Do not treat any recommendation below as a license grant. **Open each file's page, confirm the current license and required attribution at the time of use, and record it.** Never hotlink from image search results.
+
+---
+
+### Preferred sources, in order
+
+1. **Figures from the open-access papers cited here.** Many are published under Creative Commons Attribution (CC BY), which permits reuse with attribution. *Nature Communications*, *Scientific Reports*, *eLife*, and PMC open-access articles are the most likely to be CC BY — for example, the Ezzyat closed-loop memory paper [57] and the Vöröslakos current-attenuation paper [23] are *Nature Communications* articles. Check the specific article's license statement, which appears at the end of the paper. This is the best option because the figures are exactly on-topic and the provenance is unambiguous.
+2. **Wikimedia Commons** — search for: `Electroencephalography`, `Transcranial magnetic stimulation`, `Deep brain stimulation`, `Neuron anatomy`, `Magnetic resonance imaging scanner`, `Utah array`. Licenses vary per file (public domain, CC BY, CC BY-SA); each file page states its license and attribution requirement.
+3. **NIH / NINDS / NIMH image resources and the NIH BRAIN Initiative.** US federal government works are frequently public domain, but NIH hosts third-party material too, so verify per item.
+4. **University research group pages** — usable with direct written permission, which is often granted for educational use if you ask.
+
+---
+
+### Recommended images by section
+
+| Section | Image | Suggested source | Notes |
+| --- | --- | --- | --- |
+| Brain background | Labeled neuron with synapse | Wikimedia Commons | Verify license; prefer SVG for scaling |
+| Brain background | Cortical lobes and functional areas | Wikimedia Commons / NIH | Ensure labels are legible at mobile widths |
+| EEG | Participant in an EEG cap | Wikimedia Commons | Choose a research-grade cap, not a consumer toy |
+| EEG | 10–20 electrode placement diagram | Wikimedia Commons | Supports the pipeline diagram |
+| MEG | MEG helmet / shielded room | Wikimedia Commons / university lab | Conveys the scale constraint |
+| fMRI | MRI scanner; BOLD activation map | NIH / Wikimedia Commons | Caption must state BOLD is indirect |
+| TMS | Figure-8 coil positioned on head | Wikimedia Commons | Pair with the induction diagram |
+| tDCS | Electrode montage on scalp | Wikimedia Commons | Caption should note contested evidence |
+| DBS | X-ray or illustration of leads + IPG | Wikimedia Commons / NINDS | Shows the full implanted system |
+| BCI | Utah microelectrode array close-up | Wikimedia Commons / open-access paper | Scale bar is essential — conveys 400 µm pitch |
+| Speech BCI | High-density ECoG grid | Open-access figure from [48] or [52] | Verify CC BY before reuse |
+| FUS | Focused ultrasound helmet transducer | Manufacturer press kit or Wikimedia | Press images often require permission |
+
+**Asset storage.** For a typical Next.js or Astro MDX blog, store images under `public/images/human-brain-manipulation/` and reference them as `/images/human-brain-manipulation/<file>.webp`. Keep a sibling `CREDITS.md` in that directory recording, for each file: source URL, author or organization, license, date retrieved, and any required attribution text. Serve WebP or AVIF with explicit `width` and `height` to avoid layout shift, and provide descriptive `alt` text — for accessibility, alt text on a scientific figure should convey the finding, not merely name the object.
+
+**If you cannot confirm a license, link to the source instead of embedding it.** A citation with a URL is always safe; an unlicensed embed is not.
+
+---
+
+### Part XVIII — The Arc of the Field
+
+---
+
+The history in this article follows a clear progression:
+
+```text
+We learned to observe the brain (anatomy, lesions)
+        ↓
+Then to measure its electrical activity (EEG, 1920s onward)
+        ↓
+Then to map its structure and networks (MRI, fMRI)
+        ↓
+Then to stimulate specific regions (TMS 1985; DBS 1987)
+        ↓
+Then to decode neural signals (fMRI decoding 2005)
+        ↓
+Then to connect neural activity to machines (BCI 2006)
+        ↓
+Then to create closed-loop systems (RNS 2013; aDBS 2025)
+        ↓
+Now: interacting with the brain as an adaptive system
+```
+
+Each step took roughly a decade to move from demonstration to something usable, and several steps have not completed that transition. Note what the arc does *not* contain: any point at which technology gained access to thought independent of a person's cooperation.
+
+The last line is the substantive claim. Modern neurotechnology no longer treats the brain as a signal source to be read or a tissue to be zapped. Systems like RNS and adaptive DBS treat it as a **dynamical system to be interacted with continuously** — sensing state, acting, and re-sensing the consequence. That is a genuine change in kind, and it is why the traditional boundary between measuring the brain and changing it is dissolving. A closed-loop device does both, thousands of times a day, with no human in the loop.
+
+---
+
+### The Bottom Line
+
+---
+
+**So — can modern technology manipulate the human brain?** Yes. And the truthful version of that answer turns out to be more interesting than the scary one.
+
+**What is demonstrably established.** Technology can measure neural activity at millisecond resolution non-invasively and at single-neuron resolution invasively. It can perturb neural activity through the intact skull [1] and directly with implanted electrodes [29]. It can treat neurological disease: DBS for Parkinson's disease, essential tremor, and dystonia; responsive neurostimulation that cuts seizures by 37.9% against 17.3% in sham [34]; incisionless ultrasound thalamotomy [38]; rTMS for depression with modest but real effects [14][15][16]. It can decode intention well enough to let a paralyzed person control a robotic arm through seven degrees of freedom [44], type at 90 characters per minute [46], and speak from a 125,000-word vocabulary at roughly 97.5% accuracy sustained beyond eight months [51]. And it can now close the loop — sensing brain state and adjusting stimulation automatically, in two FDA-approved indications.
+
+These are extraordinary things. A person who hadn't spoken in years can now hold a conversation — in something close to their own voice [48][51][53].
+
+**What is not established.** No technology reads the thoughts of an unwilling or untrained person. The best non-invasive semantic decoder needs 16 hours of individualized training, yields gist rather than transcript, collapses across subjects, and is defeated by a subject silently naming animals [9]. No technology writes specific memories into a human brain; what exists is a 15–37% nudge in how well a word list is encoded, in patients with electrodes implanted for epilepsy, with conflicting results across studies [57][58][59][60]. No technology reliably produces a chosen emotion — stimulation effects are site- and patient-dependent [69]. No technology enhances healthy cognition reliably; the flagship claim in that area rests on a contested and probably underpowered literature with a serious dose problem [20][21][23][25]. And nothing works remotely.
+
+**The distinction that matters most:**
+
+> **Influencing neural activity is not equivalent to controlling a mind.**
+
+Every capable system in this article decodes a *voluntary act*: an attempted movement, an attempted word, a story the person chose to attend to. Will sits upstream of the machine. That isn't a gap waiting for better engineering — it falls out of what these devices measure in the first place.
+
+The real achievement is a shift in relationship. For most of history we could only observe the brain and infer. Now we can measure it, decode parts of it, perturb it, and — most significantly — interact with it in a continuous feedback loop, adapting to what it does in response to what we did. We are learning to treat the brain as an adaptive dynamical system rather than a black box or a machine with switches.
+
+Which reframes the important question. The regulatory apparatus is arriving: four US states have neural data laws, Chile has constitutional protection and a Supreme Court ruling ordering deletion of a citizen's brain data, and UNESCO adopted a global ethics standard in November 2025. Meanwhile 29 of 30 consumer neurotech companies have unconstrained access to their users' neural data and two-thirds share it [82]. The devices that genuinely work are, for now, in the hands of a few dozen research participants and a few hundred thousand patients. The devices that collect neural data with the weakest protections are the ones being sold at scale.
+
+As the ability to interact with neural circuits becomes more precise, the central challenge will not be whether we can manipulate neural activity. We can, and we have been doing so therapeutically for nearly thirty years. It will be **who gets to decide when, how, and for what purpose that capability is used** — and whether the people whose brains are involved are among those deciding.
+
+---
+
+### References
+
+---
+
+All references were verified against primary sources, PubMed/PMC records, publisher pages, or official government sources during the research for this article. Items where a specific figure could not be confirmed are noted in the Research Notes.
+
+---
+
+### Primary Research — Measurement and Decoding
+
+[2] Burle B, Spieser L, Roger C, Casini L, Hasbroucq T, Vidal F. Spatial and temporal resolution of EEG: is it really black and white? A scalp current density view. *International Journal of Psychophysiology* 2015;97(3):210–220. PMC4548479.
+
+[3] Hämäläinen M, Hari R, Ilmoniemi RJ, Knuutila J, Lounasmaa OV. Magnetoencephalography — theory, instrumentation, and applications to noninvasive studies of the working human brain. *Reviews of Modern Physics* 1993;65:413. DOI: 10.1103/RevModPhys.65.413
+
+[4] Boto E, Holmes N, Leggett J, Roberts G, Shah V, et al. Moving magnetoencephalography towards real-world applications with a wearable system. *Nature* 2018;555(7698):657–661. DOI: 10.1038/nature26147 — PMID: 29562238
+
+[5] Kamitani Y, Tong F. Decoding the visual and subjective contents of the human brain. *Nature Neuroscience* 2005;8(5):679–685. DOI: 10.1038/nn1444 — PMID: 15852014
+
+[7] Nishimoto S, Vu AT, Naselaris T, Benjamini Y, Yu B, Gallant JL. Reconstructing visual experiences from brain activity evoked by natural movies. *Current Biology* 2011;21(19):1641–1646. DOI: 10.1016/j.cub.2011.08.031 — PMID: 21945275
+
+[8] Horikawa T, Kamitani Y. Generic decoding of seen and imagined objects using hierarchical visual features. *Nature Communications* 2017;8:15037. DOI: 10.1038/ncomms15037
+
+[9] Tang J, LeBel A, Jain S, Huth AG. Semantic reconstruction of continuous language from non-invasive brain recordings. *Nature Neuroscience* 2023;26:858–866. DOI: 10.1038/s41593-023-01304-9 — PMID: 37127759 — PMC11304553
+
+[10] Défossez A, Caucheteux C, Rapin J, Kabeli O, King J-R. Decoding speech perception from non-invasive brain recordings. *Nature Machine Intelligence* 2023;5:1097–1107. DOI: 10.1038/s42256-023-00714-5
+
+[11] Takagi Y, Nishimoto S. High-resolution image reconstruction with latent diffusion models from human brain activity. *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)* 2023. Conference paper; no journal DOI.
+
+[56] Sponheim C, Papadourakis V, Collinger JL, Downey J, Weiss J, et al. Longevity and reliability of chronic unit recordings using the Utah, intracortical multi-electrode arrays. *Journal of Neural Engineering* 2021;18(6). DOI: 10.1088/1741-2552/ac3eaf — PMID: 34847547
+
+---
+
+### Primary Research — Neuromodulation
+
+[1] Barker AT, Jalinous R, Freeston IL. Non-invasive magnetic stimulation of human motor cortex. *The Lancet* 1985;1(8437):1106–1107. DOI: 10.1016/s0140-6736(85)92413-4
+
+[12] Deng ZD, Lisanby SH, Peterchev AV. Electric field depth-focality tradeoff in transcranial magnetic stimulation: simulation comparison of 50 coil designs. *Brain Stimulation* 2013;6(1):1–13. DOI: 10.1016/j.brs.2012.02.005 — PMID: 22483681
+
+[14] O'Reardon JP, Solvason HB, Janicak PG, Sampson S, et al. Efficacy and safety of transcranial magnetic stimulation in the acute treatment of major depression: a multisite randomized controlled trial. *Biological Psychiatry* 2007;62(11):1208–1216. DOI: 10.1016/j.biopsych.2007.01.018 — PMID: 17573044
+
+[15] George MS, Lisanby SH, Avery D, McDonald WM, et al. Daily left prefrontal transcranial magnetic stimulation therapy for major depressive disorder: a sham-controlled randomized trial. *Archives of General Psychiatry* 2010;67(5):507–516. PMID: 20439832
+
+[16] Blumberger DM, Vila-Rodriguez F, Thorpe KE, Feffer K, et al. Effectiveness of theta burst versus high-frequency repetitive transcranial magnetic stimulation in patients with depression (THREE-D): a randomised non-inferiority trial. *The Lancet* 2018;391(10131):1683–1692. DOI: 10.1016/S0140-6736(18)30295-2 — PMID: 29726344
+
+[17] Cole EJ, Phillips AL, Bentzley BS, Stimpson KH, et al. Stanford Neuromodulation Therapy (SNT): A Double-Blind Randomized Controlled Trial. *American Journal of Psychiatry* 2022;179(2):132–141. DOI: 10.1176/appi.ajp.2021.20101429 — PMID: 34711062
+
+[18] Cole EJ, Stimpson KH, Bentzley BS, Gulser M, et al. Stanford Accelerated Intelligent Neuromodulation Therapy for Treatment-Resistant Depression. *American Journal of Psychiatry* 2020;177(8):716–726. PMID: 32252538 (open-label study)
+
+[19] Nitsche MA, Paulus W. Excitability changes induced in the human motor cortex by weak transcranial direct current stimulation. *Journal of Physiology* 2000;527(Pt 3):633–639. PMID: 10990547 — PMC2270099
+
+[23] Vöröslakos M, Takeuchi Y, Brinyiczki K, Zombori T, et al. Direct effects of transcranial electric stimulation on brain circuits in rats and humans. *Nature Communications* 2018;9:483. DOI: 10.1038/s41467-018-02928-3 — PMID: 29396478
+
+[24] Farahani F, Khadka N, Parra LC, Bikson M, Vöröslakos M. Transcranial electric stimulation modulates firing rate at clinically relevant intensities. *Brain Stimulation* 2024;17(3):561–571. DOI: 10.1016/j.brs.2024.04.007 — PMID: 38631548
+
+[25] López-Alonso V, Cheeran B, Río-Rodríguez D, Fernández-Del-Olmo M. Inter-individual variability in response to non-invasive brain stimulation paradigms. *Brain Stimulation* 2014;7(3):372–380. DOI: 10.1016/j.brs.2014.02.004 — PMID: 24630849
+
+[26] Brunoni AR, Moffa AH, Sampaio-Junior B, Borrione L, et al. Trial of Electrical Direct-Current Therapy versus Escitalopram for Depression (ELECT-TDCS). *New England Journal of Medicine* 2017;376(26):2523–2533. DOI: 10.1056/NEJMoa1612999 — PMID: 28657871
+
+[27] Benabid AL, Pollak P, Louveau A, Henry S, de Rougemont J. Combined (thalamotomy and stimulation) stereotactic surgery of the VIM thalamic nucleus for bilateral Parkinson disease. *Applied Neurophysiology* 1987;50(1–6):344–346. PMID: 3329873
+
+[28] Benabid AL, Pollak P, Gervason C, Hoffmann D, et al. Long-term suppression of tremor by chronic stimulation of the ventral intermediate thalamic nucleus. *The Lancet* 1991;337(8738):403–406. PMID: 1671433
+
+[29] Deuschl G, Schade-Brittinger C, Krack P, Volkmann J, et al. A Randomized Trial of Deep-Brain Stimulation for Parkinson's Disease. *New England Journal of Medicine* 2006;355(9):896–908. DOI: 10.1056/NEJMoa060281 — PMID: 16943402
+
+[30] Schuepbach WMM, Rau J, Knudsen K, Volkmann J, et al. Neurostimulation for Parkinson's Disease with Early Motor Complications. *New England Journal of Medicine* 2013;368(7):610–622. DOI: 10.1056/NEJMoa1205158 — PMID: 23406026
+
+[31] Little S, Pogosyan A, Neal S, Zavala B, et al. Adaptive deep brain stimulation in advanced Parkinson disease. *Annals of Neurology* 2013;74(3):449–457. PMC3886292
+
+[32] Holtzheimer PE, Husain MM, Lisanby SH, Taylor SF, et al. Subcallosal cingulate deep brain stimulation for treatment-resistant depression: a multisite, randomised, sham-controlled trial. *The Lancet Psychiatry* 2017;4(11):839–849. DOI: 10.1016/S2215-0366(17)30371-1 — PMID: 28988904
+
+[33] Dougherty DD, Rezai AR, Carpenter LL, Howland RH, et al. A Randomized Sham-Controlled Trial of Deep Brain Stimulation of the Ventral Capsule/Ventral Striatum for Chronic Treatment-Resistant Depression. *Biological Psychiatry* 2015;78(4):240–248. PMID: 25726497
+
+[34] Morrell MJ; RNS System in Epilepsy Study Group. Responsive cortical stimulation for the treatment of medically intractable partial epilepsy. *Neurology* 2011;77(13):1295–1304. DOI: 10.1212/WNL.0b013e3182302056 — PMID: 21917777
+
+[35] Nair DR, Laxer KD, Weber PB, Murro AM, et al.; RNS System LTT Study. Nine-year prospective efficacy and safety of brain-responsive neurostimulation for focal epilepsy. *Neurology* 2020;95(9):e1244–e1256. DOI: 10.1212/WNL.0000000000010154 — PMID: 32690786 — PMC7538230
+
+[36] Scangos KW, Khambhati AN, Daly PM, Makhoul GS, et al. Closed-loop neuromodulation in an individual with treatment-resistant depression. *Nature Medicine* 2021;27(10):1696–1700. DOI: 10.1038/s41591-021-01480-w — PMID: 34608328
+
+[37] Legon W, Sato TF, Opitz A, Mueller J, et al. Transcranial focused ultrasound modulates the activity of primary somatosensory cortex in humans. *Nature Neuroscience* 2014;17(2):322–329. DOI: 10.1038/nn.3620
+
+[38] Elias WJ, Lipsman N, Ondo WG, Ghanouni P, et al. A Randomized Trial of Focused Ultrasound Thalamotomy for Essential Tremor. *New England Journal of Medicine* 2016;375(8):730–739. DOI: 10.1056/NEJMoa1600159 — PMID: 27557301
+
+[39] Sato T, Shapiro MG, Tsao DY. Ultrasonic Neuromodulation Causes Widespread Cortical Activation via an Indirect Auditory Mechanism. *Neuron* 2018;98(5):1031–1041.
+
+[40] Guo H, Hamilton M, Offutt SJ, Gloeckner CD, et al. Ultrasound Produces Extensive Brain Activation via a Cochlear Pathway. *Neuron* 2018;98(5):1020–1030. See also commentary: Hearing out Ultrasound Neuromodulation. *Neuron* 2018;98(5):875–877. PMID: 29879389
+
+[41] Lipsman N, Meng Y, Bethune AJ, Huang Y, et al. Blood-brain barrier opening in Alzheimer's disease using MR-guided focused ultrasound. *Nature Communications* 2018;9:2336. DOI: 10.1038/s41467-018-04529-6 — PMC6060168
+
+---
+
+### Primary Research — Brain-Computer Interfaces
+
+[42] Hochberg LR, Serruya MD, Friehs GM, Mukand JA, et al. Neuronal ensemble control of prosthetic devices by a human with tetraplegia. *Nature* 2006;442(7099):164–171. DOI: 10.1038/nature04970
+
+[43] Hochberg LR, Bacher D, Jarosiewicz B, Masse NY, et al. Reach and grasp by people with tetraplegia using a neurally controlled robotic arm. *Nature* 2012;485(7398):372–375. DOI: 10.1038/nature11076 — PMID: 22596161 — PMC3640850
+
+[44] Collinger JL, Wodlinger B, Downey JE, Wang W, et al. High-performance neuroprosthetic control by an individual with tetraplegia. *The Lancet* 2013;381(9866):557–564. DOI: 10.1016/S0140-6736(12)61816-9 — PMID: 23253623 — PMC3641862
+
+[45] Pandarinath C, Nuyujukian P, Blabe CH, Sorice BL, et al. High performance communication by people with paralysis using an intracortical brain-computer interface. *eLife* 2017;6:e18554. DOI: 10.7554/eLife.18554 — PMID: 28220753 — PMC5319839
+
+[46] Willett FR, Avansino DT, Hochberg LR, Henderson JM, Shenoy KV. High-performance brain-to-text communication via handwriting. *Nature* 2021;593(7858):249–254. DOI: 10.1038/s41586-021-03506-2 — PMID: 33981047 — PMC8163299
+
+[47] Willett FR, Kunz EM, Fan C, Avansino DT, et al. A high-performance speech neuroprosthesis. *Nature* 2023;620(7976):1031–1036. DOI: 10.1038/s41586-023-06377-x — PMID: 37612500 — PMC10468393
+
+[48] Metzger SL, Littlejohn KT, Silva AB, Moses DA, et al. A high-performance neuroprosthesis for speech decoding and avatar control. *Nature* 2023;620(7976):1037–1046. DOI: 10.1038/s41586-023-06443-4 — PMID: 37612505 — PMC10826467. **See Author Correction:** DOI: 10.1038/s41586-024-07735-z (neural channel misordering in data files; did not affect real-time decoding performance).
+
+[49] Moses DA, Metzger SL, Liu JR, Anumanchipalli GK, et al. Neuroprosthesis for Decoding Speech in a Paralyzed Person with Anarthria. *New England Journal of Medicine* 2021;385(3):217–227. DOI: 10.1056/NEJMoa2027540 — PMID: 34260835 — PMC8972947
+
+[50] Anumanchipalli GK, Chartier J, Chang EF. Speech synthesis from neural decoding of spoken sentences. *Nature* 2019;568(7753):493–498. DOI: 10.1038/s41586-019-1119-1 — PMC9714519
+
+[51] Card NS, Wairagkar M, Iacobacci C, Brandman DM, Stavisky SD, et al. An Accurate and Rapidly Calibrating Speech Neuroprosthesis. *New England Journal of Medicine* 2024;391(7):609–618. DOI: 10.1056/NEJMoa2314132 — PMID: 39141853
+
+[52] Littlejohn KT, Cho CJ, Liu JR, Silva AB, et al. A streaming brain-to-voice neuroprosthesis to restore naturalistic communication. *Nature Neuroscience* 2025;28(4):902–912. DOI: 10.1038/s41593-025-01905-6
+
+[53] Wairagkar M, Card NS, Hochberg LR, Brandman DM, Stavisky SD, et al. An instantaneous voice-synthesis neuroprosthesis. *Nature* 2025; published 12 June 2025. DOI: 10.1038/s41586-025-09127-3 — PMC12369848
+
+[54] Rubin DB, Ajiboye AB, Barefoot L, Bowker M, et al. Interim Safety Profile From the Feasibility Study of the BrainGate Neural Interface System. *Neurology* 2023;100(11):e1177–e1192. DOI: 10.1212/WNL.0000000000201707 — PMID: 36639237 — PMC10074470 — Trial: NCT00912041
+
+---
+
+### Primary Research — Memory, Emotion, Optogenetics
+
+[57] Ezzyat Y, Wanda PA, Levy DF, Kadel A, et al. Closed-loop stimulation of temporal cortex rescues functional networks and improves memory. *Nature Communications* 2018;9:365. DOI: 10.1038/s41467-017-02753-0 — PMID: 29410414 — PMC5802791
+
+[58] Hampson RE, Song D, Robinson BS, Fetterhoff D, et al. Developing a hippocampal neural prosthetic to facilitate human memory encoding and recall. *Journal of Neural Engineering* 2018;15(3):036014. DOI: 10.1088/1741-2552/aaaed7 — PMID: 29589592
+
+[59] Suthana N, Haneef Z, Stern J, Mukamel R, et al. Memory Enhancement and Deep-Brain Stimulation of the Entorhinal Area. *New England Journal of Medicine* 2012;366(6):502–510. DOI: 10.1056/NEJMoa1107212 — PMID: 22316444
+
+[60] Jacobs J, Miller J, Lee SA, Coffey T, et al. Direct Electrical Stimulation of the Human Entorhinal Region and Hippocampus Impairs Memory. *Neuron* 2016;92(5):983–990. DOI: 10.1016/j.neuron.2016.10.062 — PMID: 27930911
+
+[61] Nader K, Schafe GE, LeDoux JE. Fear memories require protein synthesis in the amygdala for reconsolidation after retrieval. *Nature* 2000;406(6797):722–726. DOI: 10.1038/35021052 — PMID: 10963596 — **Rat study.**
+
+[62] Ramirez S, Liu X, Lin PA, Suh J, et al. Creating a False Memory in the Hippocampus. *Science* 2013;341(6144):387–391. DOI: 10.1126/science.1239073 — PMID: 23888038 — **Mouse study; contextual fear association.**
+
+[63] Liu X, Ramirez S, Pang PT, Puryear CB, et al. Optogenetic stimulation of a hippocampal engram activates fear memory recall. *Nature* 2012;484(7394):381–385. DOI: 10.1038/nature11028 — PMID: 22441246 — **Mouse study.**
+
+[64] Boyden ES, Zhang F, Bamberg E, Nagel G, Deisseroth K. Millisecond-timescale, genetically targeted optical control of neural activity. *Nature Neuroscience* 2005;8(9):1263–1268. DOI: 10.1038/nn1525
+
+[65] Sahel JA, Boulanger-Scemama E, Pagot C, Arleo A, et al. Partial recovery of visual function in a blind patient after optogenetic therapy. *Nature Medicine* 2021;27:1223–1229. DOI: 10.1038/s41591-021-01351-4 — PMID: 34031601 — **Human retina, n=1. Not brain.**
+
+[66] Kindt M, Soeter M, Vervliet B. Beyond extinction: erasing human fear responses and preventing the return of fear. *Nature Neuroscience* 2009;12(3):256–258. DOI: 10.1038/nn.2271 — PMID: 19219038
+
+[67] Rao VR, Sellers KK, Wallace DL, Lee MB, et al. Direct Electrical Stimulation of Lateral Orbitofrontal Cortex Acutely Improves Mood in Individuals with Symptoms of Depression. *Current Biology* 2018;28(24):3893–3902. DOI: 10.1016/j.cub.2018.10.026 — PMID: 30503621
+
+[68] Sani OG, Yang Y, Lee MB, Dawes HE, Chang EF, Shanechi MM. Mood variations decoded from multi-site intracranial human brain activity. *Nature Biotechnology* 2018;36(10):954–961. DOI: 10.1038/nbt.4200
+
+---
+
+### Reviews and Meta-Analyses
+
+[6] Haynes JD, Rees G. Decoding mental states from brain activity in humans. *Nature Reviews Neuroscience* 2006;7:523–534. DOI: 10.1038/nrn1931
+
+[13] Rossi S, Antal A, Bestmann S, Bikson M, et al. Safety and recommendations for TMS use in healthy subjects and patient populations, with updates on training, ethical and regulatory issues: Expert Guidelines. *Clinical Neurophysiology* 2021;132(1):269–306. PMID: 33243615. Earlier consensus: Rossi S, Hallett M, Rossini PM, Pascual-Leone A. *Clinical Neurophysiology* 2009;120(12):2008–2039. PMC3260536.
+
+[20] Horvath JC, Forte JD, Carter O. Quantitative Review Finds No Evidence of Cognitive Effects in Healthy Populations From Single-session Transcranial Direct Current Stimulation (tDCS). *Brain Stimulation* 2015;8(3):535–550. DOI: 10.1016/j.brs.2015.01.400 — PMID: 25701175
+
+[21] Horvath JC, Forte JD, Carter O. Evidence that transcranial direct current stimulation (tDCS) generates little-to-no reliable neurophysiologic effect beyond MEP amplitude modulation in healthy human subjects: A systematic review. *Neuropsychologia* 2015;66:213–236. DOI: 10.1016/j.neuropsychologia.2014.11.021 — PMID: 25448853
+
+[22] Antal A, Keeser D, Priori A, Padberg F, Nitsche MA. Conceptual and Procedural Shortcomings of the Systematic Review "Evidence That Transcranial Direct Current Stimulation (tDCS) Generates Little-to-no Reliable Neurophysiologic Effect…" *Brain Stimulation* 2015. See also Horvath JC, et al. reply, *Brain Stimulation*, PMID: 26050600.
+
+[55] Krueger J, et al. The state of clinical trials of implantable brain–computer interfaces. *Nature Reviews Bioengineering* 2024. DOI: 10.1038/s44222-024-00239-5
+
+[69] Guillory SA, Bujarski KA. Exploring emotions using invasive methods: review of 60 years of human intracranial electrophysiology. *Social Cognitive and Affective Neuroscience* 2014;9(12):1880–1889. DOI: 10.1093/scan/nsu002 — PMID: 24509492
+
+[85] Simons DJ, Boot WR, Charness N, Gathercole SE, Chabris CF, Hambrick DZ, Stine-Morrow EAL. Do "Brain-Training" Programs Work? *Psychological Science in the Public Interest* 2016;17(3):103–186. DOI: 10.1177/1529100616661983
+
+---
+
+### Security Research
+
+[70] Martinovic I, Davies D, Frank M, Perito D, Ros T, Song D. On the Feasibility of Side-Channel Attacks with Brain-Computer Interfaces. *USENIX Security Symposium* 2012.
+
+[71] Frank M, Hwu T, Jain S, Knight R, Martinovic I. Using EEG-Based BCI Devices to Subliminally Probe for Private Information. *ACM Workshop on Privacy in the Electronic Society (WPES)* 2017. DOI: 10.1145/3139550.3139559. Earlier preprint: arXiv:1312.6052.
+
+[72] Pycroft L, Boccard SG, Owen SLF, Stein JF, et al. Brainjacking: Implant Security Issues in Invasive Neuromodulation. *World Neurosurgery* 2016;92:454–462. DOI: 10.1016/j.wneu.2016.01.010 — PMID: 27184896
+
+[73] Zhang X, Wu D. On the Vulnerability of CNN Classifiers in EEG-Based BCIs. *IEEE Transactions on Neural Systems and Rehabilitation Engineering* 2019;27(5):814–825. arXiv:1904.01002
+
+---
+
+### Institutional, Regulatory, and Policy Sources
+
+[74] US Food and Drug Administration. *Cybersecurity in Medical Devices: Quality System Considerations and Content of Premarket Submissions.* Final guidance, issued 27 September 2023. Statutory basis: Section 524B, FD&C Act (added by §3305, Consolidated Appropriations Act, 2023). https://www.fda.gov
+
+[75] US Food and Drug Administration Safety Communication and DHS ICS-CERT Advisory **ICSMA-19-080-01** (2019): Medtronic Conexus wireless telemetry protocol — lack of encryption, authentication, and authorization in certain implantable cardioverter-defibrillators and associated monitors/programmers.
+
+[76] Ienca M, Andorno R. Towards new human rights in the age of neuroscience and neurotechnology. *Life Sciences, Society and Policy* 2017;13:5. DOI: 10.1186/s40504-017-0050-1
+
+[77] Republic of Chile. **Law No. 21.383 (2021)**, constitutional reform amending Article 19 of the Constitution to protect brain activity and derived information. Chilean Supreme Court judgment, **9 August 2023** (unanimous), *Girardi v. Emotiv Inc.* — ordering deletion of the plaintiff's brain-activity data. Analysis: *Frontiers in Psychology* 2024, DOI: 10.3389/fpsyg.2024.1330439 (PMID: 38476399); *Nature Biotechnology* 2024, DOI: 10.1038/s41587-024-02303-2
+
+[78] UNESCO. *Recommendation on the Ethics of Neurotechnology.* Adopted November 2025, 43rd session of the General Conference (Resolution 43 C/34). https://www.unesco.org
+
+[79] OECD. *Recommendation of the Council on Responsible Innovation in Neurotechnology.* OECD/LEGAL/0457, adopted 11 December 2019. https://legalinstruments.oecd.org
+
+[80] Colorado General Assembly. **HB24-1058**, "Protect Privacy of Biological Data," signed 17 April 2024, amending the Colorado Privacy Act to include biological data (incl. neural data) as sensitive data. https://leg.colorado.gov
+
+[81] California Legislature. **SB 1223** (2024), signed 28 September 2024, effective 1 January 2025, amending the CCPA to define neural data as sensitive personal information. Additional state laws: Montana **SB 163** (effective 1 October 2025); Connecticut (2025 data privacy act amendments).
+
+[82] Genser J, Damianos S, Yuste R. *Safeguarding Brain Data: Assessing the Privacy Practices of Consumer Neurotechnology Companies.* The Neurorights Foundation, April 2024. Assessment of 30 consumer neurotechnology companies.
+
+[83] Defense Advanced Research Projects Agency (DARPA). Official program pages: *Restoring Active Memory (RAM)*, launched November 2013; *Next-Generation Nonsurgical Neurotechnology (N3)*, announced 2018, teams announced May 2019; *Neural Engineering System Design (NESD)*. https://www.darpa.mil
+
+[84] US Federal Trade Commission. *Lumosity to Pay $2 Million to Settle FTC Deceptive Advertising Charges for Its "Brain Training" Program.* January 2016. https://www.ftc.gov
+
+FDA device approval records referenced in text: DBS essential tremor (PMA P960009, 1997); DBS Parkinson's disease (2002); DBS dystonia (HDE, 2003); DBS OCD (HDE, 2009); DBS epilepsy (2018); VNS epilepsy (PMA P970003, July 1997); VNS depression (July 2005); rTMS MDD (DEN070003, October 2008); BrainsWay Deep TMS MDD (K122288, 2013), OCD (2018), smoking cessation (2020); NeuroPace RNS (PMA, 2013); Insightec Exablate Neuro essential tremor (2016); Medtronic BrainSense Adaptive DBS and Electrode Identifier (24 February 2025; ADAPT-PD, NCT04547712).
+
+---
+
+### Additional Reading
+
+- Shenoy KV, Henderson JM. Artificial motor intelligence and neural prosthetics — for the engineering perspective on BCI decoder design.
+- Lozano AM, Lipsman N, et al. Deep brain stimulation: current challenges and future directions. *Nature Reviews Neurology* 2019 — for a clinical overview of DBS beyond the trials cited here.
+- Yuste R, Goering S, et al. Four ethical priorities for neurotechnologies and AI. *Nature* 2017 — the widely cited comment that helped launch the neurorights policy movement.
+
+---
+
+### Research Notes
+
+---
+
+**Note: This Project was done using my ongoing project/research engine prototype- Veritas Engine**
+
+**Date of research.** All sources were verified on 7 September 2026. Regulatory statuses, publication statuses, and legal instruments are current as of that date; several items in this article — notably Neuralink's publication status and state neural data legislation — are actively changing.
+
+**Search methodology.** Research proceeded from claim to primary source rather than from source to claim. For each technology, I identified the founding paper, the strongest controlled trial, the most-cited recent result, and — deliberately — the strongest available *negative* or contradicting evidence. Verification used PubMed and PMC via the NCBI E-utilities API for bibliographic data (authors, exact titles, journal, volume, pages, DOI, PMID), publisher pages and PMC full text for quantitative results and author-stated limitations, and official government sources (FDA, DARPA, FTC, OECD, UNESCO, state legislatures) for regulatory and policy claims.
+
+**How evidence quality was assessed.** Studies were classified by design first: sham- or placebo-controlled randomized trials outrank open-label series, which outrank single cases. Species was checked in every case where a mechanism is commonly attributed to humans on the strength of animal work. Sample size is reported for every human study cited, because in this field it is frequently in the single digits and that fact is material. Where a technology had both positive open-label and negative controlled evidence, both are reported.
+
+**Specific corrections made during verification.** Several widely repeated errors were caught and corrected: the Horvath 2015 meta-analyses are frequently cited with their journals swapped (the cognitive review is in *Brain Stimulation*, the neurophysiological review in *Neuropsychologia*); Benabid's 1987 founding DBS paper is in *Applied Neurophysiology*, not *The Lancet*; Kamitani and Tong's 2005 paper is titled "Decoding the visual and subjective contents of the human brain," not a title referencing orientation; the widely quoted ~90% remission figure for SAINT/SNT comes from the 2020 open-label study, not the 2022 randomized controlled trial; the Utah array longevity study is by Sponheim and colleagues; and the low-field stimulation result often attributed to other authors is Farahani and colleagues 2024. Two candidate PMIDs I initially checked resolved to entirely unrelated papers and were discarded rather than guessed at.
+
+**Known limitations in the literature itself.** Four are severe enough to affect how the whole field should be read.
+
+*Sample sizes.* Nearly every landmark BCI result in this article is n=1. Cumulative human experience with chronic intracortical implants was approximately 35 people as of April 2022 [54]. Generalization is genuinely unknown.
+
+*Selection effects in invasive human research.* All human intracranial memory and emotion research uses patients with epilepsy who have electrodes implanted for clinical reasons [57][58][59][60][67][68]. These brains are not typical, and electrode placement is determined by clinical need rather than experimental design.
+
+*The open-label-to-controlled collapse.* This recurs so consistently it should be treated as a prior: DBS for depression (open-label 41–64% response, sham-controlled null [32][33]), SAINT (90% open-label, smaller controlled effect [17][18]), RNS (37.9% blinded, 75% at nine years open-label [34][35]), VNS for depression (approved substantially on open-label data after the acute trial missed its endpoint).
+
+*Publication bias and the tDCS problem.* Cheap equipment, easy protocols, and small samples produced a large literature of positive findings that systematic review does not support [20][21], compounded by an unresolved question about whether conventional doses reach the brain at effective intensity [23][24].
+
+**Claims that remain uncertain and are flagged as such in the text.** The mechanism of DBS. Whether conventional-dose tDCS directly affects neurons. What fraction of reported TUS neuromodulation reflects the auditory confound [39][40]. Whether human memory enhancement effects generalize beyond specific laboratory tasks. The exact decoding accuracy in the mood-decoding work [68]. Detailed intelligibility metrics in [53]. The precise current total of chronic intracortical BCI recipients. Long-term intracortical array viability beyond roughly five years.
+
+**Figures I chose not to state.** Where a plausible number was available but not verifiable from a primary source, this article gives a range, a qualitative description, or nothing: EEG amplitude in microvolts (described as "on the order of tens of microvolts"), the canonical hemodynamic response peak latency (the verified ~10-second rise-and-fall is used instead), MEG instrument cost, exact ECoG bandwidth bounds, clinical ECoG grid spacing, and pooled DBS complication rates (the trial-level 13% vs 4% serious adverse event contrast from [29] is used instead). No number in this article was estimated or inferred to fill a gap.
+
+**Charts.** Chart 1 uses cited resolution values, plotted as ranges. Chart 2 uses ordinal axes and is labeled a structural comparison, not quantitative data. Charts 3 and 4 use only dated events and published performance figures. Chart 5 uses defined ordinal categories with the classification rule stated on the chart rather than invented numerical evidence scores.
+
+**On images.** No image license is asserted in this article. Recommendations identify preferred repositories and require per-file verification at time of use.

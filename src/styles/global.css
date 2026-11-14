@@ -39,12 +39,20 @@
 
 /*
   Space Grotesk — local regular (400) style. Used for specific body/reading
-  copy (currently the About introduction). No synthetic bold faces declared.
+  copy (currently the About introduction) and article prose. A bold (700) face
+  is also declared below so **strong** text renders with a genuine bold weight.
 */
 @font-face {
   font-family: 'Space Grotesk';
   src: url('/fonts/SpaceGrotesk-Regular.ttf') format('truetype');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/SpaceGrotesk-Bold.ttf') format('truetype');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }

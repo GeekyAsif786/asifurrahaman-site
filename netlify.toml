@@ -30,6 +30,17 @@
 # instead of showing a 404. `force = false` (the default) is essential so real
 # tag pages keep working.
 [[redirects]]
+  from = "/reels"
+  to = "/reels/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/reels/*"
+  to = "https://asif-reels.netlify.app/reels/:splat"
+  status = 200
+  force = true
+[[redirects]]
   from = "/tags/*"
   to = "/blog"
   status = 302
